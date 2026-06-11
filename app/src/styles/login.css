@@ -1,0 +1,577 @@
+/* ============================================================
+   Notification Engine — Back-office console
+   Login journey styles. Built on Aljazira semantic tokens
+   (colors_and_type.css) so it follows data-theme + dir.
+   Prefix: .ne-
+   ============================================================ */
+
+/* ---------- Form-control font reset (global) ----------
+   Native controls (button, input, select, textarea) do NOT inherit
+   font-family from the page — browsers force a UA default (Arial).
+   Inherit it back so every control renders in the brand typeface
+   (Tajawal) instead of falling out of the design system. */
+button, input, select, textarea, optgroup {
+  font-family: inherit;
+}
+
+/* ---------- Icons (global) ----------
+   The Icon component fills an <i> with a 24×24 lucide <svg>. Box size is set
+   per-context on the <i>; make the <i> a flex box and force the svg to fill it
+   so it never overflows or misaligns next to text. */
+i[aria-hidden="true"] { display: inline-flex; align-items: center; justify-content: center; }
+i[aria-hidden="true"] > svg { width: 100%; height: 100%; display: block; }
+/* Buttons own their icon size via the persistent <i> wrapper (the svg fills it).
+   Sized here because the global rule above forces the svg to 100% of the <i>. */
+.ajb-btn i[aria-hidden="true"] { width: 16px; height: 16px; }
+.ajb-btn--icon i[aria-hidden="true"] { width: 20px; height: 20px; }
+
+/* ---------- Review harness (outside the product) ----------
+   Chrome that wraps the prototype for review (catalog/device/theme/
+   lang toggles). It sits OUTSIDE .ne-console so it carries no
+   data-theme — tokens resolve to the dark root, keeping the bar dark.
+   The toggles reuse the dictionary .ajb-seg component and the value
+   pill is a dictionary .ajb-badge — no bespoke harness controls. */
+.ne-page {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--ajb-bg-deep);
+  color: var(--ajb-fg);
+  font-family: var(--ajb-font);
+  display: flex;
+  flex-direction: column;
+}
+.ne-review {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ajb-5);
+  padding: 14px 22px;
+  background: var(--ajb-surface);
+  border-bottom: 1px solid var(--ajb-stroke);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.ne-review-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-inline-end: auto;
+}
+.ne-review-brand img { height: 18px; opacity: 0.92; }
+.ne-review-brand span {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ajb-fg-subtle);
+}
+.ne-ctrl { display: flex; align-items: center; gap: 8px; }
+.ne-ctrl > .ne-ctrl-lbl {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ajb-fg-subtle);
+}
+.ne-creds {
+  font-size: 12px;
+  color: var(--ajb-fg-subtle);
+}
+.ne-creds b { color: var(--ajb-accent); font-weight: 600; }
+
+/* ---------- Fit-to-width frame scaler ---------- */
+.ne-fit-wrap {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 32px;
+  overflow: auto;
+}
+.ne-fit { transform-origin: top center; }
+
+/* ============================================================
+   THE CONSOLE (inside the browser frame)
+   ============================================================ */
+.ne-console {
+  width: 100%;
+  height: 100%;
+  font-family: var(--ajb-font);
+  background: var(--ajb-bg-grad);
+  color: var(--ajb-fg);
+  position: relative;
+  overflow: hidden;
+  container-type: inline-size;
+  container-name: console;
+}
+
+/* ---------- Direction A — Brand split ---------- */
+.ne-split { display: grid; grid-template-columns: 1.04fr 1fr; height: 100%; }
+
+.ne-brand {
+  position: relative;
+  overflow: hidden;
+  background: var(--ajb-bg-gradient);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px 52px;
+}
+.ne-brand-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.5;
+  -webkit-mask-image: linear-gradient(115deg, transparent 30%, #000 78%);
+          mask-image: linear-gradient(115deg, transparent 30%, #000 78%);
+}
+.ne-brand-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(0,20,33,0.94) 38%, rgba(0,20,33,0.36) 100%);
+}
+.ne-brand-j {
+  position: absolute;
+  inset-block-end: -90px;
+  inset-inline-end: -70px;
+  width: 320px;
+  opacity: 0.16;
+  pointer-events: none;
+}
+/* Background layers stay pinned behind; only the content sits above. */
+.ne-brand-photo, .ne-brand-scrim, .ne-brand-j { position: absolute; z-index: 0; }
+.ne-brand-logo, .ne-brand-head-block, .ne-brand-foot { position: relative; z-index: 1; }
+
+/* Theme-aware brandmark wrapper — size classes (ne-brand-logo / ne-card-logo /
+   ne-side-logo) set height on this span; inner imgs fill it. CSS shows the
+   white logo on dark and the positive logo on light. */
+.ne-logo { display: inline-flex; align-items: center; }
+.ne-logo img { height: 100%; width: auto; display: block; }
+.ne-logo .ne-logo-light { display: none; }
+[data-theme="light"] .ne-logo .ne-logo-dark { display: none; }
+[data-theme="light"] .ne-logo .ne-logo-light { display: block; }
+
+/* The brand split panel (.ne-brand) is ALWAYS dark, even in light theme —
+   so its logo must always be the white/negative one. */
+[data-theme="light"] .ne-brand .ne-logo .ne-logo-dark { display: block; }
+[data-theme="light"] .ne-brand .ne-logo .ne-logo-light { display: none; }
+.ne-brand-logo { height: 30px; }
+.ne-brand-head {
+  font-weight: var(--ajb-w-light);
+  font-size: 52px;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--ajb-pearl);
+  max-width: 12ch;
+}
+.ne-brand-sub {
+  margin-top: 18px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.72);
+  max-width: 34ch;
+  font-weight: var(--ajb-w-regular);
+}
+.ne-brand-foot {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.ne-brand-foot i { width: 15px; height: 15px; }
+[lang="ar"] .ne-brand-foot { text-transform: none; letter-spacing: 0; }
+
+.ne-formside {
+  position: relative;        /* anchors the language/theme utility cluster */
+  background: var(--ajb-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+}
+[data-theme="light"] .ne-formside { background: var(--ajb-bg-deep); }
+
+/* Language + theme cluster — top-inline-end of the form side. Reuses the
+   signed-in top bar's .ne-iconbtn components so login and in-app share the
+   same control. Logical inset → mirrors to the form side automatically in RTL. */
+.ne-utilcluster {
+  position: absolute;
+  top: 24px;
+  inset-inline-end: 24px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ---------- Shared form ---------- */
+.ne-form { width: 100%; max-width: 380px; }
+.ne-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ajb-accent);
+  font-weight: var(--ajb-w-medium);
+  margin-bottom: 12px;
+}
+[lang="ar"] .ne-eyebrow { letter-spacing: 0; text-transform: none; }
+.ne-title {
+  font-weight: var(--ajb-w-light);
+  font-size: 30px;
+  line-height: 1.1;
+  color: var(--ajb-fg);
+  margin: 0 0 8px;
+}
+.ne-lede {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ajb-fg-muted);
+  margin: 0 0 28px;
+  max-width: 36ch;
+}
+
+/* ---------- Shared form: dictionary .ajb-field / .ajb-input--boxed ---------- */
+/* Alert/inline message sits between the lede and the first field — give it
+   breathing room below so it doesn't collide with the EMPLOYEE ID label. */
+.ne-form .ajb-alert { margin-bottom: 22px; }
+.ne-field { margin-bottom: 18px; }
+.ne-input-wrap { position: relative; display: flex; align-items: center; width: 100%; }
+/* let the boxed input fill the field width (matches the full-width button) */
+.ne-input-wrap .ajb-input { flex: 1; min-width: 0; box-sizing: border-box; }
+/* password field leaves room for the show/hide affordance */
+.ne-haseye { padding-inline-end: 64px; }
+
+.ne-eye {
+  position: absolute;
+  inset-inline-end: 12px;
+  border: 0;
+  background: transparent;
+  color: var(--ajb-fg-muted);
+  font-family: var(--ajb-font);
+  font-size: 13px;
+  font-weight: var(--ajb-w-medium);
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+.ne-eye:hover { color: var(--ajb-fg); }
+
+.ne-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 4px 0 24px;
+}
+.ne-link {
+  font-size: 13px;
+  font-weight: var(--ajb-w-medium);
+  color: var(--ajb-accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.ne-link:hover { text-decoration: underline; }
+
+/* primary action = dictionary .ajb-btn--sand, stretched full width */
+.ne-submit { width: 100%; }
+.ne-foot-note {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ajb-stroke);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--ajb-fg-subtle);
+}
+.ne-foot-note a { color: var(--ajb-fg-muted); text-decoration: none; }
+.ne-foot-note a:hover { color: var(--ajb-accent); }
+
+/* ============================================================
+   SUCCESS LANDING — Notification Engine console home (stub)
+   ============================================================ */
+.ne-home { display: flex; height: 100%; }
+.ne-side {
+  background: var(--ajb-bg-gradient);
+  border-inline-end: 1px solid var(--ajb-stroke);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+[data-theme="light"] .ne-side { background: var(--ajb-surface-2); }
+.ne-side-logo { height: 30px; margin: 6px 10px 22px; }
+.ne-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 44px;
+  padding: 0 13px;
+  border-radius: 12px;
+  color: var(--ajb-fg-muted);
+  font-size: 14px;
+  font-weight: var(--ajb-w-medium);
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  transition: background .2s var(--ne-ease), color .2s var(--ne-ease), padding .32s var(--ne-ease), gap .32s var(--ne-ease);
+}
+.ne-nav-item i { width: 18px; height: 18px; flex: none; }
+.ne-nav-item:hover { color: var(--ajb-fg); background: color-mix(in srgb, var(--ajb-fg) 5%, transparent); }
+.ne-nav-item.on { color: var(--ajb-accent); background: var(--ajb-tint-sand-bg); }
+.ne-nav-item.on::before {
+  content: ""; position: absolute; inset-inline-start: 0; top: 9px; bottom: 9px; width: 3px;
+  border-radius: var(--ajb-r-pill); background: var(--ajb-accent);
+  opacity: 1; transition: opacity .22s var(--ne-ease);
+}
+.ne-side-sp { flex: 1; }
+
+.ne-main { background: var(--ajb-bg); overflow: auto; flex: 1; min-width: 0; }
+[data-theme="light"] .ne-main { background: var(--ajb-bg-deep); }
+.ne-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--ajb-stroke);
+  position: relative;
+  z-index: 20;
+}
+.ne-topbar-mark { display: none; height: 22px; width: auto; opacity: 0.92; }
+[data-theme="light"] .ne-topbar-mark { filter: invert(1); opacity: 0.78; }
+.ne-topbar-t { font-size: 13px; color: var(--ajb-fg-subtle); letter-spacing: 0.04em; text-transform: uppercase; margin-inline-end: auto; }
+[lang="ar"] .ne-topbar-t { text-transform: none; letter-spacing: 0; }
+.ne-topbar-r { display: flex; align-items: center; gap: 16px; }
+.ne-iconbtn {
+  position: relative;
+  width: 38px; height: 38px;
+  border: 1px solid var(--ajb-stroke);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ajb-fg-muted);
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.ne-iconbtn i { width: 18px; height: 18px; }
+.ne-iconbtn .dot {
+  position: absolute; top: 7px; inset-inline-end: 8px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--ajb-accent);
+}
+.ne-iconbtn--lang { width: auto; min-width: 38px; gap: 7px; padding: 0 12px; border-radius: var(--ajb-r-pill); }
+.ne-iconbtn--lang.is-open { border-color: var(--ajb-stroke-strong); color: var(--ajb-fg); }
+.ne-iconbtn--lang .ne-iconbtn-lbl {
+  font-size: 12px; font-weight: var(--ajb-w-medium);
+  line-height: 1; letter-spacing: 0.02em;
+}
+/* language dropdown — dictionary .ajb-menu anchored under the trigger */
+.ne-langwrap { position: relative; display: inline-flex; }
+.ne-lang-menu {
+  position: absolute; top: calc(100% + 8px); inset-inline-end: 0;
+  min-width: 186px; z-index: 60;
+  animation: ne-lang-pop var(--ajb-dur-2) var(--ajb-ease) both;
+}
+.ne-lang-menu .ne-lang-name { font-size: 14px; font-weight: var(--ajb-w-medium); }
+@keyframes ne-lang-pop { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+/* user avatar uses the dictionary component: .ajb-avatar.ajb-avatar--sm (see components.css) */
+.ne-content { padding: 32px; }
+.ne-welcome {
+  font-weight: var(--ajb-w-light);
+  font-size: 30px;
+  color: var(--ajb-fg);
+  margin: 0 0 4px;
+}
+.ne-welcome-sub { color: var(--ajb-fg-muted); font-size: 14px; margin: 0 0 28px; }
+.ne-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px; }
+/* KPI cards: dictionary .ajb-card wrapping an .ajb-stat */
+/* dictionary .ajb-card wrapping a heading + activity rows */
+.ne-panel-h { font-size: 15px; font-weight: var(--ajb-w-bold); color: var(--ajb-fg); margin: 0; }
+.ne-panel .ajb-li { padding-inline: 0; cursor: default; }
+.ne-panel .ajb-li:hover { background: transparent; }
+
+/* enter animation */
+.ne-enter { animation: ne-fade var(--ajb-dur-3) var(--ajb-ease) both; }
+@keyframes ne-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ============================================================
+   PHONE FRAME (mobile device shell for the review harness)
+   ============================================================ */
+.ne-phone {
+  position: relative;
+  background: #05070a;
+  border-radius: 46px;
+  padding: 12px;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.06), var(--ajb-shadow-3);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.ne-phone-screen {
+  position: relative;
+  flex: 1;
+  border-radius: 36px;
+  overflow: hidden;
+  background: #000;
+}
+.ne-phone-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 132px;
+  height: 28px;
+  background: #05070a;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  z-index: 30;
+}
+.ne-phone .ne-console { height: 100%; }
+
+/* ============================================================
+   RESPONSIVE — container queries on .ne-console
+   Fire on the console's OWN width, so they work inside the
+   transform-scaled frame. Mobile frame inner ≈ 378px.
+   ============================================================ */
+@container console (max-width: 640px) {
+
+  /* ----- Direction A · Split → stacked banner + form ----- */
+  .ne-split { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .ne-brand {
+    justify-content: flex-start;
+    gap: 14px;
+    padding: 54px 26px 30px;
+  }
+  .ne-brand-photo {
+    -webkit-mask-image: linear-gradient(160deg, transparent 8%, #000 92%);
+            mask-image: linear-gradient(160deg, transparent 8%, #000 92%);
+    opacity: 0.42;
+  }
+  .ne-brand-scrim { background: linear-gradient(180deg, rgba(0,20,33,0.82) 30%, rgba(0,20,33,0.52) 100%); }
+  .ne-brand-head { font-size: 32px; }
+  .ne-brand-sub { font-size: 14px; margin-top: 12px; max-width: 40ch; }
+  .ne-brand-j { width: 200px; inset-block-end: -60px; inset-inline-end: -50px; }
+  .ne-formside { padding: 28px 24px; align-items: flex-start; }
+  .ne-form, .ne-form .ne-title { max-width: 100%; }
+  .ne-formside .ne-form { max-width: 100%; }
+  /* keep the utility cluster clear of the stacked banner on mobile */
+  .ne-utilcluster { top: 16px; inset-inline-end: 16px; }
+
+  /* shared form sizing on mobile */
+  .ne-title { font-size: 26px; }
+  .ne-submit { padding: 15px 20px; }
+
+  /* ----- Dashboard → single column + bottom tab bar ----- */
+  .ne-home { grid-template-columns: 1fr; }
+  .ne-side {
+    position: absolute;
+    width: auto;
+    inset-inline: 0;
+    inset-block-end: 0;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    gap: 0;
+    padding: 6px 4px;
+    border-inline-end: 0;
+    border-top: 1px solid var(--ajb-stroke);
+    background: var(--ajb-surface);
+    z-index: 20;
+  }
+  [data-theme="light"] .ne-side { background: var(--ajb-surface); }
+  .ne-side-logo, .ne-side-sp { display: none; }
+  .ne-nav-item {
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+    padding: 7px 4px;
+    font-size: 10px;
+    font-weight: var(--ajb-w-medium);
+    text-align: center;
+    border-radius: var(--ajb-r-sm);
+  }
+  .ne-nav-item.on { background: transparent; }
+  /* grouped-nav chrome is hidden in the bottom-bar layout */
+  .ne-nav-group, .ne-side-divider, .ne-side-user, .ne-side-toggle,
+  .ne-nav-badge, .ne-nav-dot { display: none !important; }
+  .ne-nav-label { opacity: 1 !important; max-width: none !important; }
+  .ne-topbar { padding: 16px 20px; gap: 12px; }
+  .ne-topbar-mark { display: block; }
+  .ne-content { padding: 22px 20px 96px; }
+  .ne-welcome { font-size: 25px; }
+  .ne-kpis { grid-template-columns: 1fr; gap: 12px; }
+  .ne-kpis .ajb-card { padding: 16px 18px; }
+  .ne-kpis .ajb-stat__value { font-size: 26px; }
+}
+
+/* ============================================================
+   SIDE NAV — grouped (B) ⇄ collapsed icon rail (C)
+   Collapse is driven by [data-collapsed] on .ne-home; the grid column
+   animates and every inner element fades/condenses in one motion.
+   ============================================================ */
+.ne-home { --ne-ease: cubic-bezier(.2,.7,.2,1); }
+
+.ne-side { width: 256px; flex: none; min-width: 0; overflow: hidden; gap: 4px; padding: 18px 14px 16px; transition: width .36s var(--ne-ease), padding .36s var(--ne-ease); }
+.ne-home[data-collapsed] .ne-side { width: 84px; padding-inline: 20px; }
+
+/* brand: wordmark ⇄ symbol */
+.ne-side-logo { position: relative; height: 30px; margin: 4px 8px 12px; justify-content: flex-start; transition: margin .36s var(--ne-ease); }
+.ne-side-logo .ne-logo-word { transition: opacity .3s var(--ne-ease); }
+.ne-side-logo .ne-logo-symbol { position: absolute; inset-inline-start: 50%; top: 50%; transform: translate(-50%,-50%); height: 26px; width: auto; opacity: 0; pointer-events: none; transition: opacity .3s var(--ne-ease); }
+[dir="rtl"] .ne-side-logo .ne-logo-symbol { transform: translate(50%,-50%); }
+[data-theme="light"] .ne-side-logo .ne-logo-symbol { filter: invert(1); }
+.ne-home[data-collapsed] .ne-side-logo { margin-inline: 0; justify-content: center; }
+.ne-home[data-collapsed] .ne-side-logo .ne-logo-word { opacity: 0; }
+.ne-home[data-collapsed] .ne-side-logo .ne-logo-symbol { opacity: 1; }
+
+/* group header — constant height (text fades to a centered hairline) so
+   the icons below never shift vertically when collapsing. */
+.ne-nav-group { position: relative; display: flex; align-items: center; height: 14px; margin: 13px 0 5px; padding: 0 14px; font-size: 10px; font-weight: var(--ajb-w-bold); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ajb-fg-subtle); white-space: nowrap; overflow: hidden; }
+[lang="ar"] .ne-nav-group { letter-spacing: 0; text-transform: none; }
+.ne-nav-group span { transition: opacity .2s var(--ne-ease); }
+.ne-nav-group::after { content: ""; position: absolute; inset-inline: 16px; top: 50%; height: 1px; background: var(--ajb-stroke); opacity: 0; transition: opacity .24s var(--ne-ease); }
+.ne-nav-group:first-of-type::after { display: none; }
+.ne-home[data-collapsed] .ne-nav-group span { opacity: 0; }
+.ne-home[data-collapsed] .ne-nav-group::after { opacity: 1; }
+.ne-home[data-collapsed] .ne-nav-group:first-of-type::after { display: none; }
+
+/* nav item — label condenses, icon centers when collapsed */
+.ne-nav-item { position: relative; transition: background .15s, color .15s, padding .32s var(--ne-ease), gap .32s var(--ne-ease); }
+.ne-nav-label { white-space: nowrap; overflow: hidden; max-width: 170px; opacity: 1; transition: opacity .2s var(--ne-ease), max-width .32s var(--ne-ease); }
+.ne-home[data-collapsed] .ne-nav-item { width: 44px; height: 44px; padding: 0; gap: 0; justify-content: center; margin-inline: auto; }
+.ne-home[data-collapsed] .ne-nav-label { opacity: 0; max-width: 0; }
+.ne-home[data-collapsed] .ne-nav-item.on { background: var(--ajb-accent); color: var(--ajb-on-accent); box-shadow: var(--ajb-glow-sand); }
+.ne-home[data-collapsed] .ne-nav-item.on::before { opacity: 0; }
+[data-theme="light"] .ne-home[data-collapsed] .ne-nav-item.on { color: var(--ajb-on-accent); }
+
+/* approvals badge ⇄ dot */
+.ne-nav-badge { margin-inline-start: auto; min-width: 20px; max-width: 40px; height: 20px; padding: 0 6px; border-radius: var(--ajb-r-pill); background: var(--ajb-tint-sand-bg); color: var(--ajb-accent); font-size: 11px; font-weight: var(--ajb-w-bold); display: inline-flex; align-items: center; justify-content: center; overflow: hidden; opacity: 1; transition: opacity .14s var(--ne-ease), max-width .32s var(--ne-ease), margin .32s var(--ne-ease); }
+.ne-nav-dot { display: none; position: absolute; top: 8px; inset-inline-end: 8px; width: 7px; height: 7px; border-radius: var(--ajb-r-pill); background: var(--ajb-accent); }
+.ne-home[data-collapsed] .ne-nav-badge { opacity: 0; max-width: 0; min-width: 0; padding: 0; margin: 0; }
+.ne-home[data-collapsed] .ne-nav-dot { display: block; }
+.ne-home[data-collapsed] .ne-nav-item.on .ne-nav-dot { background: var(--ajb-on-accent); }
+
+/* footer — settings, divider, signed-in user */
+.ne-side-divider { height: 1px; background: var(--ajb-stroke); margin: 10px 6px; transition: margin .32s var(--ne-ease); }
+.ne-home[data-collapsed] .ne-side-divider { margin-inline: 12px; }
+.ne-side-user { display: flex; align-items: center; gap: 11px; height: 50px; padding: 0 9px; box-sizing: border-box; border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-md); background: color-mix(in srgb, var(--ajb-fg) 2%, transparent); transition: padding .32s var(--ne-ease), border-color .3s var(--ne-ease), background .3s var(--ne-ease); cursor: pointer; }
+.ne-side-user:hover { border-color: var(--ajb-stroke-strong); }
+.ne-home[data-collapsed] .ne-side-user { padding: 0; gap: 0; border-color: transparent; background: transparent; justify-content: center; }
+.ne-side-user-txt { display: flex; flex-direction: column; min-width: 0; overflow: hidden; max-width: 160px; opacity: 1; transition: opacity .2s var(--ne-ease), max-width .32s var(--ne-ease); }
+.ne-home[data-collapsed] .ne-side-user-txt { opacity: 0; max-width: 0; }
+.ne-side-user-name { font-size: 13px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg); white-space: nowrap; }
+.ne-side-user-role { font-size: 11px; color: var(--ajb-fg-subtle); white-space: nowrap; }
+.ne-side-user-act { margin-inline-start: auto; color: var(--ajb-fg-subtle); display: inline-flex; opacity: 1; width: 16px; overflow: hidden; transition: opacity .18s var(--ne-ease), width .32s var(--ne-ease); }
+.ne-side-user-act i { width: 16px; height: 16px; }
+[dir="rtl"] .ne-side-user-act i { transform: scaleX(-1); }
+.ne-home[data-collapsed] .ne-side-user-act { opacity: 0; width: 0; margin-inline-start: 0; }
+
+/* topbar toggle */
+.ne-side-toggle { width: 38px; height: 38px; flex: none; border-radius: 10px; border: 1px solid var(--ajb-stroke); background: transparent; color: var(--ajb-fg-muted); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; margin-inline-end: 14px; transition: background .16s, color .16s, border-color .16s; }
+.ne-side-toggle:hover { background: color-mix(in srgb, var(--ajb-fg) 5%, transparent); color: var(--ajb-fg); border-color: var(--ajb-stroke-strong); }
+.ne-side-toggle i { width: 19px; height: 19px; transition: transform .36s var(--ne-ease); }
+.ne-home[data-collapsed] .ne-side-toggle i { transform: rotate(180deg); }
+[dir="rtl"] .ne-side-toggle i { transform: rotate(180deg); }
+[dir="rtl"] .ne-home[data-collapsed] .ne-side-toggle i { transform: rotate(0deg); }

@@ -1,0 +1,66 @@
+/* ============================================================
+   Delete flow — styles (used by Templates list + View details)
+   Reuses dictionary .ajb-dialog / .ajb-menu / .ajb-toast.
+   ============================================================ */
+
+/* ---------- row / header kebab menu ---------- */
+.nd-menuwrap { position: relative; display: inline-flex; }
+.nd-menu { position: absolute; z-index: 50; top: calc(100% + 6px); inset-inline-end: 0; min-width: 188px; }
+.nd-menu.is-up { top: auto; bottom: calc(100% + 6px); }
+.nd-menu .ajb-menu__item.is-danger { color: var(--ajb-tint-danger-fg); }
+.nd-menu .ajb-menu__item.is-danger:hover { background: var(--ajb-tint-danger-bg); }
+.nd-menu .ajb-menu__item.is-disabled { color: var(--ajb-fg-subtle); pointer-events: none; }
+.nd-menu .ajb-menu__item.is-disabled svg { color: var(--ajb-fg-subtle); }
+.nd-menu-sep { height: 1px; background: var(--ajb-stroke); margin: 6px 0; }
+.nd-menu-label { flex: 1; min-width: 0; }
+.nd-menu-hint { display: block; font-size: 11px; line-height: 1.3; color: var(--ajb-fg-subtle); margin-top: 2px; font-weight: var(--ajb-w-regular); white-space: normal; }
+
+/* ---------- dialog icon tones (delete = danger, blocked = warning) ---------- */
+.nd-dialog .ajb-dialog__ico--warning { background: var(--ajb-tint-warning-bg); }
+.nd-dialog .ajb-dialog__ico--warning svg { color: var(--ajb-tint-warning-fg); }
+.nd-strong { color: var(--ajb-fg); font-weight: var(--ajb-w-medium); }
+.nd-permanent { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ajb-tint-danger-fg); background: var(--ajb-tint-danger-bg); border: 1px solid color-mix(in srgb, var(--ajb-danger) 28%, transparent); border-radius: var(--ajb-r); padding: 9px 12px; margin: -8px 0 22px; }
+.nd-permanent i { width: 15px; height: 15px; flex: none; }
+.nd-tplchip { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--ajb-fg-muted); background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r); padding: 8px 12px; margin: -6px 0 20px; }
+.nd-tplchip .ajb-ltr { color: var(--ajb-fg-subtle); }
+.nd-tplchip i { width: 15px; height: 15px; color: var(--ajb-accent); flex: none; }
+
+/* ---------- toast (bottom-center within the console) ---------- */
+.nd-toastwrap { position: absolute; inset-inline: 0; bottom: 26px; display: flex; justify-content: center; z-index: 70; pointer-events: none; padding: 0 20px; }
+.nd-toastwrap .ajb-toast { pointer-events: auto; max-width: 420px; animation: nd-toast-in var(--ajb-dur-3) var(--ajb-ease-out); }
+@keyframes nd-toast-in { from { transform: translateY(12px); } to { transform: none; } }
+.nd-toast-sub { font-size: 12px; color: var(--ajb-fg-subtle); margin-top: 2px; }
+.nd-toast-x { margin-inline-start: auto; color: var(--ajb-fg-subtle); cursor: pointer; display: inline-flex; }
+.nd-toast-x i { width: 15px; height: 15px; }
+.nd-toast__ico--danger { background: var(--ajb-tint-danger-bg); color: var(--ajb-tint-danger-fg); }
+.nd-toast__ico--neutral { background: color-mix(in srgb, var(--ajb-fg) 9%, transparent); color: var(--ajb-fg); }
+
+/* ---------- modal overlay (centered within the console) ---------- */
+.ne-console { position: relative; }
+.nd-overlay { position: absolute; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.nd-overlay .ajb-dialog { animation: nd-rise var(--ajb-dur-3) var(--ajb-ease-out); }
+@keyframes nd-rise { from { transform: translateY(10px) scale(0.985); } to { transform: none; } }
+
+/* ---------- archive dialog ---------- */
+.nd-dialog .ajb-dialog__ico--sand { background: var(--ajb-tint-sand-bg); }
+.nd-dialog .ajb-dialog__ico--sand svg { color: var(--ajb-tint-sand-fg); }
+.nd-arc { width: 484px; }
+.nd-arc-lead { margin-bottom: 16px; }
+.nd-arc-reasonlbl { font-size: var(--ajb-micro); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ajb-fg-subtle); margin-bottom: 10px; }
+[dir="rtl"] .nd-arc-reasonlbl, [lang="ar"] .nd-arc-reasonlbl { letter-spacing: 0; text-transform: none; }
+.nd-arc-reasons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.nd-arc-reason { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-md); background: var(--ajb-surface); cursor: pointer; font-size: var(--ajb-small); color: var(--ajb-fg); text-align: start; font-family: var(--ajb-font); transition: border-color var(--ajb-dur-2), background var(--ajb-dur-2); }
+.nd-arc-reason:hover { border-color: var(--ajb-stroke-strong); }
+.nd-arc-reason.is-on { border-color: var(--ajb-accent); background: var(--ajb-tint-sand-bg); }
+.nd-arc-reason .ajb-radio { width: 18px; height: 18px; }
+.nd-arc-reason > i { width: 16px; height: 16px; color: var(--ajb-fg-subtle); flex: none; }
+.nd-arc-reason.is-on > i { color: var(--ajb-accent); }
+.nd-arc-reason-lbl { flex: 1; min-width: 0; }
+.nd-arc-other { width: 100%; margin-bottom: 14px; }
+.nd-arc-keep { display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; line-height: 1.45; color: var(--ajb-fg-muted); background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r); padding: 10px 12px; margin-bottom: 22px; }
+.nd-arc-keep i { width: 15px; height: 15px; flex: none; color: var(--ajb-fg-subtle); margin-top: 1px; }
+
+/* ---------- archived detail banner ---------- */
+.vw-arc { margin-bottom: 18px; }
+.vw-arc .ajb-alert__title { font-weight: var(--ajb-w-bold); font-size: 14px; color: var(--ajb-fg); margin: 0 0 3px; }
+.vw-arc .ajb-alert__text { font-size: 13px; color: var(--ajb-fg-muted); margin: 0; }

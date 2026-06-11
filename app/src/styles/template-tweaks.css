@@ -1,0 +1,90 @@
+/* ============================================================
+   Expressive tweaks — reshape the Create-Template journey's feel.
+   Driven by data-density / data-surface / data-accent on .ne-console.
+   Every value resolves to an Aljazira design-system token — no new
+   colors, type, or spacing are introduced. The unset/default state
+   (comfortable · flat · balanced) reproduces the shipped design.
+   ============================================================ */
+
+/* ----------------------------------------------------------------
+   DENSITY — global rhythm. Compact = efficient power-console;
+   Spacious = unhurried, advisory. Retunes padding/gaps/field height
+   together, never one property in isolation.
+   ---------------------------------------------------------------- */
+[data-density="compact"] .ts-page { padding: 18px 20px 30px; }
+[data-density="compact"] .ts-page.wizard { padding: 18px 20px 0; }
+[data-density="compact"] .ts-hd { margin-bottom: 15px; }
+[data-density="compact"] .ts-work { gap: 16px; }
+[data-density="compact"] .ts-formcol { gap: 12px; }
+[data-density="compact"] .ts-rail,
+[data-density="compact"] .ts-wizside { gap: 12px; }
+[data-density="compact"] .ts-card { padding: 15px 17px; }
+[data-density="compact"] .ts-card-h { margin-bottom: 12px; }
+[data-density="compact"] .ts-grid { gap: 11px 14px; }
+[data-density="compact"] .ts-field { gap: 4px; }
+[data-density="compact"] .ajb-input,
+[data-density="compact"] .ajb-select,
+[data-density="compact"] .ajb-datefield input { padding-top: 7px; padding-bottom: 7px; }
+[data-density="compact"] .ts-wizbody { margin-top: 18px; }
+[data-density="compact"] .ts-content { gap: 12px; }
+
+[data-density="spacious"] .ts-page { padding: 34px 40px 52px; }
+[data-density="spacious"] .ts-page.wizard { padding: 34px 40px 0; }
+[data-density="spacious"] .ts-hd { margin-bottom: 30px; }
+[data-density="spacious"] .ts-work { gap: 30px; }
+[data-density="spacious"] .ts-formcol { gap: 24px; }
+[data-density="spacious"] .ts-rail,
+[data-density="spacious"] .ts-wizside { gap: 22px; }
+[data-density="spacious"] .ts-card { padding: 28px 32px; }
+[data-density="spacious"] .ts-card-h { margin-bottom: 24px; }
+[data-density="spacious"] .ts-grid { gap: 22px 24px; }
+[data-density="spacious"] .ts-field { gap: 10px; }
+[data-density="spacious"] .ajb-input,
+[data-density="spacious"] .ajb-select,
+[data-density="spacious"] .ajb-datefield input { padding-top: 12px; padding-bottom: 12px; }
+[data-density="spacious"] .ts-content { gap: 22px; }
+
+/* ----------------------------------------------------------------
+   SURFACE — material depth. Flat (default) keeps surfaces sitting
+   flat on the gradient per the brand book; Raised lifts every
+   container with the DS elevation tokens + a brighter hairline.
+   ---------------------------------------------------------------- */
+[data-surface="raised"] .ts-card,
+[data-surface="raised"] .ts-varpanel,
+[data-surface="raised"] .ts-seg,
+[data-surface="raised"] .ts-pv,
+[data-surface="raised"] .ts-tablewrap {
+  box-shadow: var(--ajb-shadow-2);
+  border-color: var(--ajb-stroke-strong);
+}
+[data-surface="raised"] .ts-saved-card { box-shadow: var(--ajb-shadow-3); }
+
+/* ----------------------------------------------------------------
+   ACCENT — how far the Sand brand color travels.
+   Reserved: pull Sand out of structural chrome; it survives only on
+     true interactive selection (chips · tabs · channel · primary).
+     This is the brand book's "restrained Sand" reading.
+   Balanced (default): the shipped distribution — no rules.
+   Expressive: push Sand into numbered badges, the primary glow,
+     active language codes and the segment meter for a warmer,
+     more visibly-branded surface.
+   ---------------------------------------------------------------- */
+[data-accent="reserved"] .ts-card-n {
+  background: var(--ajb-surface-2); color: var(--ajb-fg-muted);
+}
+[data-accent="reserved"] .ts-varpanel-title i,
+[data-accent="reserved"] .ts-assume-note i { color: var(--ajb-fg-muted); }
+[data-accent="reserved"] .ts-crumbs .on,
+[data-accent="reserved"] .ajb-crumb__current { color: var(--ajb-fg-muted); }
+[data-accent="reserved"] .ts-saved-id-v { color: var(--ajb-fg); }
+
+[data-accent="expressive"] .ts-card-n {
+  background: var(--ajb-tint-sand-bg);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ajb-accent) 10%, transparent);
+}
+[data-accent="expressive"] .ajb-btn--sand { box-shadow: var(--ajb-glow-sand); }
+[data-accent="expressive"] .ts-langtabs button.is-on .ts-langtab-code {
+  background: var(--ajb-accent); color: var(--ajb-on-accent);
+}
+[data-accent="expressive"] .ts-seg-num { color: var(--ajb-accent); }
+[data-accent="expressive"] .ts-card-h i { color: var(--ajb-accent); }

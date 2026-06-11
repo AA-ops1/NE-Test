@@ -1,0 +1,229 @@
+/* ============================================================
+   Approvals (maker–checker) — styles
+   Builds on the dictionary (.ajb-*) and studio/view sheets (.ts-*, .vw-*,
+   .tl-*, .nd-*). Only approval-specific pieces live here. All values
+   resolve to Aljazira design-system tokens.
+   ============================================================ */
+
+/* ---------- nav badge (Approvals sidebar count) ---------- */
+.ne-nav-badge { margin-inline-start: auto; }
+
+/* Person chip, priority (status dot), timeline and diff now live in the
+   design system (.ajb-person / .ajb-status / .ajb-timeline / .ajb-diff). */
+
+/* ---------- token chip (inline) ---------- */
+.ap-tok { background: var(--ajb-tint-sand-bg); color: var(--ajb-accent); border-radius: 4px; padding: 1px 4px; font-weight: var(--ajb-w-medium); }
+
+/* ---------- kind badge (new vs edit) ---------- */
+.ap-kind { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: var(--ajb-w-medium); padding: 4px 11px; border-radius: var(--ajb-r-pill); white-space: nowrap; }
+.ap-kind i { width: 13px; height: 13px; }
+.ap-kind.is-new { background: var(--ajb-tint-info-bg); color: var(--ajb-tint-info-fg); }
+.ap-kind.is-edit { background: var(--ajb-tint-sand-bg); color: var(--ajb-tint-sand-fg); }
+/* version-delta arrow (replaces the old "→" glyph); inherits badge color, flips under RTL */
+.ap-vers-arrow { opacity: 0.7; }
+[dir="rtl"] .ap-kind .ap-vers-arrow { transform: scaleX(-1); }
+
+/* ============================================================
+   QUEUE
+   ============================================================ */
+.ap-qtable.ajb-table th, .ap-qtable.ajb-table td { padding: 16px 18px; }
+/* the "ago" cell isolates its latin/relative-time run as .ajb-ltr (inline-block
+   in RTL); keep it vertically centered with the row's chips in Arabic. */
+.ap-qtable td .ajb-ltr { vertical-align: middle; }
+.ap-qtable tbody tr { cursor: pointer; transition: background var(--ajb-dur-1) var(--ajb-ease); }
+.ap-qtable tbody tr:hover { background: color-mix(in srgb, var(--ajb-fg) 3%, transparent); }
+.ap-owntag { display: inline-flex; align-items: center; gap: 4px; margin-inline-start: 9px; font-size: 10.5px; font-weight: var(--ajb-w-bold); letter-spacing: 0.02em; color: var(--ajb-tint-warning-fg); background: var(--ajb-tint-warning-bg); padding: 2px 8px; border-radius: var(--ajb-r-pill); vertical-align: middle; }
+[lang="ar"] .ap-owntag { letter-spacing: 0; }
+.ap-owntag i { width: 11px; height: 11px; }
+.ap-reviewbtn.ajb-btn { padding: 9px 16px; font-size: 13px; }
+.ap-reviewbtn.ajb-btn svg { width: 15px; height: 15px; }
+/* mirror the directional arrow in Arabic (RTL) only */
+[dir="rtl"] .ap-reviewbtn.ajb-btn svg { transform: scaleX(-1); }
+
+/* queue cards (alt layout) */
+.ap-qcards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.ap-qcard { gap: 14px; cursor: pointer; }
+.ap-qcard-top { display: flex; align-items: center; gap: 12px; }
+.ap-qcard-top .tl-chico { flex: none; }
+.ap-qcard-name { flex: 1; min-width: 0; }
+.ap-qcard-mid { display: flex; }
+.ap-qcard-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 1px solid var(--ajb-stroke); }
+
+/* shared name cell bits (mirror the list) */
+.tl-chico { width: 38px; height: 38px; border-radius: 11px; background: color-mix(in srgb, var(--ajb-fg) 6%, transparent); display: inline-flex; align-items: center; justify-content: center; color: var(--ajb-accent); }
+.tl-chico i { width: 18px; height: 18px; }
+
+/* ============================================================
+   REVIEW SCREEN
+   ============================================================ */
+.ap-back { display: inline-flex; align-items: center; gap: 8px; background: 0; border: 0; padding: 0; cursor: pointer; font-family: var(--ajb-font); font-size: 13px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg-muted); transition: color var(--ajb-dur-2); }
+.ap-back:hover { color: var(--ajb-fg); }
+.ap-back i { width: 16px; height: 16px; }
+[dir="rtl"] .ap-back i { transform: scaleX(-1); }
+.ap-review-hd { margin-bottom: 14px; }
+
+/* summary card */
+.ap-summary-card { margin-bottom: 0; }
+.ap-rs { display: flex; flex-direction: column; gap: 16px; }
+.ap-rs-top { display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap; }
+.ap-rs-chico { width: 46px; height: 46px; border-radius: 13px; background: color-mix(in srgb, var(--ajb-fg) 6%, transparent); display: inline-flex; align-items: center; justify-content: center; color: var(--ajb-accent); flex: none; }
+.ap-rs-chico i { width: 22px; height: 22px; }
+.ap-rs-titleblock { min-width: 0; flex: 1; }
+.ap-rs-title { font-size: 24px; }
+.ap-rs-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 8px; font-size: 12.5px; color: var(--ajb-fg-subtle); }
+.ap-rs-tags { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ap-rs-submit { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--ajb-stroke); }
+.ap-rs-when { font-size: 12.5px; color: var(--ajb-fg-subtle); }
+.ap-rs-when b { color: var(--ajb-fg-muted); font-weight: var(--ajb-w-medium); }
+
+/* maker note */
+.ap-makernote { background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-md); padding: 14px 16px; }
+.ap-makernote-lbl { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: var(--ajb-w-bold); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ajb-fg-subtle); margin-bottom: 7px; }
+[lang="ar"] .ap-makernote-lbl { letter-spacing: 0; text-transform: none; }
+.ap-makernote-lbl i { width: 14px; height: 14px; color: var(--ajb-accent); }
+.ap-makernote-txt { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--ajb-fg); }
+
+.ap-split { align-items: start; }
+
+/* ---------- changes / diff ---------- */
+.ap-changes { display: flex; flex-direction: column; gap: 18px; }
+.ap-changes-count { font-size: 12px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg-muted); }
+.ap-nochanges { display: flex; align-items: center; gap: 9px; margin: 0; font-size: 13.5px; color: var(--ajb-fg-muted); }
+.ap-nochanges i { width: 16px; height: 16px; color: var(--ajb-fg-subtle); }
+.ap-newalert .ajb-alert__title { font-weight: var(--ajb-w-bold); font-size: 14px; color: var(--ajb-fg); }
+.ap-newalert .ajb-alert__desc { font-size: 13px; }
+
+/* Per-field before/after diff now uses the design-system .ajb-diff component. */
+
+/* ---------- content read ---------- */
+.ap-cr { display: flex; flex-direction: column; gap: 16px; }
+.ap-varsblock { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--ajb-stroke); }
+.ap-vars { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.ap-varchip { display: inline-flex; align-items: center; gap: 8px; background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-pill); padding: 5px 12px; }
+.ap-varchip-tok { font-family: 'SFMono-Regular', ui-monospace, Menlo, monospace; font-size: 12px; color: var(--ajb-accent); }
+.ap-varchip-lbl { font-size: 12px; color: var(--ajb-fg-muted); }
+.ap-varchip.is-sens { border-color: color-mix(in srgb, var(--ajb-dune) 35%, var(--ajb-stroke)); }
+.ap-varchip.is-sens i { width: 13px; height: 13px; color: var(--ajb-tint-warning-fg); }
+
+/* ---------- device preview wrapper ---------- */
+.ap-prevwrap { background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-lg); padding: 18px; }
+
+/* Audit-trail timeline now uses the design-system .ajb-timeline component. */
+
+/* ============================================================
+   DECISION BAR
+   ============================================================ */
+.ap-decision { background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-lg); padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+.ap-decision.is-blocked { border-color: color-mix(in srgb, var(--ajb-dune) 35%, var(--ajb-stroke)); }
+.ap-decision-h { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: var(--ajb-w-bold); color: var(--ajb-fg); }
+.ap-decision-h i { width: 16px; height: 16px; color: var(--ajb-accent); }
+.ap-fullbtn { width: 100%; }
+.ap-approve { font-size: 15px; padding: 15px 28px; }
+.ap-addnote { display: inline-flex; align-items: center; justify-content: center; gap: 7px; background: 0; border: 1px dashed var(--ajb-stroke-strong); border-radius: var(--ajb-r-md); padding: 10px; cursor: pointer; font-family: var(--ajb-font); font-size: 12.5px; color: var(--ajb-fg-muted); transition: border-color var(--ajb-dur-2), color var(--ajb-dur-2); }
+.ap-addnote:hover { border-color: var(--ajb-accent); color: var(--ajb-fg); }
+.ap-addnote i { width: 14px; height: 14px; }
+.ap-note-opt { font-size: 10.5px; color: var(--ajb-fg-subtle); }
+.ap-note-ta { width: 100%; box-sizing: border-box; min-height: 64px; resize: vertical; line-height: 1.5; font-family: var(--ajb-font); }
+.ap-decision-sep { height: 1px; background: var(--ajb-stroke); margin: 2px 0; }
+.ap-decision-row { display: flex; gap: 10px; }
+.ap-half { flex: 1; }
+.ap-rejectbtn { color: var(--ajb-tint-danger-fg); }
+.ap-rejectbtn:hover { border-color: var(--ajb-danger); }
+.ap-reassign-link { display: inline-flex; align-items: center; justify-content: center; gap: 7px; background: 0; border: 0; padding: 6px; cursor: pointer; font-family: var(--ajb-font); font-size: 12.5px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg-muted); }
+.ap-reassign-link:hover { color: var(--ajb-accent); }
+.ap-reassign-link i { width: 14px; height: 14px; }
+.ap-guard .ajb-alert__title { font-weight: var(--ajb-w-bold); font-size: 13.5px; color: var(--ajb-fg); }
+.ap-guard .ajb-alert__desc { font-size: 12.5px; line-height: 1.5; }
+
+/* reason block */
+.ap-reasonblock { display: flex; flex-direction: column; gap: 10px; }
+.ap-reason-hd { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: var(--ajb-w-bold); color: var(--ajb-accent); }
+.ap-reason-hd.is-reject { color: var(--ajb-tint-danger-fg); }
+.ap-reason-hd i { width: 16px; height: 16px; }
+.ap-reason-req { margin: 0; font-size: 12.5px; line-height: 1.45; color: var(--ajb-fg-muted); }
+.ap-reason-ta { width: 100%; box-sizing: border-box; min-height: 96px; resize: vertical; line-height: 1.5; font-family: var(--ajb-font); }
+.ap-reason-ta.is-error { border-color: var(--ajb-danger); }
+.ap-reason-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+/* ---------- stacked variant: bottom decision dock ---------- */
+.ap-stacked { padding-bottom: 0; display: flex; flex-direction: column; min-height: 100%; }
+.ap-stack-body { flex: 1; display: flex; flex-direction: column; gap: 18px; max-width: 920px; width: 100%; margin: 0 auto; }
+.ap-stack-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+.ap-decision-dock { position: sticky; bottom: 0; margin: 22px -30px 0; padding: 16px 30px 22px; background: color-mix(in srgb, var(--ajb-bg) 86%, transparent); backdrop-filter: blur(14px); border-top: 1px solid var(--ajb-stroke); z-index: 20; }
+.ap-decision-dock-inner { max-width: 920px; margin: 0 auto; }
+.ap-decision--stacked { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; padding: 0; background: transparent; border: 0; }
+.ap-decision--stacked .ap-decision-h { flex-basis: 100%; margin-bottom: 2px; }
+.ap-decision--stacked .ap-approve { flex: 1 1 240px; order: 0; }
+.ap-decision--stacked .ap-decision-sep { display: none; }
+.ap-decision--stacked .ap-decision-row { order: 1; flex: 0 0 auto; }
+.ap-decision--stacked .ap-addnote { order: 3; flex: 0 0 auto; padding: 13px 16px; }
+.ap-decision--stacked .ap-reassign-link { order: 2; flex: 0 0 auto; padding: 13px; }
+.ap-decision--stacked .ap-note-ta { order: 4; flex-basis: 100%; }
+.ap-decision--stacked.is-blocked { flex-direction: column; align-items: stretch; }
+.ap-decision--stacked .ap-reasonblock { flex-basis: 100%; }
+
+/* ============================================================
+   MAKER HOME
+   ============================================================ */
+.ap-mfilter { margin-bottom: 20px; flex-wrap: wrap; }
+.ap-mcards { display: flex; flex-direction: column; gap: 14px; }
+.ap-mcard { gap: 14px; }
+.ap-mcard-top { display: flex; align-items: center; gap: 12px; }
+.ap-mcard-top .tl-chico { flex: none; }
+.ap-mcard-top .ap-qcard-name { flex: 1; min-width: 0; }
+.ap-mcard-top .ajb-badge i { width: 13px; height: 13px; }
+.ap-mcard-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ap-mcard-hint { font-size: 13px; color: var(--ajb-fg-muted); }
+.ap-mcard-status { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ajb-fg-muted); }
+.ap-mcard-status i { width: 15px; height: 15px; color: var(--ajb-fg-subtle); }
+.ap-mcard-status.is-ok { color: var(--ajb-tint-success-fg); }
+.ap-mcard-status.is-ok i { color: var(--ajb-tint-success-fg); }
+.ap-mcard--ready { border-color: color-mix(in srgb, var(--ajb-accent) 24%, var(--ajb-stroke)); }
+
+/* checker note (sent-back) */
+.ap-checkernote { background: var(--ajb-tint-warning-bg); border: 1px solid color-mix(in srgb, var(--ajb-dune) 30%, transparent); border-radius: var(--ajb-r-md); padding: 14px 16px; }
+.ap-checkernote-h { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg); }
+.ap-checkernote-when { margin-inline-start: auto; font-size: 11.5px; color: var(--ajb-fg-subtle); font-weight: var(--ajb-w-regular); }
+.ap-checkernote-lbl { font-size: 10.5px; font-weight: var(--ajb-w-bold); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ajb-tint-warning-fg); margin: 10px 0 5px; }
+[lang="ar"] .ap-checkernote-lbl { letter-spacing: 0; text-transform: none; }
+.ap-checkernote-txt { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--ajb-fg); }
+
+/* ============================================================
+   MODALS — reassign / submit (extend .ajb-dialog)
+   ============================================================ */
+.ap-modal { width: 460px; }
+.ap-pickerlbl { font-size: 11px; font-weight: var(--ajb-w-bold); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ajb-fg-subtle); margin-bottom: 10px; }
+[lang="ar"] .ap-pickerlbl { letter-spacing: 0; text-transform: none; }
+.ap-pickerlbl--mt { margin-top: 18px; }
+.ap-checkers { display: flex; flex-direction: column; gap: 8px; }
+.ap-checker { display: flex; align-items: center; gap: 12px; background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-md); padding: 11px 14px; cursor: pointer; font-family: var(--ajb-font); text-align: start; transition: border-color var(--ajb-dur-2), background var(--ajb-dur-2); }
+.ap-checker:hover { border-color: var(--ajb-stroke-strong); }
+.ap-checker.is-on { border-color: var(--ajb-accent); background: var(--ajb-tint-sand-bg); }
+.ap-checker-name { font-size: 14px; color: var(--ajb-fg); font-weight: var(--ajb-w-medium); }
+.ap-submitmodal { width: 480px; }
+.ap-submitmodal .ap-note-ta { margin-top: 0; }
+.ap-submit-actions { margin-top: 22px; }
+
+/* ============================================================
+   TOAST tones (extend the delete-flow toast)
+   ============================================================ */
+.ajb-toast__ico.ap-toast--ok { background: var(--ajb-tint-success-bg); color: var(--ajb-tint-success-fg); }
+.ajb-toast__ico.ap-toast--danger { background: var(--ajb-tint-danger-bg); color: var(--ajb-tint-danger-fg); }
+
+/* ============================================================
+   RESPONSIVE (console container queries)
+   ============================================================ */
+@container console (max-width: 860px) {
+  .ap-qcards { grid-template-columns: 1fr; }
+  .ap-stack-grid { grid-template-columns: 1fr; }
+}
+@container console (max-width: 720px) {
+  .ap-split.vw-work { grid-template-columns: 1fr; }
+  .ap-split .vw-rail { position: static; }
+}
+@container console (max-width: 560px) {
+  .ap-qtable.ajb-table th, .ap-qtable.ajb-table td { padding: 13px 14px; }
+  .ap-decision-dock { margin-inline: -16px; padding-inline: 16px; }
+  .ap-decision--stacked { flex-direction: column; align-items: stretch; }
+  .ap-decision--stacked .ap-decision-row { flex-direction: row; }
+}

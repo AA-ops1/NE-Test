@@ -1,0 +1,75 @@
+/* ============================================================
+   Edit Template — styles
+   Only edit-specific pieces. Everything else reuses the studio
+   sheet (template-studio.css) and the dictionary (.ajb-*).
+   ============================================================ */
+
+/* dialog overlay needs a positioned frame */
+.ne-console { position: relative; }
+
+/* ---------- header meta strip (Updated by / Unsaved) ---------- */
+.et-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; font-size: 12.5px; color: var(--ajb-fg-subtle); }
+.et-meta b { color: var(--ajb-fg-muted); font-weight: var(--ajb-w-medium); }
+.et-meta-sep { opacity: 0.5; }
+.et-unsaved { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: var(--ajb-w-bold); letter-spacing: 0.03em; color: var(--ajb-tint-warning-fg); background: var(--ajb-tint-warning-bg); border: 1px solid color-mix(in srgb, var(--ajb-dune) 36%, transparent); padding: 3px 10px 3px 8px; border-radius: var(--ajb-r-pill); }
+[lang="ar"] .et-unsaved { letter-spacing: 0; }
+.et-unsaved::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--ajb-tint-warning-fg); }
+
+/* the edit H1 carries the template name + a status/version cluster */
+.et-titlerow { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.et-vchip { font-size: 12px; font-weight: var(--ajb-w-bold); color: var(--ajb-fg-muted); background: color-mix(in srgb, var(--ajb-fg) 7%, transparent); border: 1px solid var(--ajb-stroke); padding: 3px 10px; border-radius: var(--ajb-r-pill); letter-spacing: 0.02em; }
+
+/* ---------- status banner (dictionary .ajb-alert) ---------- */
+.et-banner { margin-bottom: 18px; }
+.et-banner .ajb-alert__title { font-weight: var(--ajb-w-bold); font-size: 14px; color: var(--ajb-fg); margin: 0 0 4px; }
+.et-banner .ajb-alert__text { font-size: 13px; line-height: 1.55; color: var(--ajb-fg-muted); margin: 0; }
+.et-banner .et-ver-inline { font-weight: var(--ajb-w-bold); }
+.et-banner-body { flex: 1; min-width: 0; }
+
+/* ---------- version history card (rail) ---------- */
+.et-ver { background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-lg); padding: 16px 18px 8px; }
+.et-ver-head { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: var(--ajb-w-bold); color: var(--ajb-fg); margin-bottom: 6px; }
+.et-ver-head i { width: 16px; height: 16px; color: var(--ajb-accent); }
+.et-ver-list { position: relative; padding-inline-start: 6px; }
+/* the connecting rail line */
+.et-ver-list::before { content: ""; position: absolute; inset-block: 14px; inset-inline-start: 11px; width: 1.5px; background: var(--ajb-stroke); }
+.et-vrow { position: relative; display: flex; gap: 14px; padding: 11px 0; }
+.et-vdot { position: relative; z-index: 1; width: 11px; height: 11px; margin-top: 4px; border-radius: 50%; background: var(--ajb-surface); border: 2px solid var(--ajb-stroke-strong); flex: none; }
+.et-vrow.is-current .et-vdot { border-color: var(--ajb-accent); background: var(--ajb-accent); box-shadow: 0 0 0 4px var(--ajb-tint-sand-bg); }
+.et-vrow.is-new .et-vdot { border-color: var(--ajb-tint-warning-fg); background: var(--ajb-tint-warning-fg); box-shadow: 0 0 0 4px var(--ajb-tint-warning-bg); }
+.et-vbody { flex: 1; min-width: 0; }
+.et-vtop { display: flex; align-items: center; gap: 8px; }
+.et-vver { font-size: 13px; font-weight: var(--ajb-w-bold); color: var(--ajb-fg); }
+.et-vtag { font-size: 9.5px; font-weight: var(--ajb-w-bold); letter-spacing: 0.05em; text-transform: uppercase; padding: 1px 7px; border-radius: var(--ajb-r-pill); }
+[lang="ar"] .et-vtag { letter-spacing: 0; text-transform: none; }
+.et-vtag.cur { color: var(--ajb-accent); background: var(--ajb-tint-sand-bg); }
+.et-vtag.new { color: var(--ajb-tint-warning-fg); background: var(--ajb-tint-warning-bg); }
+.et-vact { font-size: 12px; color: var(--ajb-fg-muted); margin-top: 2px; }
+.et-vmeta { font-size: 11px; color: var(--ajb-fg-subtle); margin-top: 2px; }
+
+/* ---------- discard dialog overlay ----------
+   Entrance animates transform only — never opacity — so the dialog stays
+   visible even where the animation clock is paused (print, PDF, headless). */
+.et-overlay { position: absolute; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.et-overlay .ajb-dialog { animation: et-rise var(--ajb-dur-3) var(--ajb-ease-out); }
+@keyframes et-rise { from { transform: translateY(10px) scale(0.985); } to { transform: none; } }
+
+/* ---------- locked state ---------- */
+.et-locked { min-height: 100%; display: flex; align-items: center; justify-content: center; padding: 40px 24px; }
+.et-locked-card { width: 100%; max-width: 460px; text-align: center; padding: 40px 36px; }
+.et-lock-badge { width: 64px; height: 64px; border-radius: var(--ajb-r-pill); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--ajb-fg) 6%, transparent); border: 1px solid var(--ajb-stroke); }
+.et-lock-badge i { width: 28px; height: 28px; color: var(--ajb-fg-muted); stroke-width: 1.5; }
+.et-lock-title { font-size: 22px; font-weight: var(--ajb-w-light); color: var(--ajb-fg); margin: 0 0 10px; }
+.et-lock-text { font-size: 13.5px; line-height: 1.6; color: var(--ajb-fg-muted); margin: 0 auto 22px; max-width: 320px; }
+.et-lock-meta { display: inline-flex; align-items: center; gap: 10px; margin: 0 auto 24px; padding: 10px 16px; background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-md); font-size: 12.5px; color: var(--ajb-fg-muted); }
+.et-lock-meta .ajb-ltr { color: var(--ajb-fg); font-weight: var(--ajb-w-medium); }
+.et-lock-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+/* saved: reuse .ts-saved-* with a small tweak for the version chip */
+.et-saved-ver { color: var(--ajb-accent); }
+
+/* ---------- narrow (mobile) ---------- */
+@container console (max-width: 560px) {
+  .et-meta { font-size: 12px; }
+  .et-locked-card { padding: 32px 22px; }
+}

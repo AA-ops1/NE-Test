@@ -1,0 +1,127 @@
+/* ============================================================
+   View Template Details — styles
+   Read-only detail view. Reuses the studio sheet + dictionary
+   (.ajb-*). Only view-specific pieces live here.
+   ============================================================ */
+
+/* ---------- read-only pill in the header ---------- */
+.vw-ro { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: var(--ajb-w-bold); letter-spacing: 0.03em; color: var(--ajb-fg-muted); background: color-mix(in srgb, var(--ajb-fg) 7%, transparent); border: 1px solid var(--ajb-stroke); padding: 4px 11px 4px 9px; border-radius: var(--ajb-r-pill); }
+[lang="ar"] .vw-ro { letter-spacing: 0; }
+.vw-ro i { width: 13px; height: 13px; }
+
+.vw-titlerow { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.vw-vchip { font-size: 12px; font-weight: var(--ajb-w-bold); color: var(--ajb-fg-muted); background: color-mix(in srgb, var(--ajb-fg) 7%, transparent); border: 1px solid var(--ajb-stroke); padding: 3px 10px; border-radius: var(--ajb-r-pill); letter-spacing: 0.02em; }
+.vw-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; font-size: 12.5px; color: var(--ajb-fg-subtle); }
+.vw-meta b { color: var(--ajb-fg-muted); font-weight: var(--ajb-w-medium); }
+.vw-meta-sep { opacity: 0.5; }
+
+/* ---------- version bar (switcher + read-only marker) ---------- */
+.vw-verbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-md); padding: 12px 16px; margin-bottom: 18px; }
+.vw-verbar-l { display: flex; align-items: center; gap: 12px; }
+.vw-verbar-lbl { font-size: 12px; color: var(--ajb-fg-subtle); }
+.vw-verbar-r { display: flex; align-items: center; gap: 12px; font-size: 12.5px; color: var(--ajb-fg-subtle); }
+
+/* version select trigger (dictionary .ajb-select shape, compact) */
+.vw-verpick { position: relative; }
+.vw-verpick-trig { display: inline-flex; align-items: center; gap: 10px; background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-pill); padding: 7px 12px; cursor: pointer; transition: border-color .15s; }
+.vw-verpick-trig:hover { border-color: var(--ajb-stroke-strong); }
+.vw-verpick-trig.is-open { border-color: var(--ajb-accent); }
+.vw-verpick-ver { font-size: 13px; font-weight: var(--ajb-w-bold); color: var(--ajb-fg); }
+.vw-verpick-trig i { width: 15px; height: 15px; color: var(--ajb-fg-subtle); transition: transform .18s; }
+.vw-verpick-trig.is-open i.vw-caret { transform: rotate(180deg); }
+.vw-verpop { position: absolute; z-index: 40; top: calc(100% + 6px); inset-inline-start: 0; min-width: 240px; }
+.vw-veropt { display: flex; align-items: center; gap: 10px; padding: 9px 12px; cursor: pointer; border-radius: var(--ajb-r); }
+.vw-veropt:hover { background: var(--ajb-tint-sand-bg); }
+.vw-veropt.is-on { background: var(--ajb-tint-sand-bg); }
+.vw-veropt-ver { font-size: 13px; font-weight: var(--ajb-w-bold); color: var(--ajb-fg); flex: none; width: 26px; }
+.vw-veropt-meta { flex: 1; min-width: 0; }
+.vw-veropt-when { font-size: 12px; color: var(--ajb-fg-muted); }
+.vw-veropt-who { font-size: 11px; color: var(--ajb-fg-subtle); margin-top: 1px; }
+.vw-veropt .ajb-menu__check { color: var(--ajb-accent); }
+
+/* ---------- older-version notice ---------- */
+.vw-older { margin-bottom: 18px; }
+.vw-older .ajb-alert__title { font-weight: var(--ajb-w-bold); font-size: 14px; color: var(--ajb-fg); margin: 0 0 3px; }
+.vw-older .ajb-alert__text { font-size: 13px; color: var(--ajb-fg-muted); margin: 0; }
+.vw-older-link { font-size: 13px; font-weight: var(--ajb-w-medium); color: var(--ajb-accent); cursor: pointer; background: 0; border: 0; font-family: var(--ajb-font); padding: 0; margin-top: 6px; display: inline-flex; align-items: center; gap: 5px; }
+.vw-older-link i { width: 14px; height: 14px; }
+
+/* ---------- two-pane layout (mirrors workspace) ---------- */
+.vw-work { display: grid; grid-template-columns: minmax(0,1fr) 372px; gap: 22px; align-items: start; }
+.vw-col { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.vw-rail { position: sticky; top: 0; display: flex; flex-direction: column; gap: 16px; }
+
+/* ---------- overview attribute grid (dictionary .ajb-kv, 2-up) ---------- */
+.vw-attrs { display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+.vw-attrs .ajb-kv__row { gap: 12px; }
+.vw-attrs .ajb-kv__key { width: 120px; }
+.vw-attrs .ajb-kv__val { text-align: end; flex: 1; }
+.vw-tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+
+/* ---------- read-only content structure ---------- */
+.vw-struct { display: flex; flex-direction: column; gap: 16px; }
+/* compact language toggle in the content card header */
+.vw-langseg { padding: 3px; }
+.vw-langseg button { padding: 5px 12px; font-size: 12px; }
+/* both-languages stacked view */
+.vw-bothlangs { display: flex; flex-direction: column; gap: 18px; }
+.vw-langgroup + .vw-langgroup { padding-top: 18px; border-top: 1px solid var(--ajb-stroke); }
+.vw-langgroup-h { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg-muted); margin-bottom: 12px; }
+.vw-langgroup-h .ajb-tab-badge { background: var(--ajb-tint-sand-bg); color: var(--ajb-accent); }
+.vw-block-lbl { font-size: 11px; font-weight: var(--ajb-w-bold); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ajb-fg-subtle); margin-bottom: 8px; display: flex; align-items: center; gap: 7px; }
+[lang="ar"] .vw-block-lbl { letter-spacing: 0; text-transform: none; }
+.vw-block-lbl i { width: 13px; height: 13px; }
+.vw-readbox { background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-md); padding: 13px 15px; font-size: 14px; line-height: 1.65; color: var(--ajb-fg); white-space: pre-wrap; word-break: break-word; }
+.vw-readbox.subj { font-weight: var(--ajb-w-medium); white-space: normal; }
+.vw-tok { background: var(--ajb-tint-sand-bg); color: var(--ajb-accent); border-radius: 4px; padding: 1px 4px; font-weight: var(--ajb-w-medium); }
+.vw-tok.sens { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ajb-accent) 40%, transparent); }
+.vw-empty-line { color: var(--ajb-fg-subtle); font-style: italic; }
+
+/* attachments */
+.vw-attach { display: flex; flex-direction: column; gap: 8px; }
+.vw-attach-item { display: flex; align-items: center; gap: 11px; background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r); padding: 10px 13px; }
+.vw-attach-ico { width: 32px; height: 32px; border-radius: 8px; background: var(--ajb-tint-danger-bg); color: var(--ajb-tint-danger-fg); display: flex; align-items: center; justify-content: center; flex: none; }
+.vw-attach-ico i { width: 16px; height: 16px; }
+.vw-attach-name { font-size: 13px; color: var(--ajb-fg); font-weight: var(--ajb-w-medium); }
+.vw-attach-size { font-size: 11.5px; color: var(--ajb-fg-subtle); margin-top: 1px; }
+.vw-attach-dl { margin-inline-start: auto; color: var(--ajb-fg-subtle); display: inline-flex; }
+.vw-attach-dl i { width: 16px; height: 16px; }
+
+/* push image url + thumbnail placeholder */
+.vw-image { display: flex; align-items: center; gap: 13px; background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-md); padding: 12px 14px; }
+.vw-image-thumb { width: 56px; height: 56px; border-radius: 8px; background: var(--ajb-midnight-blue); display: flex; align-items: center; justify-content: center; flex: none; overflow: hidden; }
+.vw-image-thumb i { width: 22px; height: 22px; color: var(--ajb-sand); }
+.vw-image-url { font-family: 'SFMono-Regular', ui-monospace, Menlo, monospace; font-size: 12px; color: var(--ajb-fg-muted); word-break: break-all; }
+
+/* ---------- variables used list ---------- */
+.vw-varhead { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+.vw-varhint { font-size: 11.5px; color: var(--ajb-fg-subtle); }
+.vw-vars { display: flex; flex-direction: column; }
+.vw-varrow { display: flex; align-items: center; gap: 12px; padding: 11px 2px; border-bottom: 1px solid var(--ajb-stroke); }
+.vw-varrow:last-child { border-bottom: 0; }
+.vw-vartok { font-family: 'SFMono-Regular', ui-monospace, Menlo, monospace; font-size: 12.5px; color: var(--ajb-accent); flex: none; }
+.vw-varlbl { font-size: 13px; color: var(--ajb-fg-muted); flex: 1; }
+.vw-sens { display: inline-flex; align-items: center; gap: 5px; font-size: 10.5px; font-weight: var(--ajb-w-bold); letter-spacing: 0.03em; color: var(--ajb-tint-warning-fg); background: var(--ajb-tint-warning-bg); padding: 3px 9px; border-radius: var(--ajb-r-pill); }
+[lang="ar"] .vw-sens { letter-spacing: 0; }
+.vw-sens i { width: 12px; height: 12px; }
+.vw-sensnote { display: flex; align-items: flex-start; gap: 9px; font-size: 12px; line-height: 1.5; color: var(--ajb-fg-subtle); margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--ajb-stroke); }
+.vw-sensnote i { width: 15px; height: 15px; color: var(--ajb-tint-warning-fg); flex: none; margin-top: 1px; }
+
+/* ---------- card header (no number, optional trailing slot) ---------- */
+.vw-card-h { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: var(--ajb-w-bold); color: var(--ajb-fg); margin-bottom: 16px; }
+.vw-card-h i { width: 17px; height: 17px; color: var(--ajb-accent); }
+.vw-card-h .vw-card-trail { margin-inline-start: auto; }
+
+/* read-only lang tabs reuse .ajb-tabs from the studio */
+.vw-langtabs { margin-bottom: 16px; }
+
+/* ---------- narrow (mobile) ---------- */
+@container console (max-width: 720px) {
+  .vw-work { grid-template-columns: 1fr; }
+  .vw-rail { position: static; }
+}
+@container console (max-width: 560px) {
+  .vw-attrs { grid-template-columns: 1fr; }
+  .vw-verbar { gap: 10px; }
+}

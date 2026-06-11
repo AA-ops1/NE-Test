@@ -1,0 +1,161 @@
+/* ============================================================
+   Side-menu exploration — scoped styles (.sm-*)
+   Five directions for the console side nav. All values resolve to
+   Aljazira design-system tokens (var(--ajb-*)). Independent of the
+   live login.css so nothing here touches the shipping pages.
+   ============================================================ */
+
+.sm-rail {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--ajb-bg-gradient);
+  border-inline-end: 1px solid var(--ajb-stroke);
+  font-family: var(--ajb-font);
+  color: var(--ajb-fg-muted);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ---------- shared bits ---------- */
+.sm-logo { display: inline-flex; align-items: center; }
+.sm-logo img { height: 22px; width: auto; display: block; }
+.sm-symbol { height: 26px; width: auto; display: block; }
+
+.sm-nav { display: flex; flex-direction: column; gap: 4px; }
+.sm-spacer { flex: 1; }
+
+.sm-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 13px; border-radius: var(--ajb-r);
+  font-size: 14px; font-weight: var(--ajb-w-medium);
+  color: var(--ajb-fg-muted); cursor: pointer; position: relative;
+  transition: background .16s var(--ajb-ease), color .16s var(--ajb-ease);
+  white-space: nowrap;
+}
+.sm-item i { width: 18px; height: 18px; flex: none; }
+.sm-item i svg { width: 100%; height: 100%; }
+.sm-item:hover { background: color-mix(in srgb, var(--ajb-fg) 5%, transparent); color: var(--ajb-fg); }
+.sm-item.on { color: var(--ajb-accent); }
+
+.sm-badge {
+  margin-inline-start: auto;
+  min-width: 20px; height: 20px; padding: 0 6px; box-sizing: border-box;
+  border-radius: var(--ajb-r-pill);
+  background: var(--ajb-accent); color: var(--ajb-on-accent);
+  font-size: 11px; font-weight: var(--ajb-w-bold);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.sm-badge--soft { background: var(--ajb-tint-sand-bg); color: var(--ajb-accent); }
+.sm-badge--dot {
+  min-width: 0; width: 7px; height: 7px; padding: 0;
+  position: absolute; top: 9px; inset-inline-end: 9px;
+}
+
+.sm-grouplbl {
+  font-size: 10px; font-weight: var(--ajb-w-bold); letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--ajb-fg-subtle);
+  padding: 0 13px; margin: 16px 0 7px;
+}
+.sm-grouplbl:first-child { margin-top: 4px; }
+
+.sm-divider { height: 1px; background: var(--ajb-stroke); margin: 12px 4px; }
+
+.sm-avatar {
+  width: 32px; height: 32px; border-radius: var(--ajb-r-pill); flex: none;
+  background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--ajb-accent); font-weight: var(--ajb-w-bold); font-size: 13px;
+}
+.sm-user { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.sm-user-txt { display: flex; flex-direction: column; min-width: 0; }
+.sm-user-name { font-size: 13px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sm-user-role { font-size: 11px; color: var(--ajb-fg-subtle); white-space: nowrap; }
+.sm-user-act { margin-inline-start: auto; color: var(--ajb-fg-subtle); display: inline-flex; cursor: pointer; }
+.sm-user-act i { width: 16px; height: 16px; }
+.sm-user-act:hover { color: var(--ajb-fg); }
+
+/* ============================================================
+   A · CURRENT (baseline)
+   ============================================================ */
+.sm-a { padding: 24px 16px; gap: 6px; }
+.sm-a .sm-logo { margin: 6px 8px 22px; }
+.sm-a .sm-item.on { background: var(--ajb-tint-sand-bg); }
+
+/* ============================================================
+   B · GROUPED + user footer  (structure that scales)
+   ============================================================ */
+.sm-b { padding: 22px 14px 16px; }
+.sm-b .sm-logo { margin: 4px 8px 10px; }
+.sm-b .sm-item.on { background: var(--ajb-tint-sand-bg); }
+.sm-b .sm-item.on::before {
+  content: ""; position: absolute; inset-inline-start: 0; top: 9px; bottom: 9px;
+  width: 3px; border-radius: var(--ajb-r-pill); background: var(--ajb-accent);
+}
+.sm-b-footer { padding: 11px; border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-md); background: color-mix(in srgb, var(--ajb-fg) 2%, transparent); }
+
+/* ============================================================
+   C · ICON RAIL (collapsed, space-efficient)
+   ============================================================ */
+.sm-c { padding: 20px 0; align-items: center; gap: 8px; }
+.sm-c .sm-symbol { margin-bottom: 16px; }
+.sm-c .sm-nav { gap: 8px; align-items: center; }
+.sm-c .sm-item {
+  width: 44px; height: 44px; padding: 0; justify-content: center;
+  border-radius: 13px; gap: 0;
+}
+.sm-c .sm-item.on { background: var(--ajb-accent); color: var(--ajb-on-accent); box-shadow: var(--ajb-glow-sand); }
+.sm-c .sm-item.on:hover { background: var(--ajb-accent); color: var(--ajb-on-accent); }
+.sm-c .sm-badge--dot { top: 7px; inset-inline-end: 7px; border: 2px solid var(--ajb-bg-deep); }
+.sm-c .sm-avatar { width: 38px; height: 38px; }
+
+/* ============================================================
+   D · SOFT CONSOLE (switcher + search + indicator)
+   ============================================================ */
+.sm-d { padding: 16px 14px; gap: 0; }
+.sm-switch {
+  display: flex; align-items: center; gap: 10px; padding: 9px 11px;
+  border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-md);
+  background: color-mix(in srgb, var(--ajb-fg) 2%, transparent); cursor: pointer; margin-bottom: 14px;
+}
+.sm-switch:hover { border-color: var(--ajb-stroke-strong); }
+.sm-switch-mark { width: 28px; height: 28px; border-radius: 8px; background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke); display: inline-flex; align-items: center; justify-content: center; }
+.sm-switch-mark img { height: 15px; }
+.sm-switch-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.sm-switch-name { font-size: 13px; font-weight: var(--ajb-w-bold); color: var(--ajb-fg); white-space: nowrap; }
+.sm-switch-sub { font-size: 10.5px; color: var(--ajb-fg-subtle); }
+.sm-switch-cv { margin-inline-start: auto; color: var(--ajb-fg-subtle); display: inline-flex; }
+.sm-switch-cv i { width: 15px; height: 15px; }
+
+.sm-search {
+  display: flex; align-items: center; gap: 9px; padding: 9px 12px;
+  border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-pill);
+  background: color-mix(in srgb, var(--ajb-bg-deep) 18%, transparent); color: var(--ajb-fg-subtle); font-size: 13px;
+  margin-bottom: 16px;
+}
+.sm-search i { width: 15px; height: 15px; }
+.sm-d .sm-nav { gap: 3px; }
+.sm-d .sm-item { border-radius: 10px; }
+.sm-d .sm-item.on { background: var(--ajb-tint-sand-bg); color: var(--ajb-accent); font-weight: var(--ajb-w-bold); }
+.sm-d .sm-item.on::after {
+  content: ""; position: absolute; inset-inline-end: 7px; top: 50%; transform: translateY(-50%);
+  width: 5px; height: 18px; border-radius: var(--ajb-r-pill); background: var(--ajb-accent);
+}
+.sm-d-footer { display: flex; align-items: center; gap: 11px; padding-top: 14px; border-top: 1px solid var(--ajb-stroke); }
+.sm-env { display: inline-flex; align-items: center; gap: 6px; margin-inline-start: auto; font-size: 10.5px; font-weight: var(--ajb-w-medium); color: var(--ajb-tint-success-fg); background: var(--ajb-tint-success-bg); padding: 3px 9px; border-radius: var(--ajb-r-pill); }
+.sm-env-dot { width: 6px; height: 6px; border-radius: var(--ajb-r-pill); background: var(--ajb-success); }
+
+/* ============================================================
+   E · BRANDED (J-shape header, warm surfaces)
+   ============================================================ */
+.sm-e { padding: 0 0 16px; }
+.sm-e-hdr { position: relative; overflow: hidden; padding: 22px 18px 18px; border-bottom: 1px solid var(--ajb-stroke); margin-bottom: 14px; }
+.sm-e-jbg { position: absolute; inset-inline-end: -28px; top: -22px; height: 120px; opacity: 0.5; pointer-events: none; }
+.sm-e-hdr .sm-logo { position: relative; }
+.sm-e-tag { position: relative; margin-top: 9px; font-size: 11px; color: var(--ajb-fg-subtle); letter-spacing: 0.02em; }
+.sm-e-body { padding: 0 14px; display: flex; flex-direction: column; flex: 1; }
+.sm-e .sm-item { border-radius: var(--ajb-r-md); }
+.sm-e .sm-item.on { background: var(--ajb-surface-2); color: var(--ajb-accent); border: 1px solid var(--ajb-stroke); box-shadow: var(--ajb-shadow-1); }
+.sm-e .sm-item.on i { color: var(--ajb-accent); }
+.sm-e-footer { padding: 11px 14px 0; }
+.sm-e .sm-user { padding: 11px; border-radius: var(--ajb-r-md); background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke); }
