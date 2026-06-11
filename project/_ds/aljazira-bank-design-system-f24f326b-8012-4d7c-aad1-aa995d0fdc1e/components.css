@@ -1,0 +1,438 @@
+/* ============================================================
+   Aljazira Bank — Component Library
+   The canonical, reusable component layer. Import AFTER
+   colors_and_type.css. Every class is built on the semantic
+   tokens, so components respond to data-theme and dir automatically.
+
+   Pair with COMPONENTS.md (copy-paste snippets) and
+   dictionary.html (browsable gallery). Always reuse these
+   classes instead of re-styling components inline.
+
+       <link rel="stylesheet" href="colors_and_type.css">
+       <link rel="stylesheet" href="components.css">
+
+   Naming: .ajb-<component> base, .ajb-<component>--<variant>
+   modifier, .is-<state> for stateful flags (.is-on, .is-disabled).
+   ============================================================ */
+
+/* ---------- Semantic state tints (theme-adaptive) ----------
+   Tint = state @ ~15% over the surface; text/icon = state mixed
+   toward the foreground so it stays legible on dark AND light. */
+:root {
+  --ajb-tint-success-bg: color-mix(in srgb, var(--ajb-success) 15%, transparent);
+  --ajb-tint-success-fg: color-mix(in srgb, var(--ajb-success) 68%, var(--ajb-fg));
+  --ajb-tint-danger-bg:  color-mix(in srgb, var(--ajb-danger) 14%, transparent);
+  --ajb-tint-danger-fg:  color-mix(in srgb, var(--ajb-danger) 70%, var(--ajb-fg));
+  --ajb-tint-warning-bg: color-mix(in srgb, var(--ajb-dune) 18%, transparent);
+  --ajb-tint-warning-fg: color-mix(in srgb, var(--ajb-dune) 62%, var(--ajb-fg));
+  --ajb-tint-info-bg:    color-mix(in srgb, var(--ajb-info) 15%, transparent);
+  --ajb-tint-info-fg:    color-mix(in srgb, var(--ajb-info) 66%, var(--ajb-fg));
+  --ajb-tint-sand-bg:    color-mix(in srgb, var(--ajb-accent) 16%, transparent);
+  --ajb-tint-sand-fg:    color-mix(in srgb, var(--ajb-accent) 70%, var(--ajb-fg));
+}
+
+/* ============================================================
+   ACTIONS — Buttons
+   ============================================================ */
+.ajb-btn {
+  font-family: var(--ajb-font);
+  font-weight: var(--ajb-w-medium);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  padding: 14px 28px;
+  border: 0;
+  border-radius: var(--ajb-r-pill);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--ajb-dur-2) var(--ajb-ease);
+}
+.ajb-btn:active { transform: scale(0.98); }
+/* Primary — Pearl fill, the default high-emphasis action */
+.ajb-btn--primary { background: var(--ajb-fg); color: var(--ajb-bg-deep); }
+.ajb-btn--primary:hover { box-shadow: var(--ajb-glow-sand); }
+/* Sand — the brand accent action */
+.ajb-btn--sand { background: var(--ajb-accent); color: var(--ajb-on-accent); }
+/* Secondary — outline / ghost */
+.ajb-btn--secondary { background: transparent; color: var(--ajb-fg); border: 1px solid var(--ajb-stroke-strong); }
+.ajb-btn--secondary:hover { border-color: var(--ajb-fg); }
+/* Tertiary — text-only, sand */
+.ajb-btn--tertiary { background: transparent; color: var(--ajb-accent); padding: 14px 8px; }
+/* Icon — square pill */
+.ajb-btn--icon { width: 48px; height: 48px; padding: 0; background: color-mix(in srgb, var(--ajb-fg) 8%, transparent); color: var(--ajb-fg); }
+.ajb-btn--icon svg { width: 20px; height: 20px; }
+.ajb-btn[disabled], .ajb-btn.is-disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+/* ============================================================
+   SURFACES — Cards
+   ============================================================ */
+.ajb-card {
+  background: var(--ajb-surface);
+  border: 1px solid var(--ajb-stroke);
+  border-radius: var(--ajb-r-lg);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: border-color var(--ajb-dur-2) var(--ajb-ease);
+}
+.ajb-card:hover { border-color: var(--ajb-stroke-strong); }
+.ajb-card--raised { background: var(--ajb-surface-2); box-shadow: var(--ajb-shadow-2); }
+.ajb-card--flat:hover { border-color: var(--ajb-stroke); } /* opt out of hover */
+
+/* ============================================================
+   DATA DISPLAY — Badges, status dots, counts
+   ============================================================ */
+.ajb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--ajb-micro);
+  font-weight: var(--ajb-w-medium);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  padding: 5px 12px;
+  border-radius: var(--ajb-r-pill);
+}
+.ajb-badge--sand      { background: var(--ajb-accent); color: var(--ajb-on-accent); }
+.ajb-badge--sand-soft { background: var(--ajb-tint-sand-bg); color: var(--ajb-tint-sand-fg); }
+.ajb-badge--neutral   { background: color-mix(in srgb, var(--ajb-fg) 8%, transparent); color: var(--ajb-fg-muted); border: 1px solid var(--ajb-stroke); }
+.ajb-badge--success   { background: var(--ajb-tint-success-bg); color: var(--ajb-tint-success-fg); }
+.ajb-badge--warning   { background: var(--ajb-tint-warning-bg); color: var(--ajb-tint-warning-fg); }
+.ajb-badge--danger    { background: var(--ajb-tint-danger-bg); color: var(--ajb-tint-danger-fg); }
+.ajb-badge--info      { background: var(--ajb-tint-info-bg); color: var(--ajb-tint-info-fg); }
+
+/* Status: a labelled dot. line-height:1 + flex keeps dot centered on text. */
+.ajb-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--ajb-small);
+  line-height: 1;
+  color: var(--ajb-fg-muted);
+}
+.ajb-dot { display: block; flex: none; width: 7px; height: 7px; border-radius: var(--ajb-r-pill); position: relative; top: -0.5px; background: var(--ajb-fg-subtle); }
+.ajb-dot--success { background: var(--ajb-emerald); }
+.ajb-dot--warning { background: var(--ajb-dune); }
+.ajb-dot--danger  { background: var(--ajb-rust); }
+.ajb-dot--muted   { background: var(--ajb-silver); }
+
+/* Count pill / notification badge */
+.ajb-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--ajb-r-pill);
+  background: var(--ajb-rust);
+  color: #fff;
+  font-size: 11px;
+  font-weight: var(--ajb-w-bold);
+}
+.ajb-count--sand { background: var(--ajb-accent); color: var(--ajb-on-accent); }
+
+/* ============================================================
+   DATA DISPLAY — Chips / tags
+   ============================================================ */
+.ajb-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--ajb-small);
+  padding: 8px 8px 8px 14px;
+  border-radius: var(--ajb-r-pill);
+  background: color-mix(in srgb, var(--ajb-fg) 7%, transparent);
+  border: 1px solid var(--ajb-stroke);
+  color: var(--ajb-fg);
+}
+.ajb-chip--filter { padding: 8px 14px; cursor: pointer; }
+.ajb-chip--add { padding: 8px 14px; border-style: dashed; color: var(--ajb-fg-muted); cursor: pointer; }
+.ajb-chip.is-on { background: var(--ajb-accent); color: var(--ajb-on-accent); border-color: transparent; font-weight: var(--ajb-w-medium); }
+.ajb-chip__x {
+  width: 18px; height: 18px; border-radius: var(--ajb-r-pill);
+  background: color-mix(in srgb, var(--ajb-fg) 12%, transparent);
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+}
+.ajb-chip__x svg { width: 12px; height: 12px; }
+
+/* ============================================================
+   DATA DISPLAY — Tooltip
+   ============================================================ */
+.ajb-tooltip {
+  position: relative;
+  display: inline-block;
+  background: var(--ajb-fg);
+  color: var(--ajb-bg);
+  font-size: var(--ajb-small);
+  font-weight: var(--ajb-w-medium);
+  padding: 9px 14px;
+  border-radius: 10px;
+  box-shadow: var(--ajb-shadow-2);
+}
+.ajb-tooltip::after {
+  content: ""; position: absolute; bottom: -6px; left: 24px;
+  width: 12px; height: 12px; background: var(--ajb-fg); transform: rotate(45deg);
+}
+
+/* ============================================================
+   DATA DISPLAY — Avatars  (letters optically centered)
+   ============================================================ */
+.ajb-avatar {
+  border-radius: var(--ajb-r-pill);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: var(--ajb-w-medium); line-height: 1;
+  overflow: hidden; flex: none; color: #fff;
+  background: linear-gradient(135deg, var(--ajb-midnight-blue), var(--ajb-dark-sand));
+}
+.ajb-avatar > span { display: block; transform: translateY(0.14em); } /* cap-center fix */
+.ajb-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.ajb-avatar--xs { width: 28px; height: 28px; font-size: 11px; }
+.ajb-avatar--sm { width: 36px; height: 36px; font-size: 13px; }
+.ajb-avatar--md { width: 48px; height: 48px; font-size: 16px; }
+.ajb-avatar--lg { width: 64px; height: 64px; font-size: 22px; }
+.ajb-avatar--symbol { background: radial-gradient(60% 60% at 32% 30%, #10314f, #000); }
+.ajb-avatar--symbol img { width: 58%; height: 58%; object-fit: contain; filter: invert(1); }
+.ajb-avatar-stack { display: flex; }
+.ajb-avatar-stack .ajb-avatar { border: 2px solid var(--ajb-bg-deep); margin-inline-start: -12px; }
+.ajb-avatar-stack .ajb-avatar:first-child { margin-inline-start: 0; }
+.ajb-avatar--more { background: color-mix(in srgb, var(--ajb-fg) 12%, transparent); font-size: 12px; }
+
+/* ============================================================
+   FORMS — Fields, inputs, helpers
+   ============================================================ */
+.ajb-field { display: flex; flex-direction: column; gap: 6px; }
+.ajb-field__label {
+  font-size: var(--ajb-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ajb-fg-subtle);
+}
+[dir="rtl"] .ajb-field__label, [lang="ar"] .ajb-field__label { letter-spacing: 0; text-transform: none; }
+.ajb-input {
+  font-family: var(--ajb-font);
+  background: transparent;
+  color: var(--ajb-fg);
+  border: 0;
+  border-bottom: 1px solid var(--ajb-stroke-strong);
+  padding: 8px 0;
+  font-size: var(--ajb-body);
+  outline: none;
+  transition: border-color var(--ajb-dur-2);
+}
+.ajb-input::placeholder { color: var(--ajb-fg-subtle); }
+.ajb-input:focus { border-color: var(--ajb-accent); }
+/* Boxed input variant (12px radius, §cards) */
+.ajb-input--boxed {
+  border: 1px solid var(--ajb-stroke);
+  border-radius: var(--ajb-r-md);
+  padding: 14px 16px;
+  background: color-mix(in srgb, var(--ajb-fg) 6%, transparent);
+}
+.ajb-helper { font-size: 11px; color: var(--ajb-fg-subtle); }
+.ajb-helper--error { color: var(--ajb-danger); }
+
+/* ============================================================
+   FORMS — Selection controls (radio, checkbox, toggle)
+   ============================================================ */
+.ajb-option { display: flex; align-items: center; gap: 12px; font-size: var(--ajb-small); color: var(--ajb-fg); }
+.ajb-option.is-muted { color: var(--ajb-fg-subtle); }
+
+.ajb-radio {
+  width: 20px; height: 20px; border-radius: var(--ajb-r-pill);
+  border: 1.5px solid var(--ajb-stroke-strong); flex: none;
+  display: flex; align-items: center; justify-content: center;
+}
+.ajb-radio.is-on { border-color: var(--ajb-accent); }
+.ajb-radio.is-on::after { content: ""; width: 10px; height: 10px; border-radius: var(--ajb-r-pill); background: var(--ajb-accent); }
+
+.ajb-check {
+  width: 20px; height: 20px; border-radius: 6px;
+  border: 1.5px solid var(--ajb-stroke-strong); flex: none;
+  display: flex; align-items: center; justify-content: center;
+}
+.ajb-check.is-on, .ajb-check.is-indeterminate { background: var(--ajb-accent); border-color: var(--ajb-accent); }
+.ajb-check.is-on::after { content: ""; width: 9px; height: 5px; border-left: 2px solid var(--ajb-on-accent); border-bottom: 2px solid var(--ajb-on-accent); transform: rotate(-45deg); margin-bottom: 2px; }
+.ajb-check.is-indeterminate::after { content: ""; width: 9px; height: 2px; background: var(--ajb-on-accent); }
+
+.ajb-switch {
+  width: 42px; height: 24px; border-radius: var(--ajb-r-pill);
+  background: color-mix(in srgb, var(--ajb-fg) 14%, transparent);
+  position: relative; flex: none; transition: background var(--ajb-dur-2);
+}
+.ajb-switch::after { content: ""; position: absolute; width: 18px; height: 18px; border-radius: var(--ajb-r-pill); background: #fff; top: 3px; inset-inline-start: 3px; transition: transform var(--ajb-dur-2); }
+.ajb-switch.is-on { background: var(--ajb-accent); }
+.ajb-switch.is-on::after { transform: translateX(18px); }
+[dir="rtl"] .ajb-switch.is-on::after { transform: translateX(-18px); }
+
+/* ============================================================
+   FORMS / NAV — Select & dropdown menu
+   ============================================================ */
+.ajb-select {
+  display: flex; align-items: center; justify-content: space-between;
+  background: color-mix(in srgb, var(--ajb-fg) 6%, transparent);
+  border: 1px solid var(--ajb-stroke);
+  border-radius: var(--ajb-r-md);
+  padding: 14px 16px; font-size: 15px; cursor: pointer; color: var(--ajb-fg);
+}
+.ajb-select.is-focus { border-color: var(--ajb-accent); }
+.ajb-select svg { width: 18px; height: 18px; color: var(--ajb-fg-muted); }
+
+.ajb-menu {
+  background: var(--ajb-surface-2);
+  border: 1px solid var(--ajb-stroke);
+  border-radius: var(--ajb-r-lg);
+  padding: 8px; box-shadow: var(--ajb-shadow-3);
+}
+.ajb-menu__item { display: flex; align-items: center; gap: 12px; padding: 11px 12px; border-radius: 9px; font-size: var(--ajb-small); cursor: pointer; color: var(--ajb-fg); }
+.ajb-menu__item svg { width: 18px; height: 18px; color: var(--ajb-fg-muted); stroke-width: 1.6; }
+.ajb-menu__item.is-on { background: color-mix(in srgb, var(--ajb-fg) 7%, transparent); }
+.ajb-menu__item.is-on .ajb-menu__check { margin-inline-start: auto; color: var(--ajb-accent); }
+.ajb-menu__item--danger, .ajb-menu__item--danger svg { color: var(--ajb-tint-danger-fg); }
+.ajb-menu__sep { height: 1px; background: var(--ajb-stroke); margin: 6px 4px; }
+
+/* ============================================================
+   NAV — Tabs & segmented control
+   ============================================================ */
+.ajb-seg { display: inline-flex; background: color-mix(in srgb, var(--ajb-fg) 6%, transparent); border-radius: var(--ajb-r-pill); padding: 4px; gap: 2px; }
+.ajb-seg button { border: 0; background: transparent; color: var(--ajb-fg-muted); font-family: var(--ajb-font); font-size: var(--ajb-small); font-weight: var(--ajb-w-medium); padding: 9px 22px; border-radius: var(--ajb-r-pill); cursor: pointer; transition: all var(--ajb-dur-2); }
+.ajb-seg button.is-on { background: var(--ajb-fg); color: var(--ajb-bg); }
+
+.ajb-tabs { display: flex; gap: 32px; border-bottom: 1px solid var(--ajb-stroke); }
+.ajb-tabs button { border: 0; background: transparent; color: var(--ajb-fg-muted); font-family: var(--ajb-font); font-size: 15px; font-weight: var(--ajb-w-medium); padding: 0 0 16px; cursor: pointer; position: relative; }
+.ajb-tabs button.is-on { color: var(--ajb-fg); }
+.ajb-tabs button.is-on::after { content: ""; position: absolute; inset-inline: 0; bottom: -1px; height: 2px; background: var(--ajb-accent); border-radius: 2px; }
+.ajb-tabs .ajb-tab-badge { font-size: 11px; background: color-mix(in srgb, var(--ajb-fg) 10%, transparent); padding: 2px 7px; border-radius: var(--ajb-r-pill); margin-inline-start: 7px; }
+
+/* ============================================================
+   NAV — Breadcrumb & pagination
+   ============================================================ */
+.ajb-crumb { display: flex; align-items: center; gap: 10px; font-size: var(--ajb-small); color: var(--ajb-fg-muted); }
+.ajb-crumb a { color: var(--ajb-fg-muted); text-decoration: none; }
+.ajb-crumb a:hover { color: var(--ajb-fg); }
+.ajb-crumb__sep { color: var(--ajb-fg-subtle); display: inline-flex; }
+.ajb-crumb__sep svg { width: 14px; height: 14px; }
+.ajb-crumb__current { color: var(--ajb-fg); font-weight: var(--ajb-w-medium); }
+
+.ajb-pag { display: flex; align-items: center; gap: 6px; }
+.ajb-pag button { min-width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--ajb-stroke); background: transparent; color: var(--ajb-fg-muted); font-family: var(--ajb-font); font-size: var(--ajb-small); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.ajb-pag button:hover { border-color: var(--ajb-stroke-strong); color: var(--ajb-fg); }
+.ajb-pag button.is-on { background: var(--ajb-fg); color: var(--ajb-bg); border-color: var(--ajb-fg); font-weight: var(--ajb-w-bold); }
+.ajb-pag button svg { width: 16px; height: 16px; }
+.ajb-pag__dots { color: var(--ajb-fg-subtle); padding: 0 4px; }
+
+/* ============================================================
+   DATA DISPLAY — List rows
+   ============================================================ */
+.ajb-list { background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-lg); overflow: hidden; }
+.ajb-li { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-bottom: 1px solid var(--ajb-stroke); cursor: pointer; }
+.ajb-li:last-child { border-bottom: 0; }
+.ajb-li:hover { background: color-mix(in srgb, var(--ajb-fg) 3%, transparent); }
+.ajb-li__ico { width: 40px; height: 40px; border-radius: 11px; background: color-mix(in srgb, var(--ajb-fg) 6%, transparent); display: flex; align-items: center; justify-content: center; color: var(--ajb-accent); flex: none; }
+.ajb-li__ico svg { width: 19px; height: 19px; stroke-width: 1.6; }
+.ajb-li__mid { flex: 1; }
+.ajb-li__title { font-size: 15px; font-weight: var(--ajb-w-medium); }
+.ajb-li__sub { font-size: var(--ajb-micro); color: var(--ajb-fg-subtle); margin-top: 2px; }
+.ajb-li__val { font-size: var(--ajb-small); color: var(--ajb-fg-muted); }
+.ajb-li__chev { color: var(--ajb-fg-subtle); display: inline-flex; }
+.ajb-li__chev svg { width: 18px; height: 18px; }
+
+/* ============================================================
+   DATA DISPLAY — Table
+   ============================================================ */
+.ajb-table { width: 100%; border-collapse: collapse; }
+.ajb-table thead th { text-align: start; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ajb-fg-subtle); font-weight: var(--ajb-w-bold); padding: 0 0 14px; border-bottom: 1px solid var(--ajb-stroke); }
+[dir="rtl"] .ajb-table thead th { letter-spacing: 0; }
+.ajb-table th.ajb-num, .ajb-table td.ajb-num { text-align: end; font-variant-numeric: tabular-nums; }
+.ajb-table tbody td { padding: 14px 0; border-bottom: 1px solid var(--ajb-stroke); font-size: var(--ajb-small); vertical-align: middle; }
+.ajb-table tbody tr:last-child td { border-bottom: 0; }
+.ajb-table .ajb-amt { font-variant-numeric: tabular-nums; font-weight: var(--ajb-w-medium); }
+.ajb-table .ajb-amt--pos { color: var(--ajb-tint-success-fg); }
+
+/* ============================================================
+   FEEDBACK — Alerts / inline messages
+   ============================================================ */
+.ajb-alert { display: flex; gap: 14px; padding: 16px 18px; border-radius: 14px; border: 1px solid; align-items: flex-start; }
+.ajb-alert__ico { flex: none; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+.ajb-alert__ico svg { width: 20px; height: 20px; stroke-width: 1.7; }
+.ajb-alert__body { flex: 1; }
+.ajb-alert__title { font-size: var(--ajb-small); font-weight: var(--ajb-w-medium); line-height: 1.3; }
+.ajb-alert__desc { font-size: var(--ajb-micro); line-height: 1.45; margin-top: 3px; color: var(--ajb-fg-muted); }
+.ajb-alert__close { color: var(--ajb-fg-subtle); cursor: pointer; }
+.ajb-alert__close svg { width: 16px; height: 16px; }
+.ajb-alert--success { background: var(--ajb-tint-success-bg); border-color: color-mix(in srgb, var(--ajb-success) 35%, transparent); }
+.ajb-alert--success .ajb-alert__ico { color: var(--ajb-tint-success-fg); }
+.ajb-alert--danger { background: var(--ajb-tint-danger-bg); border-color: color-mix(in srgb, var(--ajb-danger) 35%, transparent); }
+.ajb-alert--danger .ajb-alert__ico { color: var(--ajb-tint-danger-fg); }
+.ajb-alert--warning { background: var(--ajb-tint-warning-bg); border-color: color-mix(in srgb, var(--ajb-dune) 40%, transparent); }
+.ajb-alert--warning .ajb-alert__ico { color: var(--ajb-tint-warning-fg); }
+.ajb-alert--info { background: var(--ajb-tint-info-bg); border-color: color-mix(in srgb, var(--ajb-info) 35%, transparent); }
+.ajb-alert--info .ajb-alert__ico { color: var(--ajb-tint-info-fg); }
+
+/* ============================================================
+   FEEDBACK — Toast / snackbar
+   ============================================================ */
+.ajb-toast { display: flex; align-items: center; gap: 14px; background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke); border-radius: 14px; padding: 14px 16px; box-shadow: var(--ajb-shadow-3); }
+.ajb-toast__ico { width: 34px; height: 34px; border-radius: var(--ajb-r-pill); background: var(--ajb-tint-success-bg); display: flex; align-items: center; justify-content: center; flex: none; color: var(--ajb-tint-success-fg); }
+.ajb-toast__ico svg { width: 18px; height: 18px; }
+.ajb-toast__ico--neutral { background: color-mix(in srgb, var(--ajb-fg) 8%, transparent); color: var(--ajb-fg); }
+.ajb-toast__body { flex: 1; }
+.ajb-toast__title { font-size: var(--ajb-small); font-weight: var(--ajb-w-medium); }
+.ajb-toast__action { font-size: var(--ajb-small); font-weight: var(--ajb-w-medium); color: var(--ajb-accent); cursor: pointer; }
+
+/* ============================================================
+   FEEDBACK — Dialog / modal
+   ============================================================ */
+.ajb-scrim { position: absolute; inset: 0; background: color-mix(in srgb, var(--ajb-bg-deep) 66%, transparent); backdrop-filter: blur(3px); }
+.ajb-dialog { position: relative; width: 440px; max-width: 92vw; background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke); border-radius: 20px; box-shadow: var(--ajb-shadow-3); padding: 28px; }
+.ajb-dialog__ico { width: 52px; height: 52px; border-radius: var(--ajb-r-pill); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; background: var(--ajb-tint-danger-bg); }
+.ajb-dialog__ico svg { width: 26px; height: 26px; color: var(--ajb-tint-danger-fg); stroke-width: 1.8; }
+.ajb-dialog__title { margin: 0 0 10px; font-size: 24px; font-weight: var(--ajb-w-light); letter-spacing: -0.01em; }
+.ajb-dialog__text { margin: 0 0 24px; font-size: var(--ajb-small); line-height: 1.5; color: var(--ajb-fg-muted); }
+.ajb-dialog__actions { display: flex; gap: 12px; justify-content: flex-end; }
+
+/* ============================================================
+   FEEDBACK — Progress, spinner, skeleton, empty state
+   ============================================================ */
+.ajb-bar { height: 6px; background: color-mix(in srgb, var(--ajb-fg) 10%, transparent); border-radius: var(--ajb-r-pill); overflow: hidden; }
+.ajb-bar > div { height: 100%; background: linear-gradient(90deg, var(--ajb-dark-sand), var(--ajb-sand)); border-radius: var(--ajb-r-pill); }
+.ajb-bar__label { display: flex; justify-content: space-between; font-size: var(--ajb-micro); color: var(--ajb-fg-muted); margin-bottom: 8px; }
+
+.ajb-spinner { width: 44px; height: 44px; border-radius: var(--ajb-r-pill); border: 3px solid color-mix(in srgb, var(--ajb-fg) 12%, transparent); border-top-color: var(--ajb-accent); animation: ajb-rot 0.8s linear infinite; }
+@keyframes ajb-rot { to { transform: rotate(360deg); } }
+
+.ajb-skeleton { background: linear-gradient(90deg, color-mix(in srgb, var(--ajb-fg) 6%, transparent) 25%, color-mix(in srgb, var(--ajb-fg) 14%, transparent) 37%, color-mix(in srgb, var(--ajb-fg) 6%, transparent) 63%); background-size: 400% 100%; animation: ajb-sh 1.4s ease infinite; border-radius: 6px; }
+@keyframes ajb-sh { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+.ajb-empty { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.ajb-empty__badge { width: 72px; height: 72px; border-radius: var(--ajb-r-pill); background: color-mix(in srgb, var(--ajb-fg) 5%, transparent); border: 1px solid var(--ajb-stroke); display: flex; align-items: center; justify-content: center; }
+.ajb-empty__badge svg { width: 30px; height: 30px; color: var(--ajb-accent); stroke-width: 1.4; }
+.ajb-empty__title { margin: 0; font-size: 20px; font-weight: var(--ajb-w-light); }
+.ajb-empty__text { margin: 0; font-size: var(--ajb-micro); color: var(--ajb-fg-muted); max-width: 240px; line-height: 1.5; }
+
+/* ============================================================
+   FORMS — Calendar / date picker
+   ============================================================ */
+.ajb-cal { background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-lg); padding: 18px; }
+.ajb-cal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.ajb-cal__title { font-size: 16px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg); }
+.ajb-cal__nav { display: flex; gap: 6px; }
+.ajb-cal__nav button { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--ajb-stroke); background: transparent; color: var(--ajb-fg); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color var(--ajb-dur-2) var(--ajb-ease); }
+.ajb-cal__nav button:hover { border-color: var(--ajb-stroke-strong); }
+.ajb-cal__nav svg { width: 15px; height: 15px; }
+.ajb-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.ajb-cal__dow { text-align: center; font-size: 11px; color: var(--ajb-fg-subtle); font-weight: var(--ajb-w-bold); padding: 6px 0; letter-spacing: 0.04em; }
+.ajb-cal__day { position: relative; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--ajb-fg); font-variant-numeric: tabular-nums; cursor: pointer; border-radius: 9px; z-index: 1; }
+.ajb-cal__day:hover { background: color-mix(in srgb, var(--ajb-fg) 7%, transparent); }
+.ajb-cal__day.is-muted { color: var(--ajb-fg-subtle); }
+.ajb-cal__day.is-today { box-shadow: inset 0 0 0 1.5px var(--ajb-stroke-strong); }
+.ajb-cal__day.is-range { background: color-mix(in srgb, var(--ajb-accent) 18%, transparent); border-radius: 0; }
+.ajb-cal__day.is-range:hover { background: color-mix(in srgb, var(--ajb-accent) 26%, transparent); }
+.ajb-cal__day.is-selected { background: var(--ajb-accent); color: var(--ajb-on-accent); font-weight: var(--ajb-w-bold); }
+.ajb-cal__day.is-selected:hover { background: var(--ajb-accent); }
+.ajb-cal__day.is-start { border-start-start-radius: 9px; border-end-start-radius: 9px; }
+.ajb-cal__day.is-end { border-start-end-radius: 9px; border-end-end-radius: 9px; }

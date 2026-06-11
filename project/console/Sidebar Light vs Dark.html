@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sidebar — light theme: light vs dark rail</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="login.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: var(--ajb-font);
+    background: var(--ajb-bg-grad, #f4f1ec);
+    min-height: 100vh;
+    padding: 30px 24px 48px;
+    color: var(--ajb-fg);
+  }
+  .cmp-cap { max-width: 1280px; margin: 0 auto 18px; }
+  .cmp-cap h1 { margin: 0 0 4px; font-size: 20px; font-weight: var(--ajb-w-bold); letter-spacing: -0.01em; }
+  .cmp-cap p { margin: 0; font-size: 13.5px; color: var(--ajb-fg-subtle); }
+
+  .cmp-grid { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; align-items: start; }
+
+  .cmp-col > .cmp-label { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 12px; font-weight: var(--ajb-w-bold); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ajb-fg-subtle); }
+  .cmp-col > .cmp-label b { color: var(--ajb-accent); }
+
+  /* console frame */
+  .cmp-frame {
+    height: 560px; border-radius: var(--ajb-r-xl); overflow: hidden;
+    border: 1px solid var(--ajb-stroke); box-shadow: var(--ajb-shadow-2);
+    background: var(--ajb-bg);
+  }
+  .cmp-frame .ne-home { height: 100%; }
+
+  /* The proposed dark rail sits inside a light-theme page, so the
+     `[data-theme="light"] .ne-side` override would wrongly flatten it to a
+     solid surface. Re-assert the real dark-theme sidebar treatment so this
+     rail is identical to the journeys' dark sidebar. */
+  .ne-home[data-sidebar="dark"] .ne-side { background: var(--ajb-bg-gradient); }
+  .ne-home[data-sidebar="dark"] .ne-side-user { background: rgba(255,255,255,0.02); }
+  .ne-home[data-sidebar="dark"] .ne-nav-item:hover { background: rgba(255,255,255,0.045); }
+  /* dark rail in a light page must show the white/negative wordmark */
+  .ne-home[data-sidebar="dark"] .ne-logo .ne-logo-dark { display: block; }
+  .ne-home[data-sidebar="dark"] .ne-logo .ne-logo-light { display: none; }
+
+  /* light main stub */
+  .cmp-main { display: flex; flex-direction: column; background: var(--ajb-bg); min-width: 0; flex: 1; }
+  .cmp-top { height: 58px; flex: none; border-bottom: 1px solid var(--ajb-stroke); display: flex; align-items: center; gap: 14px; padding: 0 20px; }
+  .cmp-top .ne-side-toggle { margin-inline-end: 0; }
+  .cmp-top-t { font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ajb-fg-subtle); margin-inline-end: auto; }
+  .cmp-top-bell { width: 38px; height: 38px; border-radius: var(--ajb-r-pill); border: 1px solid var(--ajb-stroke); display: inline-flex; align-items: center; justify-content: center; color: var(--ajb-fg-muted); }
+  .cmp-top-bell i { width: 18px; height: 18px; }
+  .cmp-body { padding: 26px 28px; overflow: hidden; }
+  .cmp-h { font-size: 26px; font-weight: var(--ajb-w-light); margin: 0 0 4px; color: var(--ajb-fg); }
+  .cmp-sub { font-size: 13px; color: var(--ajb-fg-subtle); margin: 0 0 22px; }
+  .cmp-card { border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-lg); background: var(--ajb-surface); padding: 18px 20px; margin-bottom: 14px; }
+  .cmp-row { display: flex; align-items: center; gap: 14px; }
+  .cmp-row + .cmp-row { margin-top: 14px; }
+  .cmp-ic { width: 38px; height: 38px; border-radius: 11px; background: var(--ajb-tint-sand-bg); color: var(--ajb-accent); display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .cmp-ic i { width: 18px; height: 18px; }
+  .cmp-bar { height: 9px; border-radius: 5px; background: color-mix(in srgb, var(--ajb-fg) 9%, transparent); }
+  .cmp-bar.w1 { width: 200px; } .cmp-bar.w2 { width: 96px; }
+  .cmp-rowmain { display: flex; flex-direction: column; gap: 8px; }
+  .cmp-pill { margin-inline-start: auto; font-size: 11px; font-weight: var(--ajb-w-medium); padding: 4px 11px; border-radius: var(--ajb-r-pill); background: var(--ajb-tint-success-bg); color: var(--ajb-tint-success-fg); }
+</style>
+</head>
+<body data-theme="light" class="ajb-themed">
+  <div class="cmp-cap">
+    <h1>Light theme · sidebar comparison</h1>
+    <p>Same page in light theme — <b>left</b> keeps the light rail (current), <b>right</b> drops in the dark brand rail. Comparison only; the journeys are untouched.</p>
+  </div>
+
+  <div class="cmp-grid">
+    <!-- LEFT: light sidebar (current) -->
+    <div class="cmp-col">
+      <div class="cmp-label">Light rail · <b>current</b></div>
+      <div class="cmp-frame">
+        <div class="ne-home" data-theme="light"></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: dark sidebar in light page -->
+    <div class="cmp-col">
+      <div class="cmp-label">Dark rail · <b>proposed</b></div>
+      <div class="cmp-frame">
+        <div class="ne-home" data-theme="light" data-sidebar="dark"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const NAV = [
+      { g: 'Workspace', items: [
+        { icon: 'layout-dashboard', label: 'Dashboard' },
+        { icon: 'send', label: 'Campaigns' },
+        { icon: 'file-text', label: 'Templates' },
+      ] },
+      { g: 'Governance', items: [
+        { icon: 'check-check', label: 'Approvals', on: true, badge: 5 },
+      ] },
+      { g: 'Audience & delivery', items: [
+        { icon: 'users', label: 'Customers' },
+        { icon: 'activity', label: 'Delivery' },
+      ] },
+    ];
+
+    function railHTML(darkRail) {
+      const themeAttr = darkRail ? ' data-theme="dark"' : '';
+      let nav = '';
+      NAV.forEach(grp => {
+        nav += `<div class="ne-nav-group"><span>${grp.g}</span></div>`;
+        grp.items.forEach(n => {
+          nav += `<div class="ne-nav-item ${n.on ? 'on' : ''}">` +
+            `<i data-lucide="${n.icon}"></i><span class="ne-nav-label">${n.label}</span>` +
+            (n.badge ? `<span class="ne-nav-badge">${n.badge}</span><span class="ne-nav-dot"></span>` : '') +
+            `</div>`;
+        });
+      });
+      return `<aside class="ne-side"${themeAttr}>` +
+        `<span class="ne-logo ne-side-logo">` +
+          `<img class="ne-logo-dark ne-logo-word" src="../assets/logo-white.svg" alt="aljazira bank">` +
+          `<img class="ne-logo-light ne-logo-word" src="../assets/logo-black.svg" alt="aljazira bank">` +
+          `<img class="ne-logo-symbol" src="../assets/logo-ajb-symbol-white.png" alt="ajb">` +
+        `</span>` +
+        nav +
+        `<div class="ne-side-sp"></div>` +
+        `<div class="ne-nav-item"><i data-lucide="settings"></i><span class="ne-nav-label">Settings</span></div>` +
+        `<div class="ne-side-divider"></div>` +
+        `<div class="ne-side-user">` +
+          `<span class="ajb-avatar ajb-avatar--sm"><span>A</span></span>` +
+          `<span class="ne-side-user-txt"><span class="ne-side-user-name">Abdulrahman Al Amri</span><span class="ne-side-user-role">Compliance · Maker</span></span>` +
+          `<span class="ne-side-user-act"><i data-lucide="chevron-right"></i></span>` +
+        `</aside>`;
+    }
+
+    function mainHTML() {
+      return `<div class="cmp-main">` +
+        `<div class="cmp-top">` +
+          `<button class="ne-side-toggle"><i data-lucide="panel-left"></i></button>` +
+          `<span class="cmp-top-t">Approvals</span>` +
+          `<span class="cmp-top-bell"><i data-lucide="bell"></i></span>` +
+        `</div>` +
+        `<div class="cmp-body">` +
+          `<h2 class="cmp-h">Approvals</h2>` +
+          `<p class="cmp-sub">5 awaiting your review.</p>` +
+          `<div class="cmp-card">` +
+            `<div class="cmp-row"><span class="cmp-ic"><i data-lucide="file-text"></i></span><span class="cmp-rowmain"><span class="cmp-bar w1"></span><span class="cmp-bar w2"></span></span><span class="cmp-pill">New template</span></div>` +
+            `<div class="cmp-row"><span class="cmp-ic"><i data-lucide="shield-check"></i></span><span class="cmp-rowmain"><span class="cmp-bar w1"></span><span class="cmp-bar w2"></span></span><span class="cmp-pill">v5 → v6</span></div>` +
+          `</div>` +
+          `<div class="cmp-card">` +
+            `<div class="cmp-row"><span class="cmp-ic"><i data-lucide="mail"></i></span><span class="cmp-rowmain"><span class="cmp-bar w1"></span><span class="cmp-bar w2"></span></span><span class="cmp-pill">New template</span></div>` +
+          `</div>` +
+        `</div>` +
+      `</div>`;
+    }
+
+    document.querySelectorAll('.ne-home').forEach(home => {
+      const dark = home.getAttribute('data-sidebar') === 'dark';
+      home.innerHTML = railHTML(dark) + mainHTML();
+    });
+    if (window.lucide) lucide.createIcons();
+  </script>
+</body>
+</html>

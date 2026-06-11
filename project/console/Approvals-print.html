@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notification Engine — Approvals</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="login.css">
+<link rel="stylesheet" href="template-studio.css">
+<link rel="stylesheet" href="template-tweaks.css">
+<link rel="stylesheet" href="edit-template.css">
+<link rel="stylesheet" href="view-template.css">
+<link rel="stylesheet" href="template-list.css">
+<link rel="stylesheet" href="template-delete.css">
+<link rel="stylesheet" href="approvals.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body class="ne-page">
+<div id="root"></div>
+
+<script src="template-data.js"></script>
+<script src="edit-extras.js"></script>
+<script src="view-extras.js"></script>
+<script src="approval-extras.js"></script>
+<script type="text/babel" src="browser-window.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="template-parts.jsx"></script>
+<script type="text/babel" src="console-shell.jsx"></script>
+<script type="text/babel" src="approval-parts.jsx"></script>
+<script type="text/babel" src="approvals.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+const FRAMES = { desktop: { w: 1280, h: 812 }, mobile: { w: 402, h: 844 } };
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "density": "compact",
+  "surface": "flat",
+  "accent": "balanced",
+  "reviewLayout": "split",
+  "queueView": "table"
+}/*EDITMODE-END*/;
+
+function Seg({ options, value, onChange }) {
+  return (
+    <div className="ajb-seg">
+      {options.map(o => (
+        <button key={o.v} className={value === o.v ? 'is-on' : ''} onClick={() => onChange(o.v)}>{o.l}</button>
+      ))}
+    </div>
+  );
+}
+
+function PhoneFrame({ width, height, children }) {
+  return (
+    <div className="ne-phone" style={{ width, height }}>
+      <div className="ne-phone-screen">
+        <div className="ne-phone-notch" />
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function useFit(fw, fh) {
+  const ref = useRef(null);
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const recalc = () => {
+      const availW = el.clientWidth - 64, availH = el.clientHeight - 64;
+      setScale(Math.min(1, availW / fw, availH / fh));
+    };
+    recalc();
+    const ro = new ResizeObserver(recalc); ro.observe(el);
+    return () => ro.disconnect();
+  }, [fw, fh]);
+  return [ref, scale];
+}
+
+function Shell({ t, pending, theme, setTheme, lang, setLang, children }) {
+  const [collapsed, toggleSide] = useSideCollapse();
+  return (
+    <div className="ne-home" data-collapsed={collapsed ? '' : undefined}>
+      <SideNav page="approvals" t={t} collapsed={collapsed} badge={pending} />
+      <div className="ne-main">
+        <Topbar t={t} title={t.apNav} collapsed={collapsed} onToggle={toggleSide}
+          theme={theme} setTheme={setTheme} lang={lang} setLang={setLang} />
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [tw, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [theme, setTheme] = useState('dark');
+  const [lang, setLang] = useState('en');
+  const [device, setDevice] = useState('desktop');
+  const [role, setRole] = useState('checker');
+  const [queue, setQueue] = useState(() => TPL.AP.QUEUE);
+  const [mine, setMine] = useState(() => TPL.AP.MINE);
+
+  const t = TPL.T[lang];
+  const dir = lang === 'ar' ? 'rtl' : 'ltr';
+  const frame = FRAMES[device];
+  const [fitRef, scale] = useFit(frame.w, frame.h);
+  const pending = queue.length;
+
+  const consoleEl = (
+    <div className="ne-console" data-theme={theme} data-density={tw.density} data-surface={tw.surface} data-accent={tw.accent} lang={lang} dir={dir}>
+      <Shell t={t} pending={pending} theme={theme} setTheme={setTheme} lang={lang} setLang={setLang}>
+        <ApprovalsConsole role={role} lang={lang} t={t} tweaks={tw}
+          queue={queue} setQueue={setQueue} mine={mine} setMine={setMine} />
+      </Shell>
+    </div>
+  );
+
+  return (
+    <React.Fragment>
+      <div className="ne-review">
+        <div className="ne-review-brand">
+          <img src="../assets/logo-white.svg" alt="aljazira bank" />
+          <span>Notification Engine · Approvals</span>
+        </div>
+        <div className="ne-ctrl">
+          <span className="ne-ctrl-lbl">{t.apRole}</span>
+          <Seg value={role} onChange={setRole} options={[{ v: 'checker', l: t.apChecker }, { v: 'maker', l: t.apMaker }]} />
+        </div>
+        <div className="ne-ctrl">
+          <span className="ne-ctrl-lbl">{t.review.device}</span>
+          <Seg value={device} onChange={setDevice} options={[{ v: 'desktop', l: t.review.desktop }, { v: 'mobile', l: t.review.mobile }]} />
+        </div>
+        <div className="ne-ctrl">
+          <span className="ne-ctrl-lbl">{t.review.theme}</span>
+          <Seg value={theme} onChange={setTheme} options={[{ v: 'dark', l: t.review.dark }, { v: 'light', l: t.review.light }]} />
+        </div>
+        <div className="ne-ctrl">
+          <span className="ne-ctrl-lbl">{t.review.lang}</span>
+          <Seg value={lang} onChange={setLang} options={[{ v: 'en', l: 'EN' }, { v: 'ar', l: 'AR' }]} />
+        </div>
+      </div>
+
+      <div className="ne-fit-wrap" ref={fitRef}>
+        <div style={{ width: frame.w * scale, height: frame.h * scale }}>
+          <div className="ne-fit" style={{ width: frame.w, height: frame.h, transform: `scale(${scale})` }}>
+            {device === 'mobile'
+              ? <PhoneFrame width={frame.w} height={frame.h}>{consoleEl}</PhoneFrame>
+              : <ChromeWindow width={frame.w} height={frame.h} url="console.aljazira.sa/approvals" tabs={[{ title: 'aljazira · notification engine' }]}>{consoleEl}</ChromeWindow>}
+          </div>
+        </div>
+      </div>
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Review layout" />
+        <TweakRadio label="Checker review" value={tw.reviewLayout}
+          options={[{ value: 'split', label: 'Split' }, { value: 'stacked', label: 'Stacked' }]}
+          onChange={(v) => setTweak('reviewLayout', v)} />
+        <TweakRadio label="Queue" value={tw.queueView}
+          options={[{ value: 'table', label: 'Table' }, { value: 'cards', label: 'Cards' }]}
+          onChange={(v) => setTweak('queueView', v)} />
+        <TweakSection label="Rhythm" />
+        <TweakRadio label="Density" value={tw.density}
+          options={['compact', 'comfortable', 'spacious']}
+          onChange={(v) => setTweak('density', v)} />
+        <TweakSection label="Material" />
+        <TweakRadio label="Surface" value={tw.surface}
+          options={['flat', 'raised']}
+          onChange={(v) => setTweak('surface', v)} />
+        <TweakSection label="Brand voice" />
+        <TweakRadio label="Sand accent" value={tw.accent}
+          options={['reserved', 'balanced', 'expressive']}
+          onChange={(v) => setTweak('accent', v)} />
+      </TweaksPanel>
+    </React.Fragment>
+  );
+}
+
+setTimeout(() => {
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+}, 50);
+</script>
+<script>
+(async () => {
+  // Prepend so page-supplied @page / break rules (deck-stage's margin:0,
+  // author CSS) keep source-order precedence over the baseline.
+  const baseCss = document.createElement('style');
+  baseCss.textContent = "@media print {\n  @page { margin: 0.5cm; }\n  html, body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }\n  section, article, figure, table { break-inside: avoid; }\n  *, *::before, *::after {\n    animation-delay: -99s !important; animation-duration: .001s !important;\n    animation-iteration-count: 1 !important; animation-fill-mode: both !important;\n    animation-play-state: running !important; transition-duration: 0s !important;\n  }\n}";
+  document.head.prepend(baseCss);
+  if (document.readyState === 'loading') {
+    await new Promise((r) => document.addEventListener('DOMContentLoaded', r, { once: true }));
+  }
+  let ds = document.querySelector('deck-stage');
+  // whenDefined never resolves when nothing registers the element, so only
+  // await it when a <deck-stage> tag exists (and race a timeout regardless).
+  if (ds && !customElements.get('deck-stage')) {
+    try {
+      await Promise.race([
+        customElements.whenDefined('deck-stage'),
+        new Promise((r) => setTimeout(r, 3000)),
+      ]);
+    } catch (e) {}
+    ds = document.querySelector('deck-stage');
+  }
+  // dc-runtime assigns window.DCLogic at init and mounts into #dc-root on
+  // DOMContentLoaded; settle on that subtree so React has rendered before
+  // print(). Non-DC pages fall through to weighing body.
+  const isDc = !ds && 'DCLogic' in window;
+  const settleRoot = ds || (isDc ? document.getElementById('dc-root') : null) || document.body;
+  if (settleRoot) {
+    // Weigh only content children — skip script/style/template so inline
+    // Babel/CSS doesn't register as stable "content" before the framework
+    // has mounted anything.
+    const MEDIA = 'img,svg,canvas,video,picture,iframe,embed,object';
+    const weigh = () => {
+      let text = 0, media = 0;
+      for (const c of settleRoot.children) {
+        const t = c.tagName;
+        if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+        text += (c.textContent || '').trim().length;
+        media += c.querySelectorAll(MEDIA).length + (c.matches(MEDIA) ? 1 : 0);
+      }
+      return text + media * 100;
+    };
+    // "Non-zero and stable" alone is not sufficient to mean rendered: generic
+    // body can carry a static shell while async main content is pending, and
+    // #dc-root can carry the root DC's static text while child refs are still
+    // .sc-placeholder boxes. Gate generic on readyState 'complete', and never
+    // accept stability while a dc-runtime placeholder is present.
+    const isGeneric = settleRoot === document.body;
+    const deadline = Date.now() + 15000;
+    let last = -1, stable = 0;
+    while (Date.now() < deadline) {
+      const n = weigh();
+      const ready =
+        (!isGeneric || document.readyState === 'complete') &&
+        !settleRoot.querySelector('.sc-placeholder');
+      if (n > 0 && n === last && ready) { if (++stable >= 2) break; } else { stable = 0; }
+      last = n;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  }
+  try { await document.fonts.ready; } catch (e) {}
+  // Jump every animation to its end state so print() never captures a slide
+  // mid-entrance. Ordering matters: the 0s-transition style must be live
+  // BEFORE data-deck-active is set so attribute-keyed transitions don't
+  // start a (now-0s) run from the pre-active base.
+  const st = document.createElement('style');
+  st.textContent = '*,*::before,*::after{animation-delay:-99s !important;animation-duration:.001s !important;animation-iteration-count:1 !important;animation-fill-mode:both !important;animation-play-state:running !important;transition-duration:0s !important}';
+  document.head.appendChild(st);
+  for (const d of document.querySelectorAll('deck-stage')) {
+    for (const c of d.children) {
+      const t = c.tagName;
+      if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+      c.setAttribute('data-deck-active', '');
+    }
+  }
+  try {
+    const sweep = () => {
+      for (const a of document.getAnimations()) {
+        try { a.finish(); } catch (e) {
+          try { a.currentTime = (a.effect && a.effect.getComputedTiming().duration) || 0; a.pause(); } catch (e2) {}
+        }
+      }
+    };
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+  } catch (e) {}
+  setTimeout(() => { try { window.print(); } catch (e) {} }, 200);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dictionary additions — new components</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="../console/components.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { font-family: var(--ajb-font); background: var(--ajb-bg-grad); min-height: 100vh; color: var(--ajb-fg); }
+  .dx-wrap { max-width: 1080px; margin: 0 auto; padding: 40px 28px 80px; }
+  .dx-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 8px; }
+  .dx-title { font-size: 30px; font-weight: var(--ajb-w-light); letter-spacing: -0.01em; margin: 0; }
+  .dx-sub { font-size: 14px; color: var(--ajb-fg-subtle); margin: 8px 0 0; max-width: 60ch; line-height: 1.5; }
+  .dx-toggles { display: flex; gap: 10px; }
+  .dx-tg { display: flex; background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-pill); overflow: hidden; }
+  .dx-tg button { background: transparent; border: 0; color: var(--ajb-fg-muted); font-family: var(--ajb-font); font-size: 12.5px; font-weight: var(--ajb-w-medium); padding: 8px 15px; cursor: pointer; }
+  .dx-tg button.on { background: var(--ajb-accent); color: var(--ajb-on-accent); }
+  .dx-note { display: flex; align-items: center; gap: 10px; margin: 22px 0 28px; font-size: 12.5px; color: var(--ajb-fg-subtle); padding: 11px 15px; border: 1px dashed var(--ajb-stroke-strong); border-radius: var(--ajb-r-md); }
+  .dx-note b { color: var(--ajb-accent); font-weight: var(--ajb-w-medium); }
+  .dx-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
+  .dx-card { background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-lg); overflow: hidden; display: flex; flex-direction: column; }
+  .dx-card.span2 { grid-column: span 2; }
+  .dx-card-h { padding: 16px 18px 0; }
+  .dx-card-name { font-size: 15px; font-weight: var(--ajb-w-medium); margin: 0; }
+  .dx-card-cls { font-family: ui-monospace, Menlo, monospace; font-size: 11.5px; color: var(--ajb-accent); margin-top: 4px; }
+  .dx-card-desc { font-size: 12.5px; color: var(--ajb-fg-subtle); line-height: 1.5; margin: 8px 0 0; }
+  .dx-card-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: var(--ajb-w-bold); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ajb-tint-success-fg); background: var(--ajb-tint-success-bg); padding: 3px 8px; border-radius: var(--ajb-r-pill); margin-bottom: 10px; }
+  [lang="ar"] .dx-card-badge { letter-spacing: 0; text-transform: none; }
+  .dx-specimen { margin-top: 16px; padding: 22px 18px; border-top: 1px solid var(--ajb-stroke); background: var(--ajb-bg); display: flex; align-items: center; justify-content: center; min-height: 130px; }
+  .dx-specimen.col { flex-direction: column; align-items: stretch; gap: 14px; }
+  .dx-group-h { grid-column: 1 / -1; font-size: 11px; font-weight: var(--ajb-w-bold); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ajb-fg-subtle); margin: 14px 0 2px; }
+  [lang="ar"] .dx-group-h { letter-spacing: 0; text-transform: none; }
+</style>
+</head>
+<body>
+<div class="dx-wrap">
+  <div class="dx-head">
+    <div>
+      <h1 class="dx-title">Dictionary additions</h1>
+      <p class="dx-sub">New reusable components promoted from the maker–checker work into the design system. Every card is token-driven — theme &amp; direction aware.</p>
+    </div>
+    <div class="dx-toggles">
+      <div class="dx-tg" id="themeTg"><button data-theme-val="dark" class="on">Dark</button><button data-theme-val="light">Light</button></div>
+      <div class="dx-tg" id="dirTg"><button data-dir-val="ltr" class="on">EN</button><button data-dir-val="rtl">AR</button></div>
+    </div>
+  </div>
+
+  <div class="dx-note">
+    <i data-lucide="git-commit-horizontal"></i>
+    <span><b>3 new components</b> · Person, Timeline, Diff — plus a new <b>status-dot</b> variant (info). Working copy in <b>console/components.css</b>; promotion files in <b>dictionary-additions/</b>.</span>
+  </div>
+
+  <div class="dx-grid" id="grid"></div>
+</div>
+
+<script>
+const I = (n) => `<i data-lucide="${n}"></i>`;
+const T = {
+  ltr: { sent: 'Submitted for review', appr: 'Approved & activated', await: 'Awaiting decision',
+    maker: 'Maker', checker: 'Checker', sys: 'System',
+    name: 'A. Al Amri', role: 'Compliance · Maker', n: 'N. Al Harbi', s: 'S. Al Qahtani',
+    cur: 'Current', prop: 'Proposed', subj: 'Subject line',
+    before: 'Your statement is ready', after: 'Your statement is ready ',
+    addAfter: '— due today.', low: 'Low', normal: 'Normal', high: 'High', crit: 'Critical',
+    when1: '04 Jun 2026, 08:42', when2: '03 Jun 2026' },
+  rtl: { sent: 'أُرسل للمراجعة', appr: 'اعتُمد وفُعّل', await: 'بانتظار القرار',
+    maker: 'مُنشئ', checker: 'مُدقّق', sys: 'النظام',
+    name: 'عبدالرحمن العمري', role: 'الالتزام · مُنشئ', n: 'ناصر الحربي', s: 'سارة القحطاني',
+    cur: 'الحالي', prop: 'المقترح', subj: 'سطر الموضوع',
+    before: 'كشف حسابك جاهز', after: 'كشف حسابك جاهز ',
+    addAfter: '— يستحق اليوم.', low: 'منخفضة', normal: 'عادية', high: 'عالية', crit: 'حرجة',
+    when1: '٠٤ يونيو ٢٠٢٦', when2: '٠٣ يونيو ٢٠٢٦' },
+};
+
+function build() {
+  const dir = document.documentElement.getAttribute('dir') || 'ltr';
+  const t = T[dir];
+  const cards = [
+    { group: 'Data display' },
+    { name: 'Person', cls: '.ajb-person', span: false,
+      desc: 'Avatar + name + optional secondary line. The atom for actor rows, assignees and owner cells.',
+      col: true,
+      html: `
+        <span class="ajb-person"><span class="ajb-avatar ajb-avatar--sm"><span>A</span></span><span class="ajb-person__txt"><span class="ajb-person__name">${t.name}</span><span class="ajb-person__sub">${t.role}</span></span></span>
+        <span class="ajb-person"><span class="ajb-avatar ajb-avatar--xs"><span>N</span></span><span class="ajb-person__txt"><span class="ajb-person__name">${t.n}</span><span class="ajb-person__sub">${t.checker}</span></span></span>` },
+    { name: 'Status dot — info', cls: '.ajb-dot--info', span: false, col: true,
+      desc: 'New sky-blue variant. Priority maps low→muted, normal→info, high→warning, critical→danger.',
+      html: `
+        <span class="ajb-status"><span class="ajb-dot ajb-dot--muted"></span>${t.low}</span>
+        <span class="ajb-status"><span class="ajb-dot ajb-dot--info"></span>${t.normal}</span>
+        <span class="ajb-status"><span class="ajb-dot ajb-dot--warning"></span>${t.high}</span>
+        <span class="ajb-status"><span class="ajb-dot ajb-dot--danger"></span>${t.crit}</span>` },
+    { name: 'Timeline', cls: '.ajb-timeline · .ajb-timeline__item', span: true, col: true,
+      desc: 'Activity feed / audit trail. Node tints via item modifiers; actor pill (__tag) takes the same tints; __ico--pulse marks a live step.',
+      html: `
+        <ol class="ajb-timeline">
+          <li class="ajb-timeline__item ajb-timeline__item--sand"><span class="ajb-timeline__ico">${I('send')}</span><div class="ajb-timeline__body"><div class="ajb-timeline__top"><span class="ajb-timeline__action">${t.sent}</span><span class="ajb-timeline__by">· ${t.n}</span><span class="ajb-timeline__tag ajb-timeline__tag--sand">${t.maker}</span></div><div class="ajb-timeline__when ajb-ltr">${t.when1}</div></div></li>
+          <li class="ajb-timeline__item ajb-timeline__item--success"><span class="ajb-timeline__ico">${I('check')}</span><div class="ajb-timeline__body"><div class="ajb-timeline__top"><span class="ajb-timeline__action">${t.appr}</span><span class="ajb-timeline__by">· ${t.s}</span><span class="ajb-timeline__tag ajb-timeline__tag--info">${t.checker}</span></div><div class="ajb-timeline__when ajb-ltr">${t.when2}</div></div></li>
+          <li class="ajb-timeline__item ajb-timeline__item--info"><span class="ajb-timeline__ico ajb-timeline__ico--pulse">${I('clock')}</span><div class="ajb-timeline__body"><div class="ajb-timeline__top"><span class="ajb-timeline__action">${t.await}</span><span class="ajb-timeline__tag ajb-timeline__tag--info">${t.checker}</span></div></div></li>
+        </ol>` },
+    { name: 'Diff', cls: '.ajb-diff', span: true, col: true,
+      desc: 'Before / after comparison of a field with word-level marks (__mark--del / __mark--ins). Auto-stacks when narrow.',
+      html: `
+        <div class="ajb-diff">
+          <div class="ajb-diff__label">${t.subj}</div>
+          <div class="ajb-diff__grid">
+            <div class="ajb-diff__side"><div class="ajb-diff__tag ajb-diff__tag--before">${I('minus')}${t.cur}</div><div class="ajb-diff__box ajb-diff__box--before" dir="${dir}">${t.before}</div></div>
+            <div class="ajb-diff__side"><div class="ajb-diff__tag ajb-diff__tag--after">${I('plus')}${t.prop}</div><div class="ajb-diff__box ajb-diff__box--after" dir="${dir}">${t.after}<mark class="ajb-diff__mark ajb-diff__mark--ins">${t.addAfter}</mark></div></div>
+          </div>
+        </div>` },
+  ];
+
+  const grid = document.getElementById('grid');
+  grid.innerHTML = cards.map(c => {
+    if (c.group) return `<div class="dx-group-h">${c.group}</div>`;
+    return `<div class="dx-card${c.span ? ' span2' : ''}">
+      <div class="dx-card-h">
+        <span class="dx-card-badge">${I('sparkles')}New</span>
+        <h3 class="dx-card-name">${c.name}</h3>
+        <div class="dx-card-cls">${c.cls}</div>
+        <p class="dx-card-desc">${c.desc}</p>
+      </div>
+      <div class="dx-specimen${c.col ? ' col' : ''}">${c.html}</div>
+    </div>`;
+  }).join('');
+  if (window.lucide) lucide.createIcons();
+}
+
+document.getElementById('themeTg').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  document.documentElement.setAttribute('data-theme', b.dataset.themeVal);
+  [...e.currentTarget.children].forEach(x => x.classList.toggle('on', x === b));
+});
+document.getElementById('dirTg').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  const dir = b.dataset.dirVal;
+  document.documentElement.setAttribute('dir', dir);
+  document.documentElement.setAttribute('lang', dir === 'rtl' ? 'ar' : 'en');
+  [...e.currentTarget.children].forEach(x => x.classList.toggle('on', x === b));
+  build();
+});
+
+build();
+</script>
+</body>
+</html>

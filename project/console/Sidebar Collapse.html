@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Side menu — collapse transition</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="components.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<style>
+  :root { --cb-ease: cubic-bezier(.2,.7,.2,1); --cb-w: 256px; --cb-wc: 84px; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: var(--ajb-font);
+    background:
+      radial-gradient(120% 80% at 15% 0%, color-mix(in srgb, var(--ajb-midnight-blue) 40%, #000) 0%, #07080b 60%);
+    min-height: 100%;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 30px 24px 40px;
+  }
+
+  /* ---- caption ---- */
+  .cb-cap { width: 100%; max-width: 1180px; margin-bottom: 16px; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .cb-cap h1 { margin: 0; font-size: 19px; font-weight: var(--ajb-w-bold); color: var(--ajb-fg); letter-spacing: -0.01em; }
+  .cb-cap p { margin: 0; font-size: 13.5px; color: var(--ajb-fg-subtle); }
+  .cb-cap b { color: var(--ajb-accent); font-weight: var(--ajb-w-medium); }
+
+  /* ---- console frame ---- */
+  .cb-frame {
+    width: 100%; max-width: 1180px; height: min(720px, 80vh);
+    display: flex; border-radius: var(--ajb-r-xl);
+    overflow: hidden; border: 1px solid var(--ajb-stroke);
+    box-shadow: var(--ajb-shadow-3);
+    background: var(--ajb-bg);
+  }
+
+  /* ============================ RAIL ============================ */
+  .cb-rail {
+    width: var(--cb-w); flex: none;
+    background: var(--ajb-bg-gradient);
+    border-inline-end: 1px solid var(--ajb-stroke);
+    display: flex; flex-direction: column;
+    padding: 18px 14px 16px;
+    overflow: hidden;
+    transition: width .36s var(--cb-ease), padding .36s var(--cb-ease);
+  }
+  .cb-rail[data-collapsed] { width: var(--cb-wc); padding-inline: 20px; }
+
+  /* header / brand */
+  .cb-head { display: flex; align-items: center; height: 30px; margin: 4px 4px 16px; position: relative; transition: margin .36s var(--cb-ease); }
+  .cb-rail[data-collapsed] .cb-head { margin-inline: 0; justify-content: center; }
+  .cb-brand { position: relative; height: 22px; display: flex; align-items: center; }
+  .cb-brand img { display: block; transition: opacity .3s var(--cb-ease); }
+  .cb-wordmark { height: 22px; }
+  .cb-symbol { height: 26px; position: absolute; inset-inline-start: 50%; top: 50%; transform: translate(-50%,-50%); opacity: 0; }
+  [dir=rtl] .cb-symbol { transform: translate(50%,-50%); }
+  .cb-rail[data-collapsed] .cb-wordmark { opacity: 0; }
+  .cb-rail[data-collapsed] .cb-symbol { opacity: 1; }
+
+  /* nav */
+  .cb-nav { display: flex; flex-direction: column; gap: 4px; }
+  /* group header keeps a CONSTANT height in both states (text fades to a
+     centered hairline) so the icons below never shift vertically. */
+  .cb-grouplbl {
+    position: relative; display: flex; align-items: center;
+    height: 15px; margin: 17px 0 8px; padding: 0 13px;
+    font-size: 10px; font-weight: var(--ajb-w-bold); letter-spacing: 0.09em;
+    text-transform: uppercase; color: var(--ajb-fg-subtle);
+    white-space: nowrap; overflow: hidden;
+  }
+  .cb-grouplbl span { transition: opacity .2s var(--cb-ease); }
+  .cb-grouplbl::after {
+    content: ""; position: absolute; inset-inline: 16px; top: 50%; height: 1px;
+    background: var(--ajb-stroke); opacity: 0; transition: opacity .24s var(--cb-ease);
+  }
+  .cb-grouplbl:first-child::after { display: none; }
+  .cb-rail[data-collapsed] .cb-grouplbl span { opacity: 0; }
+  .cb-rail[data-collapsed] .cb-grouplbl::after { opacity: 1; }
+
+  .cb-item {
+    display: flex; align-items: center; gap: 12px;
+    height: 44px; padding: 0 13px; border-radius: 12px;
+    color: var(--ajb-fg-muted); font-size: 14px; font-weight: var(--ajb-w-medium);
+    cursor: pointer; position: relative; white-space: nowrap;
+    transition: background .2s var(--cb-ease), color .2s var(--cb-ease), padding .32s var(--cb-ease), gap .32s var(--cb-ease);
+  }
+  .cb-item i { width: 18px; height: 18px; flex: none; display: inline-flex; }
+  .cb-item i svg { width: 100%; height: 100%; }
+  .cb-item:hover { background: rgba(255,255,255,0.045); color: var(--ajb-fg); }
+  .cb-rail[data-collapsed] .cb-item { padding: 0; gap: 0; justify-content: center; width: 44px; margin-inline: auto; }
+
+  .cb-label { overflow: hidden; max-width: 160px; opacity: 1;
+    transition: opacity .2s var(--cb-ease), max-width .32s var(--cb-ease); }
+  .cb-rail[data-collapsed] .cb-label { opacity: 0; max-width: 0; }
+
+  /* active */
+  .cb-item.on { color: var(--ajb-accent); background: rgba(178,127,89,0.12); }
+  .cb-item.on::before {
+    content: ""; position: absolute; inset-inline-start: 0; top: 9px; bottom: 9px; width: 3px;
+    border-radius: var(--ajb-r-pill); background: var(--ajb-accent);
+    opacity: 1; transition: opacity .22s var(--cb-ease);
+  }
+  .cb-rail[data-collapsed] .cb-item.on { background: var(--ajb-accent); color: var(--ajb-on-accent); box-shadow: var(--ajb-glow-sand); }
+  .cb-rail[data-collapsed] .cb-item.on::before { opacity: 0; }
+
+  /* badge + dot */
+  .cb-badge { margin-inline-start: auto; min-width: 20px; height: 20px; padding: 0 6px;
+    border-radius: var(--ajb-r-pill); background: var(--ajb-tint-sand-bg); color: var(--ajb-accent);
+    font-size: 11px; font-weight: var(--ajb-w-bold); display: inline-flex; align-items: center; justify-content: center;
+    overflow: hidden; opacity: 1; transition: opacity .14s var(--cb-ease), max-width .32s var(--cb-ease), margin .32s var(--cb-ease); max-width: 40px; }
+  /* fully remove the badge's footprint when collapsed so the icon centers */
+  .cb-rail[data-collapsed] .cb-badge { opacity: 0; max-width: 0; min-width: 0; padding: 0; margin: 0; }
+  .cb-dot { position: absolute; top: 8px; inset-inline-end: 8px; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--ajb-accent); border: 2px solid #0c0e13; opacity: 0; transition: opacity .2s var(--cb-ease) .08s; }
+  .cb-rail[data-collapsed] .cb-dot { opacity: 1; }
+
+  .cb-spacer { flex: 1; min-height: 14px; }
+  .cb-divider { height: 1px; background: var(--ajb-stroke); margin: 12px 4px; transition: margin .32s var(--cb-ease); }
+  .cb-rail[data-collapsed] .cb-divider { margin-inline: 10px; }
+
+  /* user footer keeps a CONSTANT height so the bottom section never shifts */
+  .cb-user { display: flex; align-items: center; gap: 11px; height: 54px; padding: 0 10px; box-sizing: border-box;
+    border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-md); background: rgba(255,255,255,0.02);
+    transition: padding .32s var(--cb-ease), border-color .3s var(--cb-ease), background .3s var(--cb-ease); }
+  .cb-rail[data-collapsed] .cb-user { padding: 0; border-color: transparent; background: transparent; justify-content: center; }
+  .cb-avatar { width: 32px; height: 32px; border-radius: var(--ajb-r-pill); flex: none;
+    background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke);
+    display: inline-flex; align-items: center; justify-content: center; color: var(--ajb-accent);
+    font-weight: var(--ajb-w-bold); font-size: 13px; }
+  .cb-user-txt { display: flex; flex-direction: column; min-width: 0; overflow: hidden; max-width: 160px; opacity: 1;
+    transition: opacity .2s var(--cb-ease), max-width .32s var(--cb-ease); }
+  .cb-rail[data-collapsed] .cb-user-txt { opacity: 0; max-width: 0; }
+  .cb-user-name { font-size: 13px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg); white-space: nowrap; }
+  .cb-user-role { font-size: 11px; color: var(--ajb-fg-subtle); white-space: nowrap; }
+  .cb-user-act { margin-inline-start: auto; color: var(--ajb-fg-subtle); display: inline-flex; opacity: 1; width: 16px;
+    transition: opacity .18s var(--cb-ease), width .32s var(--cb-ease); }
+  .cb-user-act i { width: 16px; height: 16px; }
+  .cb-rail[data-collapsed] .cb-user-act { opacity: 0; width: 0; }
+
+  /* ============================ MAIN ============================ */
+  .cb-main { flex: 1; min-width: 0; display: flex; flex-direction: column; background: var(--ajb-bg); }
+  .cb-topbar { height: 60px; flex: none; border-bottom: 1px solid var(--ajb-stroke);
+    display: flex; align-items: center; gap: 14px; padding: 0 20px; }
+  .cb-toggle { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--ajb-stroke);
+    background: transparent; color: var(--ajb-fg-muted); cursor: pointer; display: inline-flex;
+    align-items: center; justify-content: center; transition: background .16s, color .16s, border-color .16s; }
+  .cb-toggle:hover { background: rgba(255,255,255,0.05); color: var(--ajb-fg); border-color: var(--ajb-stroke-strong); }
+  .cb-toggle i { width: 19px; height: 19px; transition: transform .36s var(--cb-ease); }
+  .cb-frame[data-collapsed] .cb-toggle i { transform: rotate(180deg); }
+  [dir=rtl] .cb-frame[data-collapsed] .cb-toggle i { transform: rotate(0deg); }
+  [dir=rtl] .cb-toggle i { transform: rotate(180deg); }
+  .cb-tb-title { font-size: 15px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg); }
+  .cb-tb-r { margin-inline-start: auto; display: flex; align-items: center; gap: 14px; color: var(--ajb-fg-subtle); }
+  .cb-tb-r i { width: 19px; height: 19px; }
+  .cb-tb-av { width: 30px; height: 30px; border-radius: var(--ajb-r-pill); background: var(--ajb-surface-2);
+    border: 1px solid var(--ajb-stroke); display: inline-flex; align-items: center; justify-content: center;
+    color: var(--ajb-accent); font-weight: var(--ajb-w-bold); font-size: 12px; }
+
+  /* faux content (context only) */
+  .cb-body { padding: 26px 30px; overflow: hidden; }
+  .cb-h { font-size: 24px; font-weight: var(--ajb-w-light); color: var(--ajb-fg); margin: 0 0 4px; }
+  .cb-sub { font-size: 13px; color: var(--ajb-fg-subtle); margin: 0 0 22px; }
+  .cb-chips { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .cb-chip { font-size: 12.5px; color: var(--ajb-fg-muted); padding: 7px 15px; border: 1px solid var(--ajb-stroke);
+    border-radius: var(--ajb-r-pill); white-space: nowrap; }
+  .cb-chip.on { background: var(--ajb-tint-sand-bg); color: var(--ajb-accent); border-color: transparent; }
+  .cb-rows { border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-lg); overflow: hidden; }
+  .cb-row { display: flex; align-items: center; gap: 16px; padding: 16px 18px; border-bottom: 1px solid var(--ajb-stroke); }
+  .cb-row:last-child { border-bottom: 0; }
+  .cb-row-ic { width: 38px; height: 38px; border-radius: 11px; background: rgba(255,255,255,0.05);
+    display: inline-flex; align-items: center; justify-content: center; color: var(--ajb-accent); flex: none; }
+  .cb-row-ic i { width: 18px; height: 18px; }
+  .cb-bar { height: 9px; border-radius: 5px; background: rgba(255,255,255,0.07); }
+  .cb-bar.w1 { width: 180px; } .cb-bar.w2 { width: 90px; }
+  .cb-row-main { display: flex; flex-direction: column; gap: 7px; }
+  .cb-pill { margin-inline-start: auto; font-size: 11px; font-weight: var(--ajb-w-medium);
+    padding: 4px 11px; border-radius: var(--ajb-r-pill); }
+  .cb-pill.ok { background: var(--ajb-tint-success-bg); color: var(--ajb-tint-success-fg); }
+  .cb-pill.rev { background: var(--ajb-tint-info-bg); color: var(--ajb-tint-info-fg); }
+
+  /* hint pulse on toggle (first load) */
+  @keyframes cbpulse { 0%,100% { box-shadow: 0 0 0 0 rgba(178,127,89,0); } 50% { box-shadow: 0 0 0 6px rgba(178,127,89,0.16); } }
+  .cb-toggle.hint { animation: cbpulse 1.8s var(--cb-ease) 2; }
+</style>
+</head>
+<body>
+  <div class="cb-cap">
+    <h1>Side menu · collapse</h1>
+    <p>Direction <b>B</b> expanded ⇄ direction <b>C</b> collapsed. Click the toggle in the top bar.</p>
+  </div>
+
+  <div class="cb-frame" id="frame">
+    <!-- RAIL -->
+    <aside class="cb-rail" id="rail">
+      <div class="cb-head">
+        <span class="cb-brand">
+          <img class="cb-wordmark" src="../assets/logo-white.svg" alt="aljazira bank">
+          <img class="cb-symbol" src="../assets/logo-ajb-symbol-white.png" alt="ajb">
+        </span>
+      </div>
+
+      <nav class="cb-nav" id="nav"></nav>
+
+      <div class="cb-spacer"></div>
+      <div class="cb-item" data-icon="settings"><i data-lucide="settings"></i><span class="cb-label">Settings</span></div>
+      <div class="cb-divider"></div>
+      <div class="cb-user">
+        <span class="cb-avatar">A</span>
+        <span class="cb-user-txt">
+          <span class="cb-user-name">Abdulrahman Al Amri</span>
+          <span class="cb-user-role">Compliance · Maker</span>
+        </span>
+        <span class="cb-user-act"><i data-lucide="chevron-right"></i></span>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="cb-main">
+      <div class="cb-topbar">
+        <button class="cb-toggle hint" id="toggle" aria-label="Toggle menu"><i data-lucide="panel-left"></i></button>
+        <span class="cb-tb-title">Templates</span>
+        <span class="cb-tb-r">
+          <i data-lucide="bell"></i>
+          <span class="cb-tb-av">A</span>
+        </span>
+      </div>
+      <div class="cb-body">
+        <h2 class="cb-h">Templates</h2>
+        <p class="cb-sub">Reusable notifications across every channel.</p>
+        <div class="cb-chips">
+          <span class="cb-chip on">All channels</span>
+          <span class="cb-chip">SMS</span>
+          <span class="cb-chip">Email</span>
+          <span class="cb-chip">Push</span>
+          <span class="cb-chip">WhatsApp</span>
+        </div>
+        <div class="cb-rows" id="rows"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const NAV = [
+      { id: 'home', icon: 'layout-dashboard', label: 'Dashboard', group: 'Workspace' },
+      { id: 'campaigns', icon: 'send', label: 'Campaigns', group: 'Workspace' },
+      { id: 'templates', icon: 'file-text', label: 'Templates', group: 'Workspace', on: true },
+      { id: 'approvals', icon: 'check-check', label: 'Approvals', group: 'Governance', badge: 5 },
+      { id: 'customers', icon: 'users', label: 'Customers', group: 'Audience & delivery' },
+      { id: 'delivery', icon: 'activity', label: 'Delivery', group: 'Audience & delivery' },
+    ];
+    // build grouped nav
+    const nav = document.getElementById('nav');
+    let lastGroup = null;
+    NAV.forEach(n => {
+      if (n.group !== lastGroup) {
+        const g = document.createElement('div'); g.className = 'cb-grouplbl';
+        g.innerHTML = `<span>${n.group}</span>`; nav.appendChild(g);
+        lastGroup = n.group;
+      }
+      const it = document.createElement('div');
+      it.className = 'cb-item' + (n.on ? ' on' : '');
+      it.innerHTML = `<i data-lucide="${n.icon}"></i><span class="cb-label">${n.label}</span>` +
+        (n.badge ? `<span class="cb-badge">${n.badge}</span><span class="cb-dot"></span>` : '');
+      nav.appendChild(it);
+    });
+
+    // faux rows
+    const ROWS = [
+      { icon: 'message-square', s: 'ok', label: 'Active' },
+      { icon: 'mail', s: 'rev', label: 'In review' },
+      { icon: 'smartphone', s: 'ok', label: 'Active' },
+      { icon: 'bell', s: 'ok', label: 'Active' },
+    ];
+    const rows = document.getElementById('rows');
+    ROWS.forEach(r => {
+      const el = document.createElement('div');
+      el.className = 'cb-row';
+      el.innerHTML = `<span class="cb-row-ic"><i data-lucide="${r.icon}"></i></span>
+        <span class="cb-row-main"><span class="cb-bar w1"></span><span class="cb-bar w2"></span></span>
+        <span class="cb-pill ${r.s}">${r.label}</span>`;
+      rows.appendChild(el);
+    });
+
+    if (window.lucide) lucide.createIcons();
+
+    // toggle + persistence
+    const frame = document.getElementById('frame');
+    const rail = document.getElementById('rail');
+    const toggle = document.getElementById('toggle');
+    function setCollapsed(c) {
+      if (c) { rail.setAttribute('data-collapsed', ''); frame.setAttribute('data-collapsed', ''); }
+      else { rail.removeAttribute('data-collapsed'); frame.removeAttribute('data-collapsed'); }
+      try { localStorage.setItem('cb-collapsed', c ? '1' : '0'); } catch (e) {}
+    }
+    let collapsed = false;
+    try { collapsed = localStorage.getItem('cb-collapsed') === '1'; } catch (e) {}
+    setCollapsed(collapsed);
+    toggle.addEventListener('click', () => { collapsed = !collapsed; setCollapsed(collapsed); toggle.classList.remove('hint'); });
+    setTimeout(() => toggle.classList.remove('hint'), 4200);
+  </script>
+</body>
+</html>

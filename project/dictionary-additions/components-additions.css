@@ -1,0 +1,203 @@
+/* ============================================================
+   Aljazira Bank — Component Library ADDITIONS
+   Append these blocks to the design system's components.css.
+   Nine new reusable components, all token-driven (theme + dir aware):
+     Option cards · Stepper · Date field · Stat · Description list ·
+     Result · Person · Timeline · Diff
+   Plus one variant on an existing component: .ajb-dot--info (sky-blue).
+   They were promoted out of the Notification Engine build, where they
+   had been hand-rolled, so every screen can now reuse them.
+   ============================================================ */
+
+/* ============================================================
+   DATA DISPLAY — Status dot, new variant
+   Rounds out the labelled-dot set (success / warning / danger / muted)
+   with an informational sky-blue. Append beside the other .ajb-dot--*.
+   ============================================================ */
+.ajb-dot--info { background: var(--ajb-sky-blue); }
+
+
+/* ============================================================
+   FORMS — Option cards (single-select tile group)
+   A grid of selectable cards, each an icon stacked over a label.
+   Use for channel / method / type pickers where an icon speeds
+   scanning and the choices deserve more presence than chips.
+   Single-select: mark the chosen card with .is-on. Set the column
+   count with the --ajb-optioncols custom property on the container
+   (defaults to 4). Disable a card with .is-disabled.
+   ============================================================ */
+.ajb-optioncards { display: grid; grid-template-columns: repeat(var(--ajb-optioncols, 4), 1fr); gap: 10px; }
+.ajb-optioncard {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-family: var(--ajb-font); font-size: var(--ajb-small); font-weight: var(--ajb-w-medium);
+  color: var(--ajb-fg-muted); text-align: center; cursor: pointer;
+  background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke);
+  border-radius: var(--ajb-r-md); padding: 14px 8px;
+  transition: color var(--ajb-dur-2) var(--ajb-ease), border-color var(--ajb-dur-2) var(--ajb-ease), background var(--ajb-dur-2) var(--ajb-ease);
+}
+.ajb-optioncard svg { width: 20px; height: 20px; stroke-width: 1.6; }
+.ajb-optioncard:hover { color: var(--ajb-fg); border-color: var(--ajb-stroke-strong); }
+.ajb-optioncard.is-on { color: var(--ajb-accent); border-color: var(--ajb-accent); background: var(--ajb-tint-sand-bg); }
+.ajb-optioncard.is-disabled { opacity: 0.4; pointer-events: none; }
+
+/* ============================================================
+   NAV — Stepper (progress through a multi-step flow)
+   .ajb-step = dot + label. Mark the active step .is-on and any
+   completed step .is-done (put a check icon in the dot). Separate
+   steps with .ajb-step-line (add .is-done once crossed).
+   ============================================================ */
+.ajb-stepper { display: flex; align-items: center; gap: 6px; }
+.ajb-step { display: flex; align-items: center; gap: 9px; }
+.ajb-step__dot { width: 26px; height: 26px; border-radius: var(--ajb-r-pill); border: 1.5px solid var(--ajb-stroke-strong); color: var(--ajb-fg-subtle); font-size: 12.5px; font-weight: var(--ajb-w-bold); display: inline-flex; align-items: center; justify-content: center; transition: all var(--ajb-dur-2) var(--ajb-ease); }
+.ajb-step__dot svg { width: 14px; height: 14px; }
+.ajb-step__label { font-size: var(--ajb-small); font-weight: var(--ajb-w-medium); color: var(--ajb-fg-subtle); }
+.ajb-step.is-on .ajb-step__dot { border-color: var(--ajb-accent); background: var(--ajb-accent); color: var(--ajb-on-accent); }
+.ajb-step.is-on .ajb-step__label { color: var(--ajb-fg); }
+.ajb-step.is-done .ajb-step__dot { border-color: var(--ajb-accent); color: var(--ajb-accent); }
+.ajb-step.is-done .ajb-step__label { color: var(--ajb-fg-muted); }
+.ajb-step-line { width: 38px; height: 1.5px; background: var(--ajb-stroke-strong); }
+.ajb-step-line.is-done { background: var(--ajb-accent); }
+
+/* ============================================================
+   FORMS — Date field
+   Native date input on the underline-input baseline with a
+   leading calendar icon. Focus turns the underline Sand.
+   ============================================================ */
+.ajb-datefield { display: flex; align-items: center; gap: 9px; border-bottom: 1px solid var(--ajb-stroke-strong); padding: 0 2px; transition: border-color var(--ajb-dur-2) var(--ajb-ease); }
+.ajb-datefield:focus-within { border-bottom-color: var(--ajb-accent); }
+.ajb-datefield svg { width: 16px; height: 16px; color: var(--ajb-fg-subtle); flex: none; }
+.ajb-datefield input { flex: 1; min-width: 0; background: transparent; border: 0; outline: none; font-family: var(--ajb-font); font-size: var(--ajb-body); color: var(--ajb-fg); padding: 11px 0; }
+.ajb-datefield input::-webkit-calendar-picker-indicator { filter: invert(0.6); cursor: pointer; }
+[data-theme="light"] .ajb-datefield input::-webkit-calendar-picker-indicator { filter: none; }
+
+/* ============================================================
+   DATA DISPLAY — Stat (a KPI figure; place inside an .ajb-card)
+   ============================================================ */
+.ajb-stat { display: block; }
+.ajb-stat__label { font-size: var(--ajb-micro); letter-spacing: 0.04em; text-transform: uppercase; color: var(--ajb-fg-subtle); }
+[dir="rtl"] .ajb-stat__label, [lang="ar"] .ajb-stat__label { letter-spacing: 0; text-transform: none; }
+.ajb-stat__value { font-size: 30px; font-weight: var(--ajb-w-light); color: var(--ajb-fg); line-height: 1.1; margin-top: 10px; }
+.ajb-stat__delta { font-size: var(--ajb-micro); margin-top: 6px; color: var(--ajb-fg-muted); }
+.ajb-stat__delta--up { color: var(--ajb-tint-success-fg); }
+.ajb-stat__delta--down { color: var(--ajb-tint-danger-fg); }
+
+/* ============================================================
+   DATA DISPLAY — Description list (key / value rows)
+   ============================================================ */
+.ajb-kv { display: flex; flex-direction: column; }
+.ajb-kv__row { display: flex; gap: 16px; padding: 11px 0; border-bottom: 1px solid var(--ajb-stroke); font-size: var(--ajb-small); }
+.ajb-kv__row:last-child { border-bottom: 0; }
+.ajb-kv__key { width: 140px; flex: none; color: var(--ajb-fg-subtle); }
+.ajb-kv__val { color: var(--ajb-fg); font-weight: var(--ajb-w-medium); }
+
+/* ============================================================
+   FEEDBACK — Result (success / outcome confirmation)
+   Centered icon badge + title + supporting text. Tint the badge
+   per intent with --success / --danger / --info; default is Sand.
+   ============================================================ */
+.ajb-result { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.ajb-result__badge { width: 58px; height: 58px; border-radius: var(--ajb-r-pill); display: inline-flex; align-items: center; justify-content: center; margin-bottom: 8px; background: var(--ajb-tint-sand-bg); color: var(--ajb-accent); }
+.ajb-result__badge svg { width: 28px; height: 28px; }
+.ajb-result--success .ajb-result__badge { background: var(--ajb-tint-success-bg); color: var(--ajb-tint-success-fg); }
+.ajb-result--danger .ajb-result__badge { background: var(--ajb-tint-danger-bg); color: var(--ajb-tint-danger-fg); }
+.ajb-result--info .ajb-result__badge { background: var(--ajb-tint-info-bg); color: var(--ajb-tint-info-fg); }
+.ajb-result__title { font-size: 22px; font-weight: var(--ajb-w-light); color: var(--ajb-fg); margin: 0; }
+.ajb-result__text { font-size: var(--ajb-small); line-height: 1.5; color: var(--ajb-fg-muted); margin: 0; max-width: 40ch; }
+
+/* ============================================================
+   FORMS — Calendar / date picker
+   The popover that pairs with an .ajb-select trigger (or .ajb-datefield).
+   Day states: .is-muted (other month) · .is-today · .is-on (selected).
+   Range select adds .in-range with .is-start / .is-end on the endpoints.
+   Mirrors automatically under dir="rtl". (Promoted from preview/calendar.html.)
+   ============================================================ */
+.ajb-calendar { width: 280px; box-sizing: border-box; background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-lg); padding: 16px; box-shadow: var(--ajb-shadow-3); }
+.ajb-calendar__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.ajb-calendar__title { font-size: 15px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg); }
+.ajb-calendar__nav { display: flex; gap: 6px; }
+.ajb-calendar__nav button { width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--ajb-stroke); background: transparent; color: var(--ajb-fg); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color var(--ajb-dur-2) var(--ajb-ease); }
+.ajb-calendar__nav button:hover { border-color: var(--ajb-stroke-strong); }
+.ajb-calendar__nav svg { width: 15px; height: 15px; }
+[dir="rtl"] .ajb-calendar__nav svg { transform: scaleX(-1); }
+.ajb-calendar__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.ajb-calendar__dow { text-align: center; font-size: 11px; color: var(--ajb-fg-subtle); font-weight: var(--ajb-w-bold); padding: 6px 0; letter-spacing: 0.04em; }
+.ajb-calendar__day { position: relative; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--ajb-fg); font-variant-numeric: tabular-nums; cursor: pointer; border-radius: 9px; }
+.ajb-calendar__day:hover { background: color-mix(in srgb, var(--ajb-fg) 8%, transparent); }
+.ajb-calendar__day.is-muted { color: var(--ajb-fg-subtle); cursor: default; }
+.ajb-calendar__day.is-muted:hover { background: transparent; }
+.ajb-calendar__day.is-today { box-shadow: inset 0 0 0 1.5px var(--ajb-stroke-strong); }
+.ajb-calendar__day.in-range { background: var(--ajb-tint-sand-bg); border-radius: 0; }
+.ajb-calendar__day.is-on { background: var(--ajb-accent); color: var(--ajb-on-accent); font-weight: var(--ajb-w-bold); }
+.ajb-calendar__day.is-start { border-start-start-radius: 9px; border-end-start-radius: 9px; }
+.ajb-calendar__day.is-end { border-start-end-radius: 9px; border-end-end-radius: 9px; }
+
+/* ============================================================
+   DATA DISPLAY — Person (identity chip: avatar + name + sub-line)
+   An .ajb-avatar beside a name and an optional secondary line
+   (role, team, timestamp). The atom for actor rows, assignees,
+   table "owner" cells, comment authors. (Promoted from the
+   Notification Engine maker–checker work.)
+   ============================================================ */
+.ajb-person { display: inline-flex; align-items: center; gap: 9px; min-width: 0; }
+.ajb-person__txt { display: flex; flex-direction: column; min-width: 0; }
+.ajb-person__name { font-size: var(--ajb-small); color: var(--ajb-fg); font-weight: var(--ajb-w-medium); white-space: nowrap; }
+.ajb-person__sub { font-size: var(--ajb-micro); color: var(--ajb-fg-subtle); }
+
+/* ============================================================
+   DATA DISPLAY — Timeline (activity feed / audit trail)
+   A vertical list of events on a connecting rail: an icon node, an
+   action + actor, a timestamp, and an optional note. Tint a node with
+   a state modifier on the item (--sand / --success / --warning /
+   --danger / --info). The small actor pill (__tag) takes the same
+   tints. Use .ajb-timeline__ico--pulse for a live "in progress" step.
+   Mirrors under dir="rtl". (Promoted from the maker–checker audit trail.)
+   ============================================================ */
+.ajb-timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.ajb-timeline__item { display: flex; gap: 14px; padding-bottom: 18px; position: relative; }
+.ajb-timeline__item::before { content: ""; position: absolute; inset-inline-start: 14px; top: 30px; bottom: -2px; width: 1.5px; background: var(--ajb-stroke); }
+.ajb-timeline__item:last-child { padding-bottom: 0; }
+.ajb-timeline__item:last-child::before { display: none; }
+.ajb-timeline__ico { width: 29px; height: 29px; border-radius: var(--ajb-r-pill); flex: none; display: inline-flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--ajb-fg) 7%, transparent); color: var(--ajb-fg-muted); border: 1px solid var(--ajb-stroke); z-index: 1; }
+.ajb-timeline__ico svg { width: 14px; height: 14px; }
+.ajb-timeline__item--sand    > .ajb-timeline__ico { background: var(--ajb-tint-sand-bg);    color: var(--ajb-accent);          border-color: color-mix(in srgb, var(--ajb-accent) 30%, transparent); }
+.ajb-timeline__item--success > .ajb-timeline__ico { background: var(--ajb-tint-success-bg); color: var(--ajb-tint-success-fg); border-color: color-mix(in srgb, var(--ajb-success) 30%, transparent); }
+.ajb-timeline__item--warning > .ajb-timeline__ico { background: var(--ajb-tint-warning-bg); color: var(--ajb-tint-warning-fg); border-color: color-mix(in srgb, var(--ajb-dune) 35%, transparent); }
+.ajb-timeline__item--danger  > .ajb-timeline__ico { background: var(--ajb-tint-danger-bg);  color: var(--ajb-tint-danger-fg);  border-color: color-mix(in srgb, var(--ajb-danger) 30%, transparent); }
+.ajb-timeline__item--info    > .ajb-timeline__ico { background: var(--ajb-tint-info-bg);    color: var(--ajb-tint-info-fg);    border-color: color-mix(in srgb, var(--ajb-info) 35%, transparent); }
+.ajb-timeline__ico--pulse { animation: ajb-timeline-pulse 1.8s var(--ajb-ease) infinite; }
+@keyframes ajb-timeline-pulse { 0%, 100% { box-shadow: 0 0 0 0 var(--ajb-tint-info-bg); } 50% { box-shadow: 0 0 0 5px transparent; } }
+.ajb-timeline__body { flex: 1; min-width: 0; padding-top: 3px; }
+.ajb-timeline__top { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+.ajb-timeline__action { font-size: var(--ajb-small); font-weight: var(--ajb-w-medium); color: var(--ajb-fg); }
+.ajb-timeline__by { font-size: var(--ajb-small); color: var(--ajb-fg-muted); }
+.ajb-timeline__tag { font-size: 9.5px; font-weight: var(--ajb-w-bold); letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: var(--ajb-r-pill); margin-inline-start: 2px; background: color-mix(in srgb, var(--ajb-fg) 8%, transparent); color: var(--ajb-fg-subtle); }
+[dir="rtl"] .ajb-timeline__tag, [lang="ar"] .ajb-timeline__tag { letter-spacing: 0; text-transform: none; }
+.ajb-timeline__tag--sand  { background: var(--ajb-tint-sand-bg); color: var(--ajb-tint-sand-fg); }
+.ajb-timeline__tag--info  { background: var(--ajb-tint-info-bg); color: var(--ajb-tint-info-fg); }
+.ajb-timeline__tag--muted { background: color-mix(in srgb, var(--ajb-fg) 8%, transparent); color: var(--ajb-fg-subtle); }
+.ajb-timeline__when { font-size: var(--ajb-micro); color: var(--ajb-fg-subtle); margin-top: 3px; }
+.ajb-timeline__note { font-size: var(--ajb-small); line-height: 1.5; color: var(--ajb-fg-muted); margin-top: 7px; background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r); padding: 9px 12px; }
+
+/* ============================================================
+   DATA DISPLAY — Diff (before / after comparison)
+   A labelled field shown as two columns — current vs proposed —
+   with word-level <mark> highlights (__mark--del removed,
+   __mark--ins added). The grid auto-stacks to one column when its
+   container gets narrow. Pass dir on each box for mixed-script copy.
+   (Promoted from the maker–checker change review.)
+   ============================================================ */
+.ajb-diff { display: flex; flex-direction: column; gap: 9px; }
+.ajb-diff__label { font-size: var(--ajb-micro); font-weight: var(--ajb-w-bold); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ajb-fg-subtle); }
+[dir="rtl"] .ajb-diff__label, [lang="ar"] .ajb-diff__label { letter-spacing: 0; text-transform: none; }
+.ajb-diff__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; align-items: stretch; }
+.ajb-diff__side { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ajb-diff__tag { display: inline-flex; align-items: center; gap: 5px; font-size: var(--ajb-micro); font-weight: var(--ajb-w-medium); }
+.ajb-diff__tag svg { width: 12px; height: 12px; }
+.ajb-diff__tag--before { color: var(--ajb-tint-danger-fg); }
+.ajb-diff__tag--after { color: var(--ajb-tint-success-fg); }
+.ajb-diff__box { flex: 1; background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-md); padding: 12px 14px; font-size: var(--ajb-small); line-height: 1.6; color: var(--ajb-fg-muted); white-space: pre-wrap; word-break: break-word; }
+.ajb-diff__box--before { border-color: color-mix(in srgb, var(--ajb-danger) 22%, var(--ajb-stroke)); }
+.ajb-diff__box--after { border-color: color-mix(in srgb, var(--ajb-success) 24%, var(--ajb-stroke)); color: var(--ajb-fg); }
+.ajb-diff__mark { border-radius: 3px; padding: 0 2px; font-weight: var(--ajb-w-medium); }
+.ajb-diff__mark--del { background: var(--ajb-tint-danger-bg); color: var(--ajb-tint-danger-fg); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--ajb-danger) 60%, transparent); }
+.ajb-diff__mark--ins { background: var(--ajb-tint-success-bg); color: var(--ajb-tint-success-fg); }

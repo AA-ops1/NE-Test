@@ -1,0 +1,64 @@
+/* ============================================================
+   Templates list (Template Store) — styles
+   Reuses the studio sheet (.ts-tablewrap/.ts-table/.ts-listsearch)
+   and dictionary (.ajb-*). Only list-specific pieces here.
+   ============================================================ */
+
+/* ---------- toolbar ---------- */
+.tl-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 18px; flex-wrap: wrap; }
+.tl-head-l { min-width: 0; }
+.tl-count { font-size: 13px; color: var(--ajb-fg-subtle); margin: 8px 0 0; }
+.tl-head-r { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+/* ---------- filter row ---------- */
+.tl-filters { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+.tl-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.tl-selects { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tl-select { min-width: 168px; }
+.tl-clear { font-family: var(--ajb-font); font-size: 12.5px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg-subtle); background: transparent; border: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; padding: 8px 6px; }
+.tl-clear:hover { color: var(--ajb-accent); }
+.tl-clear i { width: 13px; height: 13px; }
+
+/* ---------- table extras ---------- */
+.tl-namecell { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.tl-chico { width: 34px; height: 34px; border-radius: 9px; background: var(--ajb-tint-sand-bg); color: var(--ajb-accent); display: flex; align-items: center; justify-content: center; flex: none; }
+.tl-chico i { width: 17px; height: 17px; }
+.tl-nameblock { min-width: 0; }
+.tl-updby { color: var(--ajb-fg-subtle); }
+
+/* actions cell — icon buttons, revealed/strengthened on row hover */
+.tl-actions { display: flex; align-items: center; gap: 6px; justify-content: flex-end; }
+.tl-act { width: 34px; height: 34px; border-radius: var(--ajb-r-pill); display: inline-flex; align-items: center; justify-content: center; background: transparent; border: 1px solid transparent; color: var(--ajb-fg-subtle); cursor: pointer; transition: color .15s, border-color .15s, background .15s; text-decoration: none; }
+.tl-act i { width: 16px; height: 16px; }
+.ts-table tbody tr:hover .tl-act { border-color: var(--ajb-stroke); color: var(--ajb-fg-muted); }
+.tl-act:hover { color: var(--ajb-accent) !important; border-color: var(--ajb-accent) !important; background: var(--ajb-tint-sand-bg); }
+.tl-act.is-disabled { opacity: 0.32; pointer-events: none; }
+
+/* right-align the actions header + cell */
+.ts-table th.tl-actions-col, .ts-table td.tl-actions-col { text-align: end; }
+.tl-vercell { color: var(--ajb-fg-muted); }
+/* keep the isolated latin version run vertically centered with the row in RTL */
+.ts-table td .ajb-ltr { vertical-align: middle; }
+
+/* let row action menus spill out of the framed table (e.g. short lists) without
+   being clipped; keep the rounded corners by rounding the last row's end cells. */
+.tl-tablewrap { overflow: visible; }
+.tl-tablewrap .ts-table tbody tr:last-child td:first-child { border-end-start-radius: var(--ajb-r-lg); }
+.tl-tablewrap .ts-table tbody tr:last-child td:last-child { border-end-end-radius: var(--ajb-r-lg); }
+
+/* ---------- empty state ---------- */
+.tl-empty { padding: 64px 24px; }
+
+/* ---------- narrow (mobile): hide secondary columns, stack toolbar ---------- */
+@container console (max-width: 720px) {
+  .ts-table th.tl-hide, .ts-table td.tl-hide { display: none; }
+}
+@container console (max-width: 560px) {
+  .tl-head { flex-direction: column; }
+  .tl-head-r { width: 100%; }
+  .tl-head-r .ts-listsearch { flex: 1; }
+  .tl-filters { flex-direction: column; align-items: stretch; }
+  .tl-selects { justify-content: space-between; }
+  .tl-select { flex: 1; min-width: 0; }
+  .ts-table th.tl-hide2, .ts-table td.tl-hide2 { display: none; }
+}

@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notification Engine — Create Template</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="login.css">
+<link rel="stylesheet" href="template-studio.css">
+<link rel="stylesheet" href="template-tweaks.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body class="ne-page">
+<div id="root"></div>
+
+<script src="template-data.js"></script>
+<script type="text/babel" src="browser-window.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="template-parts.jsx"></script>
+<script type="text/babel" src="console-shell.jsx"></script>
+<script type="text/babel" src="template-studio.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+const FRAMES = { desktop: { w: 1280, h: 812 }, mobile: { w: 402, h: 844 } };
+const TPL_ID = 'TPL-2026-04417';
+
+/* ---------- expressive tweaks (reshape the journey's feel) ---------- */
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "density": "compact",
+  "surface": "flat",
+  "accent": "balanced"
+}/*EDITMODE-END*/;
+
+/* ---------- review-bar segmented control ---------- */
+function Seg({ options, value, onChange }) {
+  return (
+    <div className="ajb-seg">
+      {options.map(o => (
+        <button key={o.v} className={value === o.v ? 'is-on' : ''} onClick={() => onChange(o.v)}>{o.l}</button>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- mobile device shell ---------- */
+function PhoneFrame({ width, height, children }) {
+  return (
+    <div className="ne-phone" style={{ width, height }}>
+      <div className="ne-phone-screen">
+        <div className="ne-phone-notch" />
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- fit-to-width scaler ---------- */
+function useFit(fw, fh) {
+  const ref = useRef(null);
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const recalc = () => {
+      const availW = el.clientWidth - 64, availH = el.clientHeight - 64;
+      setScale(Math.min(1, availW / fw, availH / fh));
+    };
+    recalc();
+    const ro = new ResizeObserver(recalc); ro.observe(el);
+    return () => ro.disconnect();
+  }, [fw, fh]);
+  return [ref, scale];
+}
+
+/* ---------- console shell (shared side nav — console-shell.jsx) ---------- */
+function Shell({ t, lang, setLang, theme, setTheme, children }) {
+  const [collapsed, toggleSide] = useSideCollapse();
+  return (
+    <div className="ne-home" data-collapsed={collapsed ? '' : undefined}>
+      <SideNav page="templates" t={t} collapsed={collapsed} />
+      <div className="ne-main">
+        <Topbar t={t} title={t.nav.templates} collapsed={collapsed} onToggle={toggleSide}
+          theme={theme} setTheme={setTheme} lang={lang} setLang={setLang} />
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [tw, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [theme, setTheme] = useState('dark');
+  const [lang, setLang] = useState('en');
+  const [device, setDevice] = useState('desktop');
+  const [mode, setMode] = useState('compose'); // compose | filled | errors | saved | list
+
+  const t = TPL.T[lang];
+  const dir = lang === 'ar' ? 'rtl' : 'ltr';
+  const frame = FRAMES[device];
+  const layout = device === 'mobile' ? 'B' : 'A'; // desktop → Workspace, mobile → Stepper
+  const [fitRef, scale] = useFit(frame.w, frame.h);
+  const f = useTemplateForm();
+
+  /* seed form whenever the harness state or language changes */
+  useEffect(() => {
+    if (mode === 'compose') { f.setData(blank()); f.setSubmitted(false); }
+    else if (mode === 'errors') {
+      f.setData({ ...blank(), channel: 'sms', product: '', type: '', content: { en: '', ar: '' } });
+      f.setSubmitted(true);
+    } else { // filled | saved | list
+      f.setData(localizedSeed(lang)); f.setSubmitted(false);
+    }
+  }, [mode, lang]);
+
+  const onSave = useCallback(() => { setMode('saved'); }, []);
+
+  let body;
+  if (mode === 'saved') {
+    body = <SavedCard f={f} t={t} lang={lang} tplId={TPL_ID}
+      onList={() => setMode('list')} onAnother={() => setMode('compose')} />;
+  } else if (mode === 'list') {
+    body = <TemplateList f={f} t={t} lang={lang} tplId={TPL_ID} justCreated />;
+  } else if (layout === 'A') {
+    body = <DirectionA f={f} t={t} lang={lang} onSave={onSave} />;
+  } else {
+    body = <DirectionB f={f} t={t} lang={lang} onSave={onSave} />;
+  }
+
+  const url = mode === 'list' ? 'console.aljazira.sa/templates'
+    : mode === 'saved' ? 'console.aljazira.sa/templates/new?saved=1'
+    : 'console.aljazira.sa/templates/new';
+
+  return (
+    <React.Fragment>
+      <div className="ne-review">
+        <div className="ne-review-brand">
+          <img src="../assets/logo-white.svg" alt="aljazira bank" />
+          <span>Notification Engine · Templates</span>
+        </div>
+        <div className="ne-ctrl">
+          <span className="ne-ctrl-lbl">{t.review.state}</span>
+          <Seg value={mode} onChange={setMode} options={[
+            { v: 'compose', l: t.review.compose }, { v: 'filled', l: t.review.filled },
+            { v: 'errors', l: t.review.errors }, { v: 'saved', l: t.review.saved }, { v: 'list', l: t.review.list }]} />
+        </div>
+        <div className="ne-ctrl">
+          <span className="ne-ctrl-lbl">{t.review.device}</span>
+          <Seg value={device} onChange={setDevice} options={[{ v: 'desktop', l: t.review.desktop }, { v: 'mobile', l: t.review.mobile }]} />
+        </div>
+        <div className="ne-ctrl">
+          <span className="ne-ctrl-lbl">{t.review.dir}</span>
+          <span className="ajb-badge ajb-badge--sand-soft">{layout === 'A' ? t.review.a : t.review.b}</span>
+        </div>
+        <div className="ne-ctrl">
+          <span className="ne-ctrl-lbl">{t.review.theme}</span>
+          <Seg value={theme} onChange={setTheme} options={[{ v: 'dark', l: t.review.dark }, { v: 'light', l: t.review.light }]} />
+        </div>
+        <div className="ne-ctrl">
+          <span className="ne-ctrl-lbl">{t.review.lang}</span>
+          <Seg value={lang} onChange={setLang} options={[{ v: 'en', l: 'EN' }, { v: 'ar', l: 'AR' }]} />
+        </div>
+      </div>
+
+      <div className="ne-fit-wrap" ref={fitRef}>
+        <div style={{ width: frame.w * scale, height: frame.h * scale }}>
+          <div className="ne-fit" style={{ width: frame.w, height: frame.h, transform: `scale(${scale})` }}>
+            {(() => {
+              const consoleEl = (
+                <div className="ne-console" data-theme={theme} data-density={tw.density} data-surface={tw.surface} data-accent={tw.accent} lang={lang} dir={dir}>
+                  <Shell t={t} lang={lang} setLang={setLang} theme={theme} setTheme={setTheme}>{body}</Shell>
+                </div>
+              );
+              return device === 'mobile'
+                ? <PhoneFrame width={frame.w} height={frame.h}>{consoleEl}</PhoneFrame>
+                : <ChromeWindow width={frame.w} height={frame.h} url={url} tabs={[{ title: 'aljazira · notification engine' }]}>{consoleEl}</ChromeWindow>;
+            })()}
+          </div>
+        </div>
+      </div>
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Rhythm" />
+        <TweakRadio label="Density" value={tw.density}
+          options={['compact', 'comfortable', 'spacious']}
+          onChange={(v) => setTweak('density', v)} />
+        <TweakSection label="Material" />
+        <TweakRadio label="Surface" value={tw.surface}
+          options={['flat', 'raised']}
+          onChange={(v) => setTweak('surface', v)} />
+        <TweakSection label="Brand voice" />
+        <TweakRadio label="Sand accent" value={tw.accent}
+          options={['reserved', 'balanced', 'expressive']}
+          onChange={(v) => setTweak('accent', v)} />
+      </TweaksPanel>
+    </React.Fragment>
+  );
+}
+
+setTimeout(() => {
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+}, 50);
+</script>
+</body>
+</html>

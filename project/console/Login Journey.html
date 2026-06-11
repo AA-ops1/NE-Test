@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notification Engine — Login Journey</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="login.css">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body class="ne-page">
+<div id="root"></div>
+
+<script type="text/babel">
+/* LoginCtx is consumed by SignInForm in login.jsx — define before it renders. */
+window.LoginCtx = React.createContext(null);
+</script>
+
+<script type="text/babel" src="browser-window.jsx"></script>
+<script type="text/babel" src="login.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+const FRAMES = {
+  desktop: { w: 1200, h: 744 },
+  mobile:  { w: 402,  h: 844 },
+};
+
+/* ---------- Review-bar segmented control ---------- */
+function Seg({ options, value, onChange }) {
+  return (
+    <div className="ajb-seg">
+      {options.map(o => (
+        <button key={o.v} className={value === o.v ? 'is-on' : ''} onClick={() => onChange(o.v)}>{o.l}</button>
+      ))}
+    </div>
+  );
+}
+
+/* ---------- Mobile device shell ---------- */
+function PhoneFrame({ width, height, children }) {
+  return (
+    <div className="ne-phone" style={{ width, height }}>
+      <div className="ne-phone-screen">
+        <div className="ne-phone-notch" />
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Fit-to-width scaler (recalcs when frame size changes) ---------- */
+function useFit(fw, fh) {
+  const ref = useRef(null);
+  const [scale, setScale] = useState(1);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const recalc = () => {
+      const availW = el.clientWidth - 64;
+      const availH = el.clientHeight - 64;
+      setScale(Math.min(1, availW / fw, availH / fh));
+    };
+    recalc();
+    const ro = new ResizeObserver(recalc);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [fw, fh]);
+  return [ref, scale];
+}
+
+function App() {
+  const [theme, setTheme] = useState('dark');
+  const [lang, setLang] = useState('en');
+  const [device, setDevice] = useState('desktop');
+
+  const [status, setStatus] = useState('idle'); // idle | loading | invalid | locked | success
+  const [attempts, setAttempts] = useState(0);
+  const [fieldErr, setFieldErr] = useState({});
+  const [id, setIdRaw] = useState('');
+  const [pw, setPwRaw] = useState('');
+
+  const t = T[lang];
+  const dir = lang === 'ar' ? 'rtl' : 'ltr';
+  const frame = FRAMES[device];
+  const [fitRef, scale] = useFit(frame.w, frame.h);
+  const timer = useRef(null);
+
+  useEffect(() => { if (window.lucide) window.lucide.createIcons(); });
+
+  const setId = (v) => { setIdRaw(v); if (fieldErr.id) setFieldErr(e => ({ ...e, id: null })); if (status === 'invalid') setStatus('idle'); };
+  const setPw = (v) => { setPwRaw(v); if (fieldErr.pw) setFieldErr(e => ({ ...e, pw: null })); if (status === 'invalid') setStatus('idle'); };
+
+  const submit = useCallback(() => {
+    if (status === 'loading' || status === 'locked') return;
+    const fe = {};
+    if (!id) fe.id = 'reqId';
+    else if (id.length !== 6) fe.id = 'reqIdFmt';
+    if (!pw) fe.pw = 'reqPw';
+    setFieldErr(fe);
+    if (Object.keys(fe).length) return;
+
+    setStatus('loading');
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
+      if (id === NE_VALID.id && pw === NE_VALID.pw) {
+        setStatus('success');
+      } else {
+        setAttempts(a => {
+          const n = a + 1;
+          setStatus(n >= NE_VALID.max ? 'locked' : 'invalid');
+          return n;
+        });
+      }
+    }, 850);
+  }, [id, pw, status]);
+
+  /* Review "state jump" — preview any state without typing */
+  const jump = (s) => {
+    clearTimeout(timer.current);
+    setFieldErr({});
+    if (s === 'idle') { setStatus('idle'); setAttempts(0); setIdRaw(''); setPwRaw(''); }
+    else if (s === 'invalid') { setIdRaw('100245'); setPwRaw('wrongpass'); setAttempts(1); setStatus('invalid'); }
+    else if (s === 'locked') { setAttempts(NE_VALID.max); setStatus('locked'); }
+    else if (s === 'loading') { setStatus('loading'); }
+    else if (s === 'success') { setStatus('success'); }
+  };
+
+  const ctx = { status, attempts, fieldErr, id, pw, setId, setPw, submit };
+  const url = status === 'success' ? 'console.aljazira.sa/home' : 'console.aljazira.sa/sign-in';
+
+  return (
+    <React.Fragment>
+      <div className="ne-review">
+        <div className="ne-review-brand">
+          <img src="../assets/logo-white.svg" alt="aljazira bank" />
+          <span>Notification Engine · Login</span>
+        </div>
+
+        <div className="ne-ctrl">
+          <span className="ne-ctrl-lbl">State</span>
+          <Seg value={status === 'loading' ? 'loading' : status} onChange={jump}
+            options={[{ v: 'idle', l: 'Default' }, { v: 'invalid', l: 'Invalid' }, { v: 'locked', l: 'Locked' }, { v: 'loading', l: 'Loading' }, { v: 'success', l: 'Signed in' }]} />
+        </div>
+        <div className="ne-ctrl">
+          <span className="ne-ctrl-lbl">Device</span>
+          <Seg value={device} onChange={setDevice} options={[{ v: 'desktop', l: 'Desktop' }, { v: 'mobile', l: 'Mobile' }]} />
+        </div>
+        <div className="ne-ctrl">
+          <span className="ne-ctrl-lbl">Theme</span>
+          <Seg value={theme} onChange={setTheme} options={[{ v: 'dark', l: 'Dark' }, { v: 'light', l: 'Light' }]} />
+        </div>
+        <div className="ne-ctrl">
+          <span className="ne-ctrl-lbl">Lang</span>
+          <Seg value={lang} onChange={setLang} options={[{ v: 'en', l: 'EN' }, { v: 'ar', l: 'AR' }]} />
+        </div>
+        <div className="ne-creds">Demo&nbsp; <b>100245</b>&nbsp;/&nbsp;<b>aljazira</b></div>
+      </div>
+
+      <div className="ne-fit-wrap" ref={fitRef}>
+        <div style={{ width: frame.w * scale, height: frame.h * scale }}>
+          <div className="ne-fit" style={{ width: frame.w, height: frame.h, transform: `scale(${scale})` }}>
+            {(() => {
+              const console_ = (
+                <LoginCtx.Provider value={ctx}>
+                  <div className="ne-console" data-theme={theme} lang={lang} dir={dir}>
+                    {status === 'success'
+                      ? <ConsoleHome t={t} theme={theme} setTheme={setTheme} lang={lang} setLang={setLang} />
+                      : <DirectionA t={t} lang={lang} theme={theme} setTheme={setTheme} setLang={setLang} />}
+                  </div>
+                </LoginCtx.Provider>
+              );
+              return device === 'mobile'
+                ? <PhoneFrame width={frame.w} height={frame.h}>{console_}</PhoneFrame>
+                : <ChromeWindow width={frame.w} height={frame.h} url={url} tabs={[{ title: 'aljazira · notification engine' }]}>{console_}</ChromeWindow>;
+            })()}
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+}
+
+setTimeout(() => {
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  setTimeout(() => { if (window.lucide) window.lucide.createIcons(); }, 200);
+}, 50);
+</script>
+</body>
+</html>

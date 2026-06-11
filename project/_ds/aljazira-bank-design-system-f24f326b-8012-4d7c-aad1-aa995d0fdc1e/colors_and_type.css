@@ -1,0 +1,340 @@
+/* ============================================================
+   Aljazira Bank — Design Tokens
+   Visual identity foundations. Import this anywhere.
+   ============================================================ */
+
+/* Tajawal — brand typeface, served from local /fonts.
+   Supplied by the brand team (May 2026). Replaces the prior Google Fonts CDN. */
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url('fonts/Tajawal-ExtraLight.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('fonts/Tajawal-Light.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('fonts/Tajawal-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('fonts/Tajawal-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('fonts/Tajawal-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('fonts/Tajawal-ExtraBold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('fonts/Tajawal-Black.ttf') format('truetype');
+}
+
+:root {
+  /* ---------- Brand colors (primary) — §2.2 Color Palette ---------- */
+  --ajb-midnight-blue: #001421; /* Pantone 296 C    | RGB 0/20/33    */
+  --ajb-black:         #000000; /* Pantone Black 6C | RGB 0/0/0      | gradient only */
+  --ajb-dark-sand:     #8c684a; /* Pantone 4635 C   | RGB 140/104/74 */
+  --ajb-sand:          #b27f59; /* Pantone 4645 C   | RGB 178/127/89 | headlines & text */
+  --ajb-pearl:         #ffffff; /* RGB 255/255/255  | type on dark, light surfaces */
+
+  /* ---------- Secondary (charts / UX / social only) ---------- */
+  --ajb-dark-silver:   #333f48; /* Pantone 7546C */
+  --ajb-silver:        #6c7378; /* Pantone 431C */
+  --ajb-light-silver:  #a2aaad; /* Pantone 429C */
+  --ajb-dune:          #cda991; /* Pantone 4665C — extension of sand family */
+  --ajb-sky-blue:      #3e87d3; /* Pantone 2143C — chart accent / social BG */
+  --ajb-emerald:       #33b793; /* Pantone 2413C — positive UX state */
+  --ajb-rust:          #db3512; /* Pantone 3516C — negative UX state */
+
+  /* ---------- Gradients ---------- */
+  /* Brand background gradient — predominantly black, midnight blue rising from lower corner */
+  --ajb-bg-gradient: radial-gradient(
+    120% 90% at 18% 95%,
+    var(--ajb-midnight-blue) 0%,
+    #000a14 30%,
+    var(--ajb-black) 60%
+  );
+
+  /* J-shape inner fill gradient (45° axis) */
+  --ajb-j-fill: linear-gradient(
+    135deg,
+    var(--ajb-midnight-blue) 0%,
+    var(--ajb-black) 42%,
+    var(--ajb-black) 54%,
+    var(--ajb-dark-sand) 100%
+  );
+
+  /* J-shape outline gradient (45° axis) */
+  --ajb-j-stroke: linear-gradient(
+    135deg,
+    var(--ajb-dark-sand) 0%,
+    var(--ajb-sand) 85%,
+    var(--ajb-pearl) 100%
+  );
+
+  /* ---------- Semantic surface tokens ----------
+     DEFAULT THEME = DARK. The dark palette is the brand's home turf:
+     the gradient backdrop is the hero treatment in ~65% of compositions.
+     Light theme overrides these below in [data-theme="light"]. Always drive
+     surfaces/fg through these semantic tokens — never hard-code a hex — so a
+     single `data-theme` swap re-skins the whole tree.  */
+  --ajb-bg:            var(--ajb-midnight-blue);
+  --ajb-bg-deep:       var(--ajb-black);
+  --ajb-bg-grad:       var(--ajb-bg-gradient); /* theme-aware alias of the page backdrop */
+  --ajb-surface:       #0a1c2b;      /* card on dark */
+  --ajb-surface-2:     #11283a;      /* raised card on dark */
+  --ajb-surface-light: var(--ajb-pearl);
+  --ajb-surface-soft:  #f4f1ec;      /* warm off-white */
+
+  --ajb-fg:            var(--ajb-pearl);
+  --ajb-fg-muted:      rgba(255,255,255,0.72);
+  --ajb-fg-subtle:     rgba(255,255,255,0.48);
+  --ajb-fg-on-light:   var(--ajb-black);
+  --ajb-fg-on-light-muted: #4a4a4a;
+  --ajb-accent:        var(--ajb-sand);      /* highlight on dark — Sand */
+  --ajb-accent-deep:   var(--ajb-dark-sand);
+  --ajb-on-accent:     var(--ajb-midnight-blue); /* text/icon ON a sand fill */
+  --ajb-stroke:        rgba(255,255,255,0.12);
+  --ajb-stroke-strong: rgba(255,255,255,0.28);
+  --ajb-stroke-light:  rgba(0,0,0,0.10);
+
+  --ajb-success: var(--ajb-emerald);
+  --ajb-danger:  var(--ajb-rust);
+  --ajb-info:    var(--ajb-sky-blue);
+
+  /* ---------- Type ---------- */
+  --ajb-font: 'Tajawal', 'Helvetica Neue', Arial, sans-serif;
+  --ajb-font-arabic: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+
+  /* Weights */
+  --ajb-w-light: 300;
+  --ajb-w-regular: 400;
+  --ajb-w-medium: 500;
+  --ajb-w-bold: 700;
+
+  /* Type scale (Tajawal Light for display, Medium for sub, Regular/Bold for body) */
+  --ajb-display-xl: 88px;   /* hero — "Wealth Grows Here" */
+  --ajb-display:    64px;
+  --ajb-h1:         48px;
+  --ajb-h2:         36px;
+  --ajb-h3:         28px;
+  --ajb-h4:         22px;
+  --ajb-h5:         18px;
+  --ajb-body:       16px;
+  --ajb-small:      14px;
+  --ajb-micro:      12px;
+
+  /* Leading */
+  --ajb-lead-tight: 1.05;   /* display */
+  --ajb-lead-sub:   1.15;   /* sub-headlines */
+  --ajb-lead-body:  1.2;    /* body */
+  --ajb-lead-reader: 1.5;   /* long-form reading */
+
+  /* Letter-spacing — Tajawal Light at display benefits from slight negative tracking */
+  --ajb-tracking-display: -0.01em;
+  --ajb-tracking-tight:   -0.005em;
+  --ajb-tracking-normal:  0;
+  --ajb-tracking-wide:    0.04em; /* small caps / labels */
+
+  /* ---------- Spacing (4px base) ---------- */
+  --ajb-1: 4px;
+  --ajb-2: 8px;
+  --ajb-3: 12px;
+  --ajb-4: 16px;
+  --ajb-5: 20px;
+  --ajb-6: 24px;
+  --ajb-7: 32px;
+  --ajb-8: 40px;
+  --ajb-9: 48px;
+  --ajb-10: 64px;
+  --ajb-11: 80px;
+  --ajb-12: 120px;
+
+  /* ---------- Radii ----------
+     The wordmark is squared. UI uses gentle radii for surfaces and pill for actions. */
+  --ajb-r-sm: 4px;
+  --ajb-r:    8px;
+  --ajb-r-md: 12px;
+  --ajb-r-lg: 16px;
+  --ajb-r-xl: 24px;
+  --ajb-r-pill: 999px;
+
+  /* ---------- Elevation ----------
+     Most product surfaces sit flat on dark. Elevation is reserved for raised cards / sheets. */
+  --ajb-shadow-1: 0 1px 2px rgba(0,0,0,0.18);
+  --ajb-shadow-2: 0 6px 18px rgba(0,0,0,0.28);
+  --ajb-shadow-3: 0 18px 48px rgba(0,0,0,0.45);
+  --ajb-glow-sand: 0 0 0 1px rgba(178,127,89,0.4), 0 8px 24px rgba(178,127,89,0.15);
+
+  /* ---------- Motion ---------- */
+  --ajb-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ajb-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ajb-dur-1: 120ms;  /* press */
+  --ajb-dur-2: 220ms;  /* hover / fade */
+  --ajb-dur-3: 420ms;  /* enter / panel */
+  --ajb-dur-4: 800ms;  /* hero reveal */
+}
+
+/* ============================================================
+   THEMES — set data-theme="dark" (default) or "light" on <html>,
+   <body>, or any subtree. Light theme keeps the brand primaries
+   intact and flips only surfaces, foregrounds, strokes, and the
+   page backdrop. Accents shift from Sand → Dark Sand because Sand
+   washes out on light surfaces (matches §2.3 "color usage" where
+   highlight words darken on light).
+   ============================================================ */
+
+/* Explicit dark theme (identical to :root default) — lets you scope
+   a dark island inside a light page. */
+[data-theme="dark"] {
+  --ajb-bg:            var(--ajb-midnight-blue);
+  --ajb-bg-deep:       var(--ajb-black);
+  --ajb-bg-grad:       var(--ajb-bg-gradient);
+  --ajb-surface:       #0a1c2b;
+  --ajb-surface-2:     #11283a;
+  --ajb-fg:            var(--ajb-pearl);
+  --ajb-fg-muted:      rgba(255,255,255,0.72);
+  --ajb-fg-subtle:     rgba(255,255,255,0.48);
+  --ajb-accent:        var(--ajb-sand);
+  --ajb-accent-deep:   var(--ajb-dark-sand);
+  --ajb-on-accent:     var(--ajb-midnight-blue);
+  --ajb-stroke:        rgba(255,255,255,0.12);
+  --ajb-stroke-strong: rgba(255,255,255,0.28);
+}
+
+[data-theme="light"] {
+  --ajb-bg:            #faf7f2;   /* warm pearl page */
+  --ajb-bg-deep:       #ffffff;
+  /* Light backdrop is a whisper of warmth, not the dramatic dark gradient */
+  --ajb-bg-grad:       radial-gradient(120% 90% at 18% 5%, #ffffff 0%, #f4efe7 55%, #ece4d8 100%);
+  --ajb-surface:       #ffffff;   /* card on light */
+  --ajb-surface-2:     #f4efe7;   /* warm raised surface */
+  --ajb-surface-soft:  #f4f1ec;
+
+  --ajb-fg:            #1a140e;   /* warm near-black */
+  --ajb-fg-muted:      rgba(26,20,14,0.66);
+  --ajb-fg-subtle:     rgba(26,20,14,0.42);
+  --ajb-accent:        var(--ajb-dark-sand);  /* highlight on light — Dark Sand */
+  --ajb-accent-deep:   #6f4f37;
+  --ajb-on-accent:     #ffffff;
+
+  --ajb-stroke:        rgba(26,20,14,0.12);
+  --ajb-stroke-strong: rgba(26,20,14,0.24);
+  --ajb-stroke-light:  rgba(26,20,14,0.08);
+
+  --ajb-shadow-1: 0 1px 2px rgba(60,45,32,0.08);
+  --ajb-shadow-2: 0 6px 18px rgba(60,45,32,0.10);
+  --ajb-shadow-3: 0 18px 48px rgba(60,45,32,0.16);
+}
+
+/* Convenience base: opt into theme-driven page paint by adding
+   class="ajb-themed" to <body>. Honors data-theme automatically. */
+.ajb-themed {
+  background: var(--ajb-bg);
+  color: var(--ajb-fg);
+  font-family: var(--ajb-font);
+}
+
+/* ============================================================
+   BIDIRECTIONALITY — Arabic / RTL
+   Tajawal is the single bilingual family, so type "just works" in
+   both scripts. Set dir="rtl" (and optionally lang="ar") on the
+   root or any subtree to mirror layout. The rules below make the
+   typographic system script-aware:
+     • Arabic has no letter case → never uppercase labels/micro.
+     • Arabic counters tight tracking → reset letter-spacing to 0.
+     • Display Light gets a touch more leading in Arabic for the
+       taller glyph extenders.
+   Always lay out with logical properties (margin-inline-start,
+   padding-inline, inset-inline, text-align:start/end) so a single
+   dir flip mirrors the whole composition. Keep LTR numerals,
+   IBANs, and the latin logo un-mirrored with dir="ltr" inline.
+   ============================================================ */
+[dir="rtl"] {
+  text-align: right;
+}
+[dir="rtl"] .ajb-label,
+[dir="rtl"] .ajb-micro,
+[lang="ar"] .ajb-label,
+[lang="ar"] .ajb-micro {
+  text-transform: none;      /* Arabic has no uppercase */
+  letter-spacing: 0;          /* tracking breaks Arabic joins */
+}
+[dir="rtl"] .ajb-display-xl,
+[dir="rtl"] .ajb-display,
+[dir="rtl"] .ajb-h1,
+[lang="ar"] .ajb-display-xl,
+[lang="ar"] .ajb-display,
+[lang="ar"] .ajb-h1 {
+  letter-spacing: 0;          /* negative tracking is latin-only */
+  line-height: 1.18;          /* breathing room for Arabic extenders */
+}
+/* Keep latin runs (numbers, IBAN, the logo, latin product names)
+   upright and un-mirrored inside an RTL block. */
+[dir="rtl"] .ajb-ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+
+/* ============================================================
+   Semantic typography classes — apply directly or extend
+   ============================================================ */
+.ajb-display-xl,
+.ajb-display,
+.ajb-h1, .ajb-h2, .ajb-h3, .ajb-h4, .ajb-h5,
+.ajb-sub, .ajb-body, .ajb-small, .ajb-micro, .ajb-label {
+  font-family: var(--ajb-font);
+  margin: 0;
+}
+
+.ajb-display-xl {
+  font-weight: var(--ajb-w-light);
+  font-size: var(--ajb-display-xl);
+  line-height: var(--ajb-lead-tight);
+  letter-spacing: var(--ajb-tracking-display);
+}
+.ajb-display {
+  font-weight: var(--ajb-w-light);
+  font-size: var(--ajb-display);
+  line-height: var(--ajb-lead-tight);
+  letter-spacing: var(--ajb-tracking-display);
+}
+.ajb-h1 { font-weight: var(--ajb-w-light); font-size: var(--ajb-h1); line-height: var(--ajb-lead-tight); letter-spacing: var(--ajb-tracking-tight); }
+.ajb-h2 { font-weight: var(--ajb-w-light); font-size: var(--ajb-h2); line-height: var(--ajb-lead-tight); }
+.ajb-h3 { font-weight: var(--ajb-w-regular); font-size: var(--ajb-h3); line-height: 1.1; }
+.ajb-h4 { font-weight: var(--ajb-w-medium); font-size: var(--ajb-h4); line-height: var(--ajb-lead-sub); }
+.ajb-h5 { font-weight: var(--ajb-w-medium); font-size: var(--ajb-h5); line-height: var(--ajb-lead-sub); }
+.ajb-sub   { font-weight: var(--ajb-w-medium);  font-size: var(--ajb-h4); line-height: var(--ajb-lead-sub); }
+.ajb-body  { font-weight: var(--ajb-w-regular); font-size: var(--ajb-body); line-height: var(--ajb-lead-reader); }
+.ajb-small { font-weight: var(--ajb-w-medium);  font-size: var(--ajb-small); line-height: var(--ajb-lead-body); }
+.ajb-micro { font-weight: var(--ajb-w-medium);  font-size: var(--ajb-micro); line-height: var(--ajb-lead-body); letter-spacing: var(--ajb-tracking-wide); text-transform: uppercase; }
+.ajb-label { font-weight: var(--ajb-w-medium); font-size: var(--ajb-small); letter-spacing: var(--ajb-tracking-wide); text-transform: uppercase; }
+
+/* Sand-accent rule:
+   Tag specific words inside a headline with .ajb-accent to color them Sand.
+   Never apply to the full sentence — only highlights. */
+.ajb-accent { color: var(--ajb-sand); }
+.ajb-accent-deep { color: var(--ajb-dark-sand); }
