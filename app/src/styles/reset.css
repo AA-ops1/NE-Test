@@ -1,0 +1,5 @@
+/* Global reset for the full-screen console layout */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; padding: 0; }
+#root { height: 100%; display: flex; flex-direction: column; }
+.ne-console { flex: 1; min-height: 100vh; }

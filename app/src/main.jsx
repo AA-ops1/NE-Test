@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { AppProvider } from './contexts/AppContext';
 
+// Global layout reset (must come first)
+import './styles/reset.css';
 // Design system + component styles
 import './styles/colors_and_type.css';
 import './styles/components.css';
