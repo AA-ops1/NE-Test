@@ -507,6 +507,26 @@ const VIEW_TEMPLATES = {
 const T = {
   en: {
     dir: 'ltr',
+    acct: {
+      open: 'Open account menu', myAccount: 'My account', signedInAs: 'Signed in as',
+      viewProfile: 'View profile', accountSettings: 'Account settings', signOut: 'Sign out',
+      logoutTitle: 'Sign out of the console?',
+      logoutText: 'You’ll be returned to the sign-in screen. Make sure any work in progress is saved before you leave.',
+      logoutCancel: 'Stay signed in', logoutConfirm: 'Sign out',
+    },
+    prof: {
+      title: 'Profile', subtitle: 'Your account details, role and active sessions.',
+      back: 'Back to console', signOut: 'Sign out', readOnly: 'Read-only',
+      secPersonal: 'Personal information', secRole: 'Role & permissions', secSessions: 'Active sessions',
+      fName: 'Full name', fEmail: 'Email', fPhone: 'Phone', fJob: 'Job title',
+      fDept: 'Department', fEmployee: 'Employee ID', fJoined: 'Member since',
+      roleLbl: 'Role', permsLbl: 'Permissions',
+      permView: 'View templates', permCreate: 'Create & edit templates', permSubmit: 'Submit for approval',
+      permApprove: 'Approve / reject', permManage: 'Manage delivery',
+      granted: 'Granted', notGranted: 'Not granted',
+      thisDevice: 'This device', current: 'Current',
+      sessionsNote: 'Sessions are managed by IT — contact support to revoke a device.',
+    },
     nav: {
       home: 'Dashboard',
       campaigns: 'Campaigns',
@@ -1031,6 +1051,26 @@ const T = {
   },
   ar: {
     dir: 'rtl',
+    acct: {
+      open: 'فتح قائمة الحساب', myAccount: 'حسابي', signedInAs: 'تسجيل الدخول باسم',
+      viewProfile: 'عرض الملف الشخصي', accountSettings: 'إعدادات الحساب', signOut: 'تسجيل الخروج',
+      logoutTitle: 'تسجيل الخروج من المنصة؟',
+      logoutText: 'ستتم إعادتك إلى شاشة تسجيل الدخول. تأكد من حفظ أي عمل قيد التنفيذ قبل المغادرة.',
+      logoutCancel: 'البقاء مسجلاً', logoutConfirm: 'تسجيل الخروج',
+    },
+    prof: {
+      title: 'الملف الشخصي', subtitle: 'تفاصيل حسابك ودورك والجلسات النشطة.',
+      back: 'العودة إلى المنصة', signOut: 'تسجيل الخروج', readOnly: 'للعرض فقط',
+      secPersonal: 'المعلومات الشخصية', secRole: 'الدور والصلاحيات', secSessions: 'الجلسات النشطة',
+      fName: 'الاسم الكامل', fEmail: 'البريد الإلكتروني', fPhone: 'الهاتف', fJob: 'المسمى الوظيفي',
+      fDept: 'الإدارة', fEmployee: 'الرقم الوظيفي', fJoined: 'عضو منذ',
+      roleLbl: 'الدور', permsLbl: 'الصلاحيات',
+      permView: 'عرض القوالب', permCreate: 'إنشاء وتعديل القوالب', permSubmit: 'إرسال للاعتماد',
+      permApprove: 'الاعتماد / الرفض', permManage: 'إدارة التسليم',
+      granted: 'ممنوحة', notGranted: 'غير ممنوحة',
+      thisDevice: 'هذا الجهاز', current: 'الحالية',
+      sessionsNote: 'تُدار الجلسات بواسطة تقنية المعلومات — تواصل مع الدعم لإلغاء جهاز.',
+    },
     nav: {
       home: 'لوحة التحكم',
       campaigns: 'الحملات',
@@ -1555,12 +1595,38 @@ const T = {
   },
 };
 
+// ---------- Profile / account (signed-in user) ----------
+const PROFILE = {
+  initial: 'A',
+  name: { en: 'Abdulrahman Al Amri', ar: 'عبدالرحمن العمري' },
+  role: { en: 'Compliance · Maker', ar: 'الالتزام · مُنشئ' },
+  roleTag: { en: 'Maker', ar: 'مُنشئ' },
+  email: 'a.alamri@aljazira.sa',
+  phone: '+966 50 123 4567',
+  job: { en: 'Compliance Officer', ar: 'مسؤول التزام' },
+  dept: { en: 'Compliance & Governance', ar: 'الالتزام والحوكمة' },
+  employeeId: 'AJB-04821',
+  joined: { en: 'March 2021', ar: 'مارس 2021' },
+  perms: [
+    { id: 'permView', granted: true },
+    { id: 'permCreate', granted: true },
+    { id: 'permSubmit', granted: true },
+    { id: 'permApprove', granted: false },
+    { id: 'permManage', granted: false },
+  ],
+  sessions: [
+    { id: 1, icon: 'monitor', device: { en: 'Chrome · macOS', ar: 'Chrome · macOS' }, loc: { en: 'Riyadh, SA', ar: 'الرياض، السعودية' }, last: { en: 'Active now', ar: 'نشطة الآن' }, current: true },
+    { id: 2, icon: 'smartphone', device: { en: 'aljazira app · iOS', ar: 'تطبيق الجزيرة · iOS' }, loc: { en: 'Riyadh, SA', ar: 'الرياض، السعودية' }, last: { en: '2 hours ago', ar: 'قبل ساعتين' }, current: false },
+    { id: 3, icon: 'tablet', device: { en: 'Safari · iPadOS', ar: 'Safari · iPadOS' }, loc: { en: 'Jeddah, SA', ar: 'جدة، السعودية' }, last: { en: 'Yesterday', ar: 'أمس' }, current: false },
+  ],
+};
+
 // ---------- Build & export ----------
 const TPL = {
   CHANNELS, PRODUCTS, TYPES, PRIORITIES, LANGS, VAR_GROUPS, VAR_INDEX,
   calcSegments, resolveSample, SAMPLE, CATALOG_KEY,
   LIST, EDIT_TPL, VERSIONS, DRAFT_VERSIONS,
-  SENSITIVE, VIEW_TEMPLATES,
+  SENSITIVE, VIEW_TEMPLATES, PROFILE,
   AP: { O, N, S: S_person, F, CURRENT: O, CHECKERS: [N, S_person, F], EVENTS, QUEUE, MINE },
   T,
 };

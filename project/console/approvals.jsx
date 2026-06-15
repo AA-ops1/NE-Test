@@ -184,7 +184,9 @@ function ReviewSummary({ sub, lang, t }) {
 function ReviewScreen({ sub, lang, t, variant, onBack, onApprove, onSendBack, onReject, onReassign }) {
   const blocked = sub.ownWork === true;
   const [clang, setClang] = useApS(lang);
+  const [sample, setSample] = useApS(false);
   useApE(() => { setClang(lang); }, [sub.id, lang]);
+  useApE(() => { setSample(false); }, [sub.id]);
   const langs = sub.langs || ['en'];
   const showLangSeg = langs.length > 1;
   const LangSeg = () => showLangSeg ? (
@@ -204,7 +206,7 @@ function ReviewScreen({ sub, lang, t, variant, onBack, onApprove, onSendBack, on
       <DevicePreview channel={sub.channel} text={sub.content && (sub.content[lang] ?? sub.content.en)}
         subject={sub.subject && (sub.subject[lang] ?? sub.subject.en)}
         ntitle={sub.ntitle && (sub.ntitle[lang] ?? sub.ntitle.en)}
-        lang={lang} sample={false} onToggleSample={() => {}} t={t} />
+        lang={lang} sample={sample} onToggleSample={() => setSample(s => !s)} t={t} />
     </div>
   );
   const timeline = (

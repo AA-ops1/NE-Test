@@ -1,0 +1,85 @@
+/* ============================================================
+   Profile page — read-only account detail.
+   Layout + page-specific bits only; surfaces, lists, badges,
+   avatars and buttons all come from the design system
+   (components.css). Two layouts via [data-pf-layout].
+   ============================================================ */
+
+.pf-page { padding: 30px 34px 40px; max-width: 1180px; }
+
+/* page header */
+.pf-hd { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
+.pf-hd-titles { display: flex; flex-direction: column; gap: 6px; }
+.pf-hd-title { font-size: 26px; font-weight: var(--ajb-w-light); letter-spacing: -0.01em; color: var(--ajb-fg); }
+.pf-hd-sub { font-size: 13.5px; color: var(--ajb-fg-muted); }
+
+/* hero card — avatar + identity */
+.pf-hero { display: flex; align-items: center; gap: 22px; padding: 24px 26px; margin-bottom: 22px; background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-lg); }
+.pf-sec { background: var(--ajb-surface); border: 1px solid var(--ajb-stroke); border-radius: var(--ajb-r-lg); overflow: hidden; }
+.pf-hero-id { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.pf-hero-name { font-size: 22px; font-weight: var(--ajb-w-medium); letter-spacing: -0.01em; color: var(--ajb-fg); }
+.pf-hero-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; font-size: 13px; color: var(--ajb-fg-muted); }
+.pf-hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.pf-hero-meta i { width: 15px; height: 15px; color: var(--ajb-fg-subtle); }
+.pf-hero-sp { flex: 1; }
+
+/* layout grid */
+.pf-grid { display: grid; gap: 22px; align-items: start; }
+[data-pf-layout="two-column"] .pf-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+[data-pf-layout="stacked"] .pf-grid { grid-template-columns: minmax(0, 1fr); max-width: 720px; }
+.pf-col { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+/* in two-column, sessions span the full width below */
+[data-pf-layout="two-column"] .pf-sessions-wrap { grid-column: 1 / -1; }
+
+/* section card */
+.pf-sec-h { display: flex; align-items: center; gap: 10px; padding: 16px 20px; border-bottom: 1px solid var(--ajb-stroke); font-size: 13px; font-weight: var(--ajb-w-bold); letter-spacing: 0.02em; color: var(--ajb-fg); }
+.pf-sec-h i { width: 17px; height: 17px; color: var(--ajb-fg-muted); }
+.pf-sec-h .pf-ro { margin-inline-start: auto; }
+
+/* read-only badge (uses .ajb-badge neutral, just smaller) */
+.pf-ro { font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; }
+[lang="ar"] .pf-ro, [dir="rtl"] .pf-ro { letter-spacing: 0; text-transform: none; }
+
+/* definition rows */
+.pf-dl { padding: 6px 0; }
+.pf-row { display: flex; align-items: center; gap: 16px; padding: 13px 20px; border-bottom: 1px solid var(--ajb-stroke); }
+.pf-row:last-child { border-bottom: 0; }
+.pf-row-k { flex: 0 0 38%; font-size: 12.5px; color: var(--ajb-fg-subtle); }
+.pf-row-v { flex: 1; min-width: 0; font-size: 13.5px; color: var(--ajb-fg); font-weight: var(--ajb-w-medium); text-align: end; }
+
+/* role block */
+.pf-role { display: flex; align-items: center; gap: 12px; padding: 16px 20px; border-bottom: 1px solid var(--ajb-stroke); }
+.pf-role-lbl { font-size: 12.5px; color: var(--ajb-fg-subtle); }
+.pf-role-sp { flex: 1; }
+
+/* permissions */
+.pf-perms { padding: 6px 0; }
+.pf-perm { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--ajb-stroke); }
+.pf-perm:last-child { border-bottom: 0; }
+.pf-perm-ico { width: 20px; height: 20px; flex: none; display: inline-flex; align-items: center; justify-content: center; }
+.pf-perm-ico i { width: 18px; height: 18px; }
+.pf-perm.is-on .pf-perm-ico i { color: var(--ajb-tint-success-fg); }
+.pf-perm.is-off .pf-perm-ico i { color: var(--ajb-fg-subtle); }
+.pf-perm.is-off .pf-perm-lbl { color: var(--ajb-fg-muted); }
+.pf-perm-lbl { flex: 1; min-width: 0; font-size: 13.5px; color: var(--ajb-fg); }
+
+/* sessions */
+.pf-sess { display: flex; align-items: center; gap: 16px; padding: 15px 20px; border-bottom: 1px solid var(--ajb-stroke); }
+.pf-sess:last-child { border-bottom: 0; }
+.pf-sess-ico { width: 40px; height: 40px; flex: none; border-radius: var(--ajb-r-md); border: 1px solid var(--ajb-stroke); display: inline-flex; align-items: center; justify-content: center; color: var(--ajb-fg-muted); background: color-mix(in srgb, var(--ajb-fg) 3%, transparent); }
+.pf-sess-ico i { width: 19px; height: 19px; }
+.pf-sess-txt { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.pf-sess-dev { font-size: 13.5px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg); }
+.pf-sess-sub { font-size: 12px; color: var(--ajb-fg-subtle); display: inline-flex; align-items: center; gap: 7px; }
+.pf-sess-sub i { width: 13px; height: 13px; }
+.pf-sess-tr { margin-inline-start: auto; }
+.pf-sess-note { display: flex; align-items: center; gap: 9px; padding: 13px 20px; font-size: 12px; color: var(--ajb-fg-subtle); background: color-mix(in srgb, var(--ajb-fg) 2%, transparent); }
+.pf-sess-note i { width: 15px; height: 15px; flex: none; }
+
+/* responsive: collapse to single column on a narrow console */
+@container console (max-width: 720px) {
+  [data-pf-layout="two-column"] .pf-grid { grid-template-columns: minmax(0, 1fr); }
+  .pf-page { padding: 22px 18px 32px; }
+  .pf-hero { flex-direction: row; }
+  .pf-row-k { flex-basis: 42%; }
+}

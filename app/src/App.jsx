@@ -10,6 +10,7 @@ const ViewTemplatePage = lazy(() => import('./pages/ViewTemplate'));
 const EditTemplatePage = lazy(() => import('./pages/EditTemplate'));
 const ApprovalsPage = lazy(() => import('./pages/Approvals'));
 const SettingsPage = lazy(() => import('./pages/Settings'));
+const ProfilePage = lazy(() => import('./pages/Profile'));
 
 function AppShell({ page, children }) {
   const { theme, lang } = useApp();
@@ -66,6 +67,11 @@ export default function App() {
         <Route path="/settings" element={
           <div className="ne-console" data-theme={theme} lang={lang} dir={dir}>
             <SettingsPage />
+          </div>
+        } />
+        <Route path="/profile" element={
+          <div className="ne-console" data-theme={theme} lang={lang} dir={dir}>
+            <ProfilePage />
           </div>
         } />
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -18,6 +18,7 @@ import './styles/edit-template.css';
 import './styles/template-delete.css';
 import './styles/approvals.css';
 import './styles/settings.css';
+import './styles/profile.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

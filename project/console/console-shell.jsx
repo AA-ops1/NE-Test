@@ -1,4 +1,4 @@
-/* global React, Icon */
+/* global React, Icon, AccountPanel, TPL */
 /* ============================================================
    Notification Engine — shared console shell (side nav + collapse)
    One source of truth for the duplicated side menu across every
@@ -67,33 +67,55 @@ function NavItem({ n, page, t, collapsed, badge }) {
   );
 }
 
-function SideNav({ page, t, collapsed, badge }) {
+function SideNav({ page, t, collapsed, badge, acctVariant }) {
   const groupLabel = (gid) => (t.navGroup && t.navGroup[gid]) || gid;
+  const [acctOpen, setAcctOpen] = useShellState(false);
+  const prof = (window.TPL && window.TPL.PROFILE) || {};
+  const acctT = t.acct || {};
+  // entry-point variation: explicit prop (Profile tweak) wins, else persisted, else anchored
+  let variant = acctVariant;
+  if (!variant) { try { variant = localStorage.getItem('ne-acct-variant') || 'anchored'; } catch (e) { variant = 'anchored'; } }
+  // persist the tweak so the panel style stays consistent across every shell
+  useShellEffect(() => {
+    if (!acctVariant) return;
+    try { localStorage.setItem('ne-acct-variant', acctVariant); } catch (e) {}
+  }, [acctVariant]);
+  const openAcct = () => setAcctOpen(true);
   return (
-    <aside className="ne-side">
-      <span className="ne-logo ne-side-logo">
-        <img className="ne-logo-dark ne-logo-word" src="../assets/logo-white.svg" alt="aljazira bank" />
-        <img className="ne-logo-light ne-logo-word" src="../assets/logo-black.svg" alt="aljazira bank" />
-        <img className="ne-logo-symbol" src="../assets/logo-ajb-symbol-white.png" alt="ajb" />
-      </span>
-      {NE_NAV_GROUPS.map(g => (
-        <React.Fragment key={g.id}>
-          <div className="ne-nav-group"><span>{groupLabel(g.id)}</span></div>
-          {g.items.map(n => <NavItem key={n.id} n={n} page={page} t={t} collapsed={collapsed} badge={badge} />)}
-        </React.Fragment>
-      ))}
-      <div className="ne-side-sp" />
-      <NavItem n={NE_NAV_FOOTER} page={page} t={t} collapsed={collapsed} />
-      <div className="ne-side-divider" />
-      <div className="ne-side-user" title={collapsed ? (t.userName || '') : undefined}>
-        <span className="ajb-avatar ajb-avatar--sm"><span>A</span></span>
-        <span className="ne-side-user-txt">
-          <span className="ne-side-user-name">{t.userName}</span>
-          <span className="ne-side-user-role">{t.userRole}</span>
+    <React.Fragment>
+      <aside className="ne-side">
+        <span className="ne-logo ne-side-logo">
+          <img className="ne-logo-dark ne-logo-word" src="../assets/logo-white.svg" alt="aljazira bank" />
+          <img className="ne-logo-light ne-logo-word" src="../assets/logo-black.svg" alt="aljazira bank" />
+          <img className="ne-logo-symbol" src="../assets/logo-ajb-symbol-white.png" alt="ajb" />
         </span>
-        <span className="ne-side-user-act"><Icon name="chevron-right" /></span>
-      </div>
-    </aside>
+        {NE_NAV_GROUPS.map(g => (
+          <React.Fragment key={g.id}>
+            <div className="ne-nav-group"><span>{groupLabel(g.id)}</span></div>
+            {g.items.map(n => <NavItem key={n.id} n={n} page={page} t={t} collapsed={collapsed} badge={badge} />)}
+          </React.Fragment>
+        ))}
+        <div className="ne-side-sp" />
+        <NavItem n={NE_NAV_FOOTER} page={page} t={t} collapsed={collapsed} />
+        <div className="ne-side-divider" />
+        <div className={`ne-side-user${acctOpen ? ' is-active' : ''}`} role="button" tabIndex={0}
+          title={collapsed ? (t.userName || '') : undefined}
+          aria-haspopup="dialog" aria-expanded={acctOpen} aria-label={acctT.open}
+          onClick={openAcct}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openAcct(); } }}>
+          <span className="ajb-avatar ajb-avatar--sm"><span>{prof.initial || 'A'}</span></span>
+          <span className="ne-side-user-txt">
+            <span className="ne-side-user-name">{t.userName}</span>
+            <span className="ne-side-user-role">{t.userRole}</span>
+          </span>
+          <span className="ne-side-user-act"><Icon name="chevron-right" /></span>
+        </div>
+      </aside>
+      <AccountPanel open={acctOpen} onClose={() => setAcctOpen(false)}
+        user={{ initial: prof.initial || 'A', name: t.userName, role: t.userRole, email: prof.email }}
+        t={acctT} variant={variant} dir={t.dir}
+        profileHref="Profile.html" settingsHref="Settings.html" loginHref="Login Journey.html" />
+    </React.Fragment>
   );
 }
 

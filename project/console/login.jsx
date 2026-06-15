@@ -295,6 +295,12 @@ function ConsoleHome({ t, theme, setTheme, lang, setLang }) {
     try { localStorage.setItem('ne-side-collapsed', next ? '1' : '0'); } catch (e) {}
     return next;
   });
+  // account panel (shared component) — strings/email come from TPL when present
+  const acctT = (window.TPL && window.TPL.T[lang] && window.TPL.T[lang].acct) || {};
+  const acctEmail = (window.TPL && window.TPL.PROFILE && window.TPL.PROFILE.email) || '';
+  let acctVariant = 'anchored';
+  try { acctVariant = localStorage.getItem('ne-acct-variant') || 'anchored'; } catch (e) {}
+  const [acctOpen, setAcctOpen] = useState(false);
   const navItem = (n) => (
     <div key={n.id} className={`ne-nav-item ${n.on ? 'on' : ''}`}
       title={collapsed ? t[n.id] : undefined}
@@ -329,7 +335,11 @@ function ConsoleHome({ t, theme, setTheme, lang, setLang }) {
         <div className="ne-side-sp" />
         {navItem({ id: 'settings', icon: 'settings' })}
         <div className="ne-side-divider" />
-        <div className="ne-side-user" title={collapsed ? t.userName : undefined}>
+        <div className={`ne-side-user${acctOpen ? ' is-active' : ''}`} role="button" tabIndex={0}
+          title={collapsed ? t.userName : undefined}
+          aria-haspopup="dialog" aria-expanded={acctOpen} aria-label={acctT.open}
+          onClick={() => setAcctOpen(true)}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setAcctOpen(true); } }}>
           <span className="ajb-avatar ajb-avatar--sm"><span>A</span></span>
           <span className="ne-side-user-txt">
             <span className="ne-side-user-name">{t.userName}</span>
@@ -338,6 +348,10 @@ function ConsoleHome({ t, theme, setTheme, lang, setLang }) {
           <span className="ne-side-user-act"><i data-lucide="chevron-right"></i></span>
         </div>
       </aside>
+      <AccountPanel open={acctOpen} onClose={() => setAcctOpen(false)}
+        user={{ initial: 'A', name: t.userName, role: t.userRole, email: acctEmail }}
+        t={acctT} variant={acctVariant} dir={lang === 'ar' ? 'rtl' : 'ltr'}
+        profileHref="Profile.html" settingsHref="Settings.html" loginHref="Login Journey.html" />
       <div className="ne-main">
         <div className="ne-topbar">
           <button type="button" className="ne-side-toggle" onClick={toggleSide}

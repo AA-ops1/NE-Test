@@ -361,7 +361,7 @@ i[aria-hidden="true"] > svg { width: 100%; height: 100%; display: block; }
 .ne-side-sp { flex: 1; }
 
 .ne-main { background: var(--ajb-bg); overflow: auto; flex: 1; min-width: 0; }
-[data-theme="light"] .ne-main { background: var(--ajb-bg-deep); }
+[data-theme="light"] .ne-main { background: var(--ajb-bg); }
 .ne-topbar {
   display: flex;
   align-items: center;
@@ -548,7 +548,7 @@ i[aria-hidden="true"] > svg { width: 100%; height: 100%; display: block; }
    Collapse is driven by [data-collapsed] on .ne-home; the grid column
    animates and every inner element fades/condenses in one motion.
    ============================================================ */
-.ne-home { --ne-ease: cubic-bezier(.2,.7,.2,1); }
+.ne-home { --ne-ease: cubic-bezier(.2,.7,.2,1); --ne-collapse: .42s; }
 
 .ne-side { width: 256px; flex: none; min-width: 0; overflow: hidden; gap: 4px; padding: 18px 14px 16px; transition: width .36s var(--ne-ease), padding .36s var(--ne-ease); }
 .ne-home[data-collapsed] .ne-side { width: 84px; padding-inline: 20px; }
@@ -561,7 +561,7 @@ i[aria-hidden="true"] > svg { width: 100%; height: 100%; display: block; }
 [data-theme="light"] .ne-side-logo .ne-logo-symbol { filter: invert(1); }
 .ne-home[data-collapsed] .ne-side-logo { margin-inline: 0; justify-content: center; }
 .ne-home[data-collapsed] .ne-side-logo .ne-logo-word { opacity: 0; }
-.ne-home[data-collapsed] .ne-side-logo .ne-logo-symbol { opacity: 1; }
+.ne-home[data-collapsed] .ne-side-logo .ne-logo-symbol { opacity: 1; height: 44px; transition: opacity .22s var(--ne-ease), height var(--ne-collapse) var(--ne-ease); }
 
 /* group header — constant height (text fades to a centered hairline) so
    the icons below never shift vertically when collapsing. */
@@ -612,3 +612,103 @@ i[aria-hidden="true"] > svg { width: 100%; height: 100%; display: block; }
 .ne-home[data-collapsed] .ne-side-toggle i { transform: rotate(180deg); }
 [dir="rtl"] .ne-side-toggle i { transform: rotate(180deg); }
 [dir="rtl"] .ne-home[data-collapsed] .ne-side-toggle i { transform: rotate(0deg); }
+
+/* ============================================================
+   ACCOUNT PANEL — slide-in account sheet + sign-out flow
+   Reached from the side-nav user chip on every shell. New reusable
+   component (no DS sheet/drawer exists); built from DS tokens + the
+   global .ajb-avatar / .ajb-menu / .ajb-dialog classes. Two entry
+   variations: 'anchored' (rises from the chip) and 'drawer' (full-
+   height edge panel). Component: components/AccountPanel.jsx.
+   ============================================================ */
+/* overlays anchor to the console box */
+.ne-console { position: relative; }
+
+/* user chip is now an interactive trigger */
+.ne-side-user { cursor: pointer; }
+.ne-side-user.is-active { border-color: var(--ajb-accent); background: var(--ajb-tint-sand-bg); }
+.ne-side-user:focus-visible { outline: 2px solid var(--ajb-accent); outline-offset: 2px; }
+
+.ne-acct-overlay { position: absolute; inset: 0; z-index: 80; }
+.ne-acct-overlay--anchored { display: block; }
+.ne-acct-overlay--drawer { display: block; }
+.ne-acct-overlay--dialog { display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 90; }
+
+.ne-acct-scrim { position: absolute; inset: 0; background: color-mix(in srgb, var(--ajb-bg-deep) 58%, transparent); backdrop-filter: blur(3px); animation: ne-acct-fade .22s var(--ne-ease, ease) both; }
+
+/* the sheet */
+.ne-acct {
+  position: absolute; box-sizing: border-box;
+  background: var(--ajb-surface-2); border: 1px solid var(--ajb-stroke);
+  box-shadow: var(--ajb-shadow-3);
+  display: flex; flex-direction: column;
+}
+.ne-acct-x {
+  position: absolute; inset-block-start: 14px; inset-inline-end: 14px;
+  width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center;
+  border: 0; border-radius: var(--ajb-r-pill); background: transparent; color: var(--ajb-fg-subtle);
+  cursor: pointer; transition: background .16s var(--ne-ease, ease), color .16s var(--ne-ease, ease);
+}
+.ne-acct-x:hover { background: color-mix(in srgb, var(--ajb-fg) 7%, transparent); color: var(--ajb-fg); }
+.ne-acct-x i { width: 17px; height: 17px; }
+
+/* anchored — floating card near the chip (bottom inline-start) */
+.ne-acct--anchored {
+  inset-block-end: 16px; inset-inline-start: 16px;
+  width: 300px; max-width: calc(100% - 32px); border-radius: var(--ajb-r-lg);
+  padding: 22px 20px 14px;
+  transform-origin: bottom left;
+  animation: ne-acct-rise .3s var(--ne-ease, ease) both;
+}
+[dir="rtl"] .ne-acct--anchored { transform-origin: bottom right; }
+
+/* drawer — full-height edge panel */
+.ne-acct--drawer {
+  inset-block: 0; inset-inline-start: 0;
+  width: 344px; max-width: 86%; border-radius: 0;
+  border-inline-start: 0; border-block: 0;
+  padding: 28px 24px 18px;
+  animation: ne-acct-slide .34s var(--ne-ease, ease) both;
+}
+
+/* header */
+.ne-acct-head { display: flex; flex-direction: column; align-items: flex-start; padding-block-end: 16px; margin-block-end: 8px; border-bottom: 1px solid var(--ajb-stroke); }
+.ne-acct-avatar { margin-bottom: 14px; }
+.ne-acct-eyebrow { font-size: 10.5px; font-weight: var(--ajb-w-bold); letter-spacing: .09em; text-transform: uppercase; color: var(--ajb-fg-subtle); }
+[lang="ar"] .ne-acct-eyebrow, [dir="rtl"] .ne-acct-eyebrow { letter-spacing: 0; text-transform: none; }
+.ne-acct-name { margin-top: 6px; font-size: 17px; font-weight: var(--ajb-w-medium); color: var(--ajb-fg); letter-spacing: -0.01em; }
+.ne-acct-role { margin-top: 3px; font-size: 12.5px; color: var(--ajb-fg-muted); }
+.ne-acct-email { margin-top: 8px; font-size: 12px; color: var(--ajb-fg-subtle); }
+
+/* action menu (mirrors .ajb-menu item rhythm) */
+.ne-acct-menu { display: flex; flex-direction: column; gap: 2px; padding-top: 6px; }
+.ne-acct-item {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 11px 12px; border: 0; border-radius: 10px; background: transparent;
+  font-family: var(--ajb-font); font-size: var(--ajb-small); color: var(--ajb-fg);
+  cursor: pointer; text-align: start;
+  transition: background .15s var(--ne-ease, ease), color .15s var(--ne-ease, ease);
+}
+.ne-acct-item i { width: 18px; height: 18px; flex: none; color: var(--ajb-fg-muted); }
+.ne-acct-item:hover { background: color-mix(in srgb, var(--ajb-fg) 6%, transparent); }
+.ne-acct-item-lbl { flex: 1; min-width: 0; }
+.ne-acct-item-go { margin-inline-start: auto; color: var(--ajb-fg-subtle) !important; }
+[dir="rtl"] .ne-acct-item-go { transform: scaleX(-1); }
+.ne-acct-item--danger, .ne-acct-item--danger i { color: var(--ajb-tint-danger-fg); }
+.ne-acct-item--danger:hover { background: var(--ajb-tint-danger-bg); }
+.ne-acct-sep { height: 1px; background: var(--ajb-stroke); margin: 6px 4px; }
+
+/* sign-out confirm dialog (reuses .ajb-dialog) */
+.ne-acct-dialog { animation: ne-acct-rise .26s var(--ne-ease, ease) both; }
+.ne-acct-dialog-ico { background: var(--ajb-tint-danger-bg); }
+.ne-acct-dialog-ico i { width: 26px; height: 26px; color: var(--ajb-tint-danger-fg); }
+
+@keyframes ne-acct-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ne-acct-rise { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes ne-acct-slide { from { opacity: .4; transform: translateX(-101%); } to { opacity: 1; transform: none; } }
+[dir="rtl"] .ne-acct--drawer { animation-name: ne-acct-slide-rtl; }
+@keyframes ne-acct-slide-rtl { from { opacity: .4; transform: translateX(101%); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .ne-acct-scrim, .ne-acct--anchored, .ne-acct--drawer, .ne-acct-dialog { animation: none; }
+}
