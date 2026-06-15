@@ -329,7 +329,7 @@ function ViewDetails({ tpl, idx, onPick, lang, t, editHref, backHref }) {
       <header className="ts-hd">
         <div className="ts-hd-l">
           <div className="ajb-crumb">
-            <a href="#">{t.crumbHome}</a>
+            <a href={backHref}>{t.crumbHome}</a>
             <span className="ajb-crumb__sep"><Icon name="chevron-right" /></span>
             <span className="ajb-crumb__current">{L(tpl.name, lang)}</span>
           </div>
@@ -350,18 +350,18 @@ function ViewDetails({ tpl, idx, onPick, lang, t, editHref, backHref }) {
         <div className="ts-actions">
           <KebabMenu t={t} triggerClass="ajb-btn ajb-btn--icon" triggerIcon="more-horizontal" items={archived
             ? [
-              { icon: 'copy', label: t.duplicateTpl, onClick: () => {} },
-              { icon: 'download', label: t.exportTpl, onClick: () => {} },
+              { icon: 'copy', label: t.duplicateTpl, onClick: () => { window.location.href = 'Create Template.html'; } },
+              { icon: 'download', label: t.exportTpl, onClick: () => { window.print(); } },
             ]
             : [
-              { icon: 'copy', label: t.duplicateTpl, onClick: () => {} },
-              { icon: 'download', label: t.exportTpl, onClick: () => {} },
+              { icon: 'copy', label: t.duplicateTpl, onClick: () => { window.location.href = 'Create Template.html'; } },
+              { icon: 'download', label: t.exportTpl, onClick: () => { window.print(); } },
               { icon: 'archive', label: t.archiveTpl, onClick: askArchive },
               { sep: true },
               { icon: 'trash-2', label: t.deleteTpl, danger: latest.status === 'draft', disabled: latest.status !== 'draft', hint: latest.status !== 'draft' ? t.delDraftOnly : undefined, onClick: askDelete },
             ]} />
           {archived
-            ? <button type="button" className="ajb-btn ajb-btn--sand"><Icon name="copy" />{t.arcDuplicate}</button>
+            ? <button type="button" className="ajb-btn ajb-btn--sand" onClick={() => { window.location.href = 'Create Template.html'; }}><Icon name="copy" />{t.arcDuplicate}</button>
             : inReview
               ? <span className="ajb-badge ajb-badge--info vw-inreview"><Icon name="clock" />{apfmt(t.apAwaiting, { who: L(submittedTo, lang) })}</span>
               : isDraft
@@ -446,7 +446,7 @@ function ViewDetails({ tpl, idx, onPick, lang, t, editHref, backHref }) {
           </section>
         </div>
         <aside className="vw-rail">
-          <DevicePreview channel={tpl.channel} text={ver.content && ver.content[lang]} subject={ver.subject && ver.subject[lang]} ntitle={ver.ntitle && ver.ntitle[lang]} lang={lang} sample={sample} onToggleSample={() => setSample(s => !s)} t={t} />
+          <DevicePreview channel={tpl.channel} text={ver.content && ver.content[lang]} subject={ver.subject && ver.subject[lang]} ntitle={ver.ntitle && ver.ntitle[lang]} lang={lang} sample={sample} onToggleSample={() => setSample(s => !s)} format={ver.bodyFormat} t={t} />
           {(tpl.channel === 'sms' || tpl.channel === 'whatsapp') && <SegmentMeter text={ver.content && ver.content[lang]} lang={lang} t={t} />}
           <VersionHistory versions={tpl.versions} t={t} lang={lang} />
         </aside>

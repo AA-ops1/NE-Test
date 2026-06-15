@@ -219,7 +219,7 @@ function SectionCard({ n, title, children }) {
 function HeaderActions({ t, onSave }) {
   return (
     <div className="ts-actions">
-      <button type="button" className="ajb-btn ajb-btn--tertiary">{t.cancel}</button>
+      <button type="button" className="ajb-btn ajb-btn--tertiary" onClick={() => { window.location.href = 'Templates.html'; }}>{t.cancel}</button>
       <button type="button" className="ajb-btn ajb-btn--secondary" onClick={() => onSave('draft')}>{t.saveDraft}</button>
       <button type="button" className="ajb-btn ajb-btn--sand" onClick={() => onSave('save')}><Icon name="check" />{t.save}</button>
     </div>
@@ -246,7 +246,7 @@ function DirectionA({ f, t, lang, onSave }) {
     <div className="ts-page">
       <header className="ts-hd">
         <div className="ts-hd-l">
-          <div className="ajb-crumb"><a href="#">{t.crumbHome}</a><span className="ajb-crumb__sep"><Icon name="chevron-right" /></span><span className="ajb-crumb__current">{t.crumbNew}</span></div>
+          <div className="ajb-crumb"><a href="Templates.html">{t.crumbHome}</a><span className="ajb-crumb__sep"><Icon name="chevron-right" /></span><span className="ajb-crumb__current">{t.crumbNew}</span></div>
           <h1 className="ts-h1">{t.title}<span className="ts-draftbadge">{t.draftBadge}</span></h1>
           <p className="ts-sub">{t.subtitle}</p>
         </div>
@@ -297,7 +297,7 @@ function DirectionB({ f, t, lang, onSave }) {
   return (
     <div className="ts-page wizard">
       <header className="ts-hd center">
-        <div className="ajb-crumb"><a href="#">{t.crumbHome}</a><span className="ajb-crumb__sep"><Icon name="chevron-right" /></span><span className="ajb-crumb__current">{t.crumbNew}</span></div>
+        <div className="ajb-crumb"><a href="Templates.html">{t.crumbHome}</a><span className="ajb-crumb__sep"><Icon name="chevron-right" /></span><span className="ajb-crumb__current">{t.crumbNew}</span></div>
         <h1 className="ts-h1">{t.title}<span className="ts-draftbadge">{t.draftBadge}</span></h1>
         <Stepper step={step} t={t} />
       </header>

@@ -158,9 +158,9 @@ function TemplateStore({ t, lang }) {
                         <Link to={viewUrl} className="tl-act" title={t.detailsAction}><Icon name="eye" /></Link>
                         <Link to={canEdit ? '/templates/edit' : '#'} className={cx('tl-act', !canEdit && 'is-disabled')} title={t.editAction}><Icon name="pencil" /></Link>
                         <KebabMenu t={t} items={r.status === 'archived'
-                          ? [{ icon: 'copy', label: t.duplicateTpl, onClick: () => {} }]
+                          ? [{ icon: 'copy', label: t.duplicateTpl, onClick: () => navigate('/templates/new') }]
                           : [
-                            { icon: 'copy', label: t.duplicateTpl, onClick: () => {} },
+                            { icon: 'copy', label: t.duplicateTpl, onClick: () => navigate('/templates/new') },
                             { icon: 'archive', label: t.archiveTpl, onClick: () => askArchive(r) },
                             { sep: true },
                             { icon: 'trash-2', label: t.deleteTpl, danger: r.status === 'draft', disabled: r.status !== 'draft', hint: r.status !== 'draft' ? t.delDraftOnly : undefined, onClick: () => askDelete(r) },

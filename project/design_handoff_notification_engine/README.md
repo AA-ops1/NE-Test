@@ -84,16 +84,19 @@ update the docs in the same change and bump the version.
 - **Single source of truth.** These docs *describe* the files under `console/`;
   they do not duplicate them. When you change a journey, update the matching
   section here so the two never drift.
-- **Semantic versioning** (`MAJOR.MINOR.PATCH`) recorded in `CHANGELOG.md`:
+- **Semantic versioning** (`MAJOR.MINOR.PATCH`) for these docs, recorded
+  alongside each doc's `Docs version` stamp:
   - **MAJOR** — a business rule changes (e.g. maker *can* now self-approve under
     a condition), a journey is added/removed, or the data model changes shape.
   - **MINOR** — new screen state, new field, new copy, additive tweak.
   - **PATCH** — corrections, clarifications, typo/wording fixes.
 - **Stamp every doc.** Each file carries a `Docs version` + `Last updated` line
   at the top — bump both when you edit it.
-- **Record every change** as a dated entry in `CHANGELOG.md`, newest first.
+- **Record every design change** in the project-root `../../CHANGELOG.md`
+  (the canonical design change log), newest first — see the *Design Change Log
+  Rules* in `CLAUDE.md`.
 
-> See `CHANGELOG.md` for the current version and full history.
+> See the project-root `CHANGELOG.md` for the full design change history.
 
 ---
 

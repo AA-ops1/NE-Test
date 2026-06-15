@@ -63,7 +63,7 @@ export default function EditTemplatePage() {
 
   let body;
   if (scenario === 'locked') {
-    body = <LockedState t={t} lang={lang} tpl={tpl} onList={() => navigate('/templates')} />;
+    body = <LockedState t={t} lang={lang} tpl={tpl} onList={() => navigate('/templates')} onRestore={() => navigate(`/templates/${detail}`)} />;
   } else if (scenario === 'saved') {
     body = (
       <EditSaved t={t} lang={lang} tpl={tpl} kind={savedInfo.kind} verLabel={savedInfo.ver}

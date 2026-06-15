@@ -102,42 +102,17 @@ function SideNav({ page, t, collapsed, badge }) {
    script, with a check on the active one. Composed from existing DS
    components; outside-click closes (same pattern as KebabMenu). */
 function LangMenu({ lang, setLang, label }) {
-  const [open, setOpen] = useShellState(false);
-  const ref = useShellRef(null);
-  useShellEffect(() => {
-    if (!open) return;
-    const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
-    const k = (e) => { if (e.key === 'Escape') setOpen(false); };
-    document.addEventListener('mousedown', h);
-    document.addEventListener('keydown', k);
-    return () => { document.removeEventListener('mousedown', h); document.removeEventListener('keydown', k); };
-  }, [open]);
-  const LANGS = [
-    { id: 'en', name: 'English', code: 'EN' },
-    { id: 'ar', name: 'العربية', code: 'عربي' },
-  ];
-  const cur = LANGS.find((l) => l.id === lang) || LANGS[0];
-  const pick = (id) => { setOpen(false); if (id !== lang) setLang(id); };
+  const toggle = () => setLang(lang === 'en' ? 'ar' : 'en');
   return (
-    <span className="ne-langwrap" ref={ref}>
-      <button type="button" className={`ne-iconbtn ne-iconbtn--lang ${open ? 'is-open' : ''}`}
-        aria-label={label} title={label} aria-haspopup="menu" aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}>
-        <Icon name="languages" />
-        <span className="ne-iconbtn-lbl ajb-ltr">{cur.code}</span>
+    <span className="ne-langwrap">
+      <button type="button" className="ne-iconbtn ne-iconbtn--lang"
+        aria-label={label} title={label}
+        onClick={toggle}>
+        <span className="ne-langglyph" aria-hidden="true">
+          <span className="ne-langglyph-en">E</span>
+          <span className="ne-langglyph-ar">ع</span>
+        </span>
       </button>
-      {open && (
-        <div className="ajb-menu ne-lang-menu" role="menu" onClick={(e) => e.stopPropagation()}>
-          {LANGS.map((l) => (
-            <div key={l.id} role="menuitemradio" aria-checked={l.id === lang}
-              className={`ajb-menu__item ${l.id === lang ? 'is-on' : ''}`}
-              onClick={() => pick(l.id)}>
-              <span className="ne-lang-name" lang={l.id} dir={l.id === 'ar' ? 'rtl' : 'ltr'}>{l.name}</span>
-              {l.id === lang && <span className="ajb-menu__check"><Icon name="check" /></span>}
-            </div>
-          ))}
-        </div>
-      )}
     </span>
   );
 }

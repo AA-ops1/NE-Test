@@ -363,18 +363,18 @@ export function ViewDetails({ tpl, idx, onPick, lang, t, editHref, backHref }) {
         <div className="ts-actions">
           <KebabMenu t={t} triggerClass="ajb-btn ajb-btn--icon" triggerIcon="more-horizontal" items={archived
             ? [
-              { icon: 'copy', label: t.duplicateTpl, onClick: () => {} },
-              { icon: 'download', label: t.exportTpl, onClick: () => {} },
+              { icon: 'copy', label: t.duplicateTpl, onClick: () => navigate('/templates/new') },
+              { icon: 'download', label: t.exportTpl, onClick: () => window.print() },
             ]
             : [
-              { icon: 'copy', label: t.duplicateTpl, onClick: () => {} },
-              { icon: 'download', label: t.exportTpl, onClick: () => {} },
+              { icon: 'copy', label: t.duplicateTpl, onClick: () => navigate('/templates/new') },
+              { icon: 'download', label: t.exportTpl, onClick: () => window.print() },
               { icon: 'archive', label: t.archiveTpl, onClick: askArchive },
               { sep: true },
               { icon: 'trash-2', label: t.deleteTpl, danger: latest.status === 'draft', disabled: latest.status !== 'draft', hint: latest.status !== 'draft' ? t.delDraftOnly : undefined, onClick: askDelete },
             ]} />
           {archived
-            ? <button type="button" className="ajb-btn ajb-btn--sand"><Icon name="copy" />{t.arcDuplicate}</button>
+            ? <button type="button" className="ajb-btn ajb-btn--sand" onClick={() => navigate('/templates/new')}><Icon name="copy" />{t.arcDuplicate}</button>
             : inReview
               ? <span className="ajb-badge ajb-badge--info vw-inreview"><Icon name="clock" />{apfmt(t.apAwaiting, { who: L(submittedTo, lang) })}</span>
               : isDraft

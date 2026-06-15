@@ -186,7 +186,7 @@ function DirectionA({ t, lang, theme, setTheme, setLang }) {
           <button type="button" className="ne-iconbtn ne-iconbtn--lang"
             aria-label={t.langLbl} title={t.langLbl}
             onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}>
-            <span className="ne-iconbtn-lbl ajb-ltr">{lang === 'en' ? 'عر' : 'EN'}</span>
+            <span className="ne-langglyph" aria-hidden="true"><span className="ne-langglyph-en">E</span><span className="ne-langglyph-ar">ع</span></span>
           </button>
         </div>
         <SignInForm t={t} lang={lang} />

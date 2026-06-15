@@ -100,7 +100,7 @@ function EditRail({ f, t, lang, versions, newVer }) {
   const aLang = f.data.activeLang;
   return (
     <aside className="ts-rail">
-      <DevicePreview channel={f.data.channel} text={f.data.content[aLang]} subject={f.data.subject[aLang]} ntitle={f.data.ntitle[aLang]} lang={aLang} sample={f.data.sampleMode} onToggleSample={() => f.setField('sampleMode', !f.data.sampleMode)} t={t} />
+      <DevicePreview channel={f.data.channel} text={f.data.content[aLang]} subject={f.data.subject[aLang]} ntitle={f.data.ntitle[aLang]} lang={aLang} sample={f.data.sampleMode} onToggleSample={() => f.setField('sampleMode', !f.data.sampleMode)} format={f.data.bodyFormat} t={t} />
       <SegmentMeter text={f.data.content[aLang]} lang={lang} t={t} />
       <VariablePanel onInsert={f.insert} lang={lang} t={t} compact />
       <VersionHistory versions={versions} newVer={newVer} t={t} lang={lang} />
@@ -117,7 +117,7 @@ function EditWorkspace({ f, t, lang, scenario, tpl, status, verLabel, nextLabel,
       <header className="ts-hd">
         <div className="ts-hd-l">
           <div className="ajb-crumb">
-            <a href="#">{t.crumbHome}</a>
+            <a href="Templates.html">{t.crumbHome}</a>
             <span className="ajb-crumb__sep"><Icon name="chevron-right" /></span>
             <a href="View Template.html">{L(tpl.name, lang)}</a>
             <span className="ajb-crumb__sep"><Icon name="chevron-right" /></span>
@@ -179,7 +179,7 @@ function LockedState({ t, lang, tpl, onList }) {
         </div>
         <div className="et-lock-actions">
           <button type="button" className="ajb-btn ajb-btn--secondary" onClick={onList}>{t.lkBackList}</button>
-          <button type="button" className="ajb-btn ajb-btn--sand"><Icon name="rotate-ccw" />{t.lkRestore}</button>
+          <button type="button" className="ajb-btn ajb-btn--sand" onClick={() => { window.location.href = 'View Template.html'; }}><Icon name="rotate-ccw" />{t.lkRestore}</button>
         </div>
       </div>
     </div>

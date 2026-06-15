@@ -161,7 +161,7 @@ function App() {
 
   let body;
   if (scenario === 'locked') {
-    body = <LockedState t={t} lang={lang} tpl={tpl} onList={() => {}} />;
+    body = <LockedState t={t} lang={lang} tpl={tpl} onList={() => { window.location.href = 'Templates.html'; }} />;
   } else if (scenario === 'saved') {
     body = <EditSaved t={t} lang={lang} tpl={tpl} kind={savedInfo.kind} verLabel={savedInfo.ver}
       onBack={() => window.location.href = 'View Template.html'} onView={() => window.location.href = 'View Template.html'} />;

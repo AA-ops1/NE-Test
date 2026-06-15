@@ -121,7 +121,7 @@ export function EditWorkspace({ f, t, lang, scenario, tpl, status, verLabel, nex
       <header className="ts-hd">
         <div className="ts-hd-l">
           <div className="ajb-crumb">
-            <Link to="/">{t.crumbHome}</Link>
+            <Link to="/templates">{t.crumbHome}</Link>
             <span className="ajb-crumb__sep"><Icon name="chevron-right" /></span>
             <Link to={`/templates/${tpl.id}`}>{L(tpl.name, lang)}</Link>
             <span className="ajb-crumb__sep"><Icon name="chevron-right" /></span>
@@ -168,7 +168,7 @@ export function EditWorkspace({ f, t, lang, scenario, tpl, status, verLabel, nex
 /* ============================================================
    LOCKED — archived template can't be edited
    ============================================================ */
-export function LockedState({ t, lang, tpl, onList }) {
+export function LockedState({ t, lang, tpl, onList, onRestore }) {
   return (
     <div className="et-locked">
       <div className="ajb-card ajb-card--raised et-locked-card">
@@ -183,7 +183,7 @@ export function LockedState({ t, lang, tpl, onList }) {
         </div>
         <div className="et-lock-actions">
           <button type="button" className="ajb-btn ajb-btn--secondary" onClick={onList}>{t.lkBackList}</button>
-          <button type="button" className="ajb-btn ajb-btn--sand"><Icon name="rotate-ccw" />{t.lkRestore}</button>
+          <button type="button" className="ajb-btn ajb-btn--sand" onClick={onRestore}><Icon name="rotate-ccw" />{t.lkRestore}</button>
         </div>
       </div>
     </div>

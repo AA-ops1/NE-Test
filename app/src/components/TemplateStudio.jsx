@@ -4,6 +4,7 @@
    plus the shared form hook, Saved card, and Template list glimpse.
    ============================================================ */
 import React, { useState, useRef, useMemo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Icon from './Icon';
 import TPL from '../data/tpl';
 import {
@@ -223,9 +224,10 @@ function SectionCard({ n, title, children }) {
 
 /* ---------- header actions ---------- */
 function HeaderActions({ t, onSave }) {
+  const navigate = useNavigate();
   return (
     <div className="ts-actions">
-      <button type="button" className="ajb-btn ajb-btn--tertiary">{t.cancel}</button>
+      <button type="button" className="ajb-btn ajb-btn--tertiary" onClick={() => navigate('/templates')}>{t.cancel}</button>
       <button type="button" className="ajb-btn ajb-btn--secondary" onClick={() => onSave('draft')}>{t.saveDraft}</button>
       <button type="button" className="ajb-btn ajb-btn--sand" onClick={() => onSave('save')}><Icon name="check" />{t.save}</button>
     </div>
@@ -248,11 +250,12 @@ function PreviewRail({ f, t, lang }) {
    DIRECTION A — Workspace (two-pane)
    ============================================================ */
 export function WorkspaceA({ f, t, lang, onSave }) {
+  const navigate = useNavigate();
   return (
     <div className="ts-page">
       <header className="ts-hd">
         <div className="ts-hd-l">
-          <div className="ajb-crumb"><a href="#">{t.crumbHome}</a><span className="ajb-crumb__sep"><Icon name="chevron-right" /></span><span className="ajb-crumb__current">{t.crumbNew}</span></div>
+          <div className="ajb-crumb"><a href="/templates" onClick={e => { e.preventDefault(); navigate('/templates'); }}>{t.crumbHome}</a><span className="ajb-crumb__sep"><Icon name="chevron-right" /></span><span className="ajb-crumb__current">{t.crumbNew}</span></div>
           <h1 className="ts-h1">{t.title}<span className="ts-draftbadge">{t.draftBadge}</span></h1>
           <p className="ts-sub">{t.subtitle}</p>
         </div>
@@ -295,6 +298,7 @@ function ReviewRow({ k, children }) {
 }
 
 export function StepperB({ f, t, lang, onSave }) {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const aLang = f.data.activeLang;
   const prod = TPL.PRODUCTS.find(p => p.id === f.data.product);

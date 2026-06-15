@@ -3,6 +3,7 @@
    Reused by both layout directions (Workspace + Stepper).
    ============================================================ */
 import React, { useState, useRef, useEffect, useMemo, forwardRef, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import Icon from './Icon';
 import TPL from '../data/tpl';
 
@@ -352,6 +353,11 @@ function DevicePreview({ channel, text, subject, ntitle, lang, sample, onToggleS
   }, [zoom]);
   useEffect(() => { if (!isHtmlEmail && zoom) setZoom(false); }, [isHtmlEmail, zoom]);
 
+  // The modal is portaled to <body>, escaping the scaled console frame; carry the
+  // active console theme onto it so its chrome matches the surface it launched from.
+  const modalTheme = (typeof document !== 'undefined'
+    && document.querySelector('.ne-console')?.getAttribute('data-theme')) || 'dark';
+
   // render with token chips when NOT in sample mode
   const renderBody = (str) => {
     if (sample) return str;
@@ -432,13 +438,13 @@ function DevicePreview({ channel, text, subject, ntitle, lang, sample, onToggleS
             </button>
           )}
           <button type="button" className={cx('ts-pv-toggle', sample && 'on')} onClick={onToggleSample}>
-            <Icon name={sample ? 'eye' : 'tag'} key={sample ? 'eye' : 'tag'} />{sample ? t.showSample : t.showRaw}
+            <Icon name={sample ? 'tag' : 'eye'} key={sample ? 'tag' : 'eye'} />{sample ? t.showRaw : t.showSample}
           </button>
         </div>
       </div>
       <div className={cx('ts-pv-stage', `ch-${channel}`)} key={channel}>{inner}</div>
-      {zoom && isHtmlEmail && (
-        <div className="ts-emailmodal" role="dialog" aria-modal="true">
+      {zoom && isHtmlEmail && ReactDOM.createPortal(
+        <div className="ts-emailmodal" role="dialog" aria-modal="true" dir={dir} lang={lang} data-theme={modalTheme}>
           <div className="ajb-scrim ts-emailmodal-scrim" onClick={() => setZoom(false)} />
           <div className="ts-emailmodal-panel" dir={dir}>
             <div className="ts-emailmodal-head">
@@ -452,7 +458,8 @@ function DevicePreview({ channel, text, subject, ntitle, lang, sample, onToggleS
               <EmailHtmlFrame html={body} dir={dir} fill />
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

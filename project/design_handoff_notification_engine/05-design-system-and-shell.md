@@ -1,6 +1,6 @@
 # 05 · Design system & the shared console shell
 
-**Docs version:** `1.0.0` · **Last updated:** 7 Jun 2026
+**Docs version:** `1.1.0` · **Last updated:** 15 Jun 2026
 
 The console is built entirely on the **Aljazira Bank Design System**. This doc
 lists the tokens used, the design-system components consumed, and the **shared
@@ -96,6 +96,19 @@ App-specific components (built **on top of** the design system, in
 `FieldDiff`, `PersonChip`, `PriorityTag`, `KebabMenu`, `DeleteModal`,
 `ArchiveModal`, `SubmitModal`, `ReassignModal`, `NeToast`.
 
+### Scrollbars (global, `login.css`)
+Native scrollbars are themed two ways so they never fall back to the bright OS
+default on a dark surface:
+- **`color-scheme`** is set per theme root (`dark` on default/`[data-theme="dark"]`,
+  `light` on `[data-theme="light"]`) so the browser paints theme-appropriate
+  scrollbars on the page, variable list, code editor, and menus.
+- A global `::-webkit-scrollbar` + `scrollbar-color` rule uses a **transparent
+  track** and a transparent thumb border (`background-clip: padding-box`). The
+  transparent track lets each scroll area's **own** background show through, so
+  the scrollbar background dynamically matches whatever surface is behind it
+  (page, card, popover, editor) in either theme. Thumb is `color-mix(var(--ajb-fg)
+  22%…)`, 34% on hover. `.ts-select-pop` keeps its own surface-2 thumb border.
+
 Icons: **Lucide** (CDN), 1.5–1.7px stroke, never filled — a documented stand-in
 for the proprietary aljazira icon set. The `Icon` wrapper (`template-parts.jsx`)
 renders a Lucide glyph by name.
@@ -155,8 +168,19 @@ placeholders. The active item gets `on: true`.
 
 ### Topbar
 Collapse toggle · `ajb` symbol mark · page title (`t.nav.<page>`) ·
-notification bell with a dot. (The duplicate user avatar that used to sit in the
-topbar was removed — the user identity lives only in the side-nav footer.)
+**language toggle** · notification bell with a dot. (The duplicate user avatar
+that used to sit in the topbar was removed — the user identity lives only in the
+side-nav footer.)
+
+### Language control (`LangMenu`, `console-shell.jsx`)
+A **direct toggle**, not a dropdown: one click flips `lang` EN⇄AR, re-skinning
+the whole tree via `dir`/`lang` (RTL mirroring + Arabic type rules apply
+automatically). Its label is a single **bilingual glyph** — `A | ع` (Latin A +
+Arabic ʿain with a hairline divider), class `.ne-langglyph` in `login.css`. The
+**same control and glyph** appear on the login screen (`login.jsx`, both the
+sign-in form cluster and the signed-in home topbar), so language switching is
+identical across every surface. In production this is one shared control bound to
+the app's locale/`dir` state.
 
 ---
 
