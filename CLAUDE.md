@@ -13,7 +13,7 @@ Workflow for any change (feature, design update, fix, refactor):
    - Good: `Profile page: fill full screen width`
    - Good: `Implement 2026-06-16 design: Account panel + Profile journey`
    - Avoid: `Update`, `Changes`, `Fixes`, `WIP`.
-4. Assign **`othAlmubarak`** as the reviewer on every PR.
+4. Assign **`othAlmubarak`** and **`moashour94`** as reviewers on every PR.
 5. Leave the PR open for the user to review and merge (do not self-merge
    unless explicitly asked).
 
