@@ -5,7 +5,7 @@
    (components.css). Two layouts via [data-pf-layout].
    ============================================================ */
 
-.pf-page { padding: 30px 34px 40px; max-width: 1180px; }
+.pf-page { padding: 30px 34px 40px; max-width: none; }
 
 /* page header */
 .pf-hd { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 22px; }
